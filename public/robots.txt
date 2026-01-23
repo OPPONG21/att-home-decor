@@ -1,0 +1,16 @@
+# robots.txt for Classic Dreamspread
+# https://att-home-decor.com/robots.txt
+
+User-agent: *
+Allow: /
+Allow: /products.html
+Allow: /about.html
+Allow: /contact.html
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://att-home-decor.com/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+# Crawl-delay: 1

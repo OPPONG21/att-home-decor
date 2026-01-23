@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Classic Dreamspread">
+  <rect width="100%" height="100%" rx="8" fill="#0a58ca"/>
+  <g fill="#fff" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle">
+    <text x="50%" y="38%" dominant-baseline="middle">CD</text>
+  </g>
+</svg>

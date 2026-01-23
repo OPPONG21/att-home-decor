@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Products | Classic Dreamspread</title>
+    <meta name="description" content="Browse our collection of premium bedspreads and curtains in Ghana. Quality materials, elegant designs, and affordable pricing. Order via WhatsApp today.">
+    <meta name="keywords" content="bedspreads, curtains, products, home décor, Ghana, bedding, window treatments">
+    <meta name="author" content="Classic Dreamspread">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Products | Classic Dreamspread">
+    <meta property="og:description" content="Browse our collection of premium bedspreads and curtains in Ghana. Quality materials, elegant designs, and affordable pricing.">
+    <meta property="og:url" content="https://att-home-decor.com/products.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg">
+    <link rel="apple-touch-icon" href="../assets/favicon/favicon.svg">
+    
+    <!-- Fonts - Optimized loading with font-display: swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js" defer></script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="header">
+    <h1 class="logo">Classic <span>Dreamspread</span></h1>
+
+    <nav class="nav" role="navigation" aria-label="Primary Navigation">
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="products.html" class="active" aria-current="page">Products</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="navLinks">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+</header>
+
+<main id="main-content">
+    <!-- HERO SECTION -->
+    <section class="hero" style="margin-bottom: 2rem;">
+        <h2>Explore Our Collection</h2>
+        <p>
+            Discover premium bedspreads and elegant curtains designed to transform your home.
+            Each piece is carefully selected for quality, style, and comfort. Browse our collection
+            and find the perfect addition to your living space.
+        </p>
+        <div class="hero-actions">
+            <a href="#products-grid" class="btn hero-btn" role="button">View All Products</a>
+            <a href="contact.html" class="btn hero-btn" role="button">Get In Touch</a>
+            <a href="https://wa.me/233540460532" class="btn hero-btn" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #25D366, #128C7E);">Order on WhatsApp</a>
+        </div>
+    </section>
+
+    <section class="section" aria-labelledby="products-heading">
+        <h2 id="products-heading" class="section-title">Our Products</h2>
+
+        <!-- SEARCH BAR -->
+        <div class="search-container" style="max-width: 600px; margin: 0 auto 2rem;">
+            <label for="product-search" class="sr-only">Search products</label>
+            <input 
+                type="search" 
+                id="product-search" 
+                class="search-input" 
+                placeholder="Search products by name or description..." 
+                aria-label="Search products"
+                autocomplete="off">
+        </div>
+
+        <!-- FILTER CONTROLS -->
+        <div class="filter-controls" role="group" aria-label="Product categories">
+          <button class="filter-btn active" data-category="all" aria-pressed="true" aria-label="Show all products">All</button>
+          <button class="filter-btn" data-category="bedspread" aria-pressed="false" aria-label="Filter bedspreads">Bedspreads</button>
+          <button class="filter-btn" data-category="curtain" aria-pressed="false" aria-label="Filter curtains">Curtains</button>
+          <button class="filter-btn" data-category="pillows" aria-pressed="false" aria-label="Filter pillows">Pillows</button>
+          <button class="filter-btn" data-category="blankets" aria-pressed="false" aria-label="Filter blankets">Blankets</button>
+        </div>
+
+        <!-- ADVANCED FILTERS -->
+        <div class="advanced-filters" role="group" aria-label="Advanced filters">
+            <details class="filter-section">
+                <summary class="filter-summary">
+                    <span>Filters</span>
+                    <span class="filter-count" id="active-filter-count" aria-live="polite">0 active</span>
+                </summary>
+                <div class="filter-options">
+                    <!-- Price Filter -->
+                    <div class="filter-group">
+                        <label for="price-min" class="filter-label">Price Range (GHS)</label>
+                        <div class="price-range">
+                            <input type="number" id="price-min" class="price-input" placeholder="Min" min="0" step="1" aria-label="Minimum price">
+                            <span class="price-separator">—</span>
+                            <input type="number" id="price-max" class="price-input" placeholder="Max" min="0" step="1" aria-label="Maximum price">
+                        </div>
+                    </div>
+
+                    <!-- Size Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Size</label>
+                        <div class="filter-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="size" value="single" aria-label="Filter by Single size">
+                                <span>Single</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="size" value="double" aria-label="Filter by Double size">
+                                <span>Double</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="size" value="queen" aria-label="Filter by Queen size">
+                                <span>Queen</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="size" value="king" aria-label="Filter by King size">
+                                <span>King</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Color Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Color</label>
+                        <div class="filter-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="white" aria-label="Filter by White color">
+                                <span>White</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="beige" aria-label="Filter by Beige color">
+                                <span>Beige</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="gray" aria-label="Filter by Gray color">
+                                <span>Gray</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="blue" aria-label="Filter by Blue color">
+                                <span>Blue</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="red" aria-label="Filter by Red color">
+                                <span>Red</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="green" aria-label="Filter by Green color">
+                                <span>Green</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="purple" aria-label="Filter by Purple color">
+                                <span>Purple</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="color" value="yellow" aria-label="Filter by Yellow color">
+                                <span>Yellow</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Fabric Type Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Fabric Type</label>
+                        <div class="filter-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="fabric" value="cotton" aria-label="Filter by Cotton fabric">
+                                <span>Cotton</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="fabric" value="polyester" aria-label="Filter by Polyester fabric">
+                                <span>Polyester</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="fabric" value="linen" aria-label="Filter by Linen fabric">
+                                <span>Linen</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="fabric" value="velvet" aria-label="Filter by Velvet fabric">
+                                <span>Velvet</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="fabric" value="silk" aria-label="Filter by Silk fabric">
+                                <span>Silk</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="filter-checkbox" data-filter="fabric" value="sheer" aria-label="Filter by Sheer fabric">
+                                <span>Sheer</span>
+                            </label>
+                        </div>
+                    </div>
+
+                                <!-- Curtain Type Filter -->
+                                <div class="filter-group">
+                                  <label class="filter-label">Curtain Type</label>
+                                  <div class="filter-checkboxes">
+                                    <label class="checkbox-label">
+                                      <input type="checkbox" class="filter-checkbox" data-filter="subcategory" value="two in one" aria-label="Filter Two in one curtains">
+                                      <span>Two in one</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                      <input type="checkbox" class="filter-checkbox" data-filter="subcategory" value="three in one" aria-label="Filter Three in one curtains">
+                                      <span>Three in one</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                      <input type="checkbox" class="filter-checkbox" data-filter="subcategory" value="door curtains" aria-label="Filter Door curtains">
+                                      <span>Door curtains</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                      <input type="checkbox" class="filter-checkbox" data-filter="subcategory" value="bathroom curtains" aria-label="Filter Bathroom curtains">
+                                      <span>Bathroom curtains</span>
+                                    </label>
+                                  </div>
+                                </div>
+
+                    <!-- Clear Filters Button -->
+                    <div class="filter-actions">
+                        <button type="button" class="btn btn-secondary" id="clear-filters" aria-label="Clear all filters">Clear All Filters</button>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- VIEW TOGGLE -->
+        <div class="view-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div class="results-count" id="results-count" aria-live="polite">
+                <span id="results-text">Loading...</span>
+            </div>
+            <div class="view-toggle" role="group" aria-label="View options">
+                <button type="button" class="view-btn active" id="view-grid" aria-label="Grid view" aria-pressed="true" title="Grid view">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M3 3h4v4H3V3zm0 6h4v4H3V9zm6-6h4v4H9V3zm0 6h4v4H9V9zm6-6h4v4h-4V3zm0 6h4v4h-4V9z"/>
+                    </svg>
+                </button>
+                <button type="button" class="view-btn" id="view-list" aria-label="List view" aria-pressed="false" title="List view">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M3 3h14v2H3V3zm0 4h14v2H3V7zm0 4h14v2H3v-2zm0 4h14v2H3v-2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ERROR MESSAGE -->
+        <div id="products-error" class="container--center" role="alert" aria-live="polite"></div>
+        
+        <!-- RELOAD BUTTON (only shown on error) -->
+        <div id="reload-container" style="text-align:center; margin-bottom:20px; display: none;">
+            <button id="reload-products" class="btn" aria-label="Reload products list">Reload Products</button>
+        </div>
+        
+        <!-- PRODUCTS GRID/LIST -->
+        <div class="products products-grid" id="products-grid" role="list" aria-label="Products list" aria-busy="true">
+            <div class="products-loading" style="text-align: center; padding: 2rem; color: var(--muted);">
+                Loading products...
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; <time datetime="2025">2025</time> Classic Dreamspread. All Rights Reserved.</p>
+</footer>
+
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/233540460532" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp"
+   target="_blank"
+   rel="noopener noreferrer">
+   WhatsApp
+</a>
+
+<!-- Products Script -->
+<script>
+  (function() {
+    'use strict';
+    
+    // State management
+    let allProducts = [];
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let priceMin = null;
+    let priceMax = null;
+    let selectedSizes = [];
+    let selectedColors = [];
+    let selectedFabrics = [];
+    let selectedSubcategories = []; // e.g. curtain types
+    let currentView = 'grid'; // 'grid' or 'list'
+
+    // Get URL filter parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    function normalizeCategoryName(s) {
+      if (!s) return 'all';
+      const t = String(s).trim().toLowerCase();
+      if (t === 'bedspreads' || t === 'bedspread') return 'bedspread';
+      if (t === 'curtains' || t === 'curtain') return 'curtain';
+      return t;
+    }
+    currentCategory = normalizeCategoryName(urlParams.get('filter')) || 'all';
+
+    // API configuration
+    const API_BASE = (location.protocol === 'file:') ? 'http://localhost:3000' : '';
+    const apiUrl = (path = '/api/products') => `${API_BASE}${path}`;
+
+    /**
+     * Extract filter values from product name/description
+     * This is a temporary solution until database schema is updated
+     */
+    function extractProductAttributes(product) {
+      const text = `${product.name || ''} ${product.description || ''}`.toLowerCase();
+      return {
+        sizes: ['single', 'double', 'queen', 'king'].filter(size => text.includes(size)),
+        colors: ['white', 'beige', 'gray', 'grey', 'blue', 'red', 'green', 'purple', 'yellow'].filter(color => text.includes(color)),
+        fabrics: ['cotton', 'polyester', 'linen', 'velvet', 'silk', 'sheer'].filter(fabric => text.includes(fabric))
+      };
+    }
+
+    /**
+     * Filter products based on all active filters
+     */
+    function filterProducts(products) {
+      return products.filter(product => {
+        // Category filter (normalize singular/plural)
+        if (currentCategory !== 'all') {
+          const prodCat = normalizeCategoryName(product.category || '');
+          if (prodCat !== currentCategory) {
+            return false;
+          }
+        }
+
+        // Search filter
+        if (searchQuery.trim()) {
+          const query = searchQuery.toLowerCase();
+          const searchText = `${product.name || ''} ${product.description || ''}`.toLowerCase();
+          if (!searchText.includes(query)) {
+            return false;
+          }
+        }
+
+        // Price filter
+        const productPrice = Number(product.price) || 0;
+        if (priceMin !== null && productPrice < priceMin) {
+          return false;
+        }
+        if (priceMax !== null && productPrice > priceMax) {
+          return false;
+        }
+
+        // Size filter
+        if (selectedSizes.length > 0) {
+          const attrs = extractProductAttributes(product);
+          const hasMatchingSize = selectedSizes.some(size => attrs.sizes.includes(size));
+          if (!hasMatchingSize) {
+            return false;
+          }
+        }
+
+        // Color filter
+        if (selectedColors.length > 0) {
+          const attrs = extractProductAttributes(product);
+          // Handle grey/gray variant
+          const normalizedColors = attrs.colors.map(c => c === 'grey' ? 'gray' : c);
+          const normalizedSelected = selectedColors.map(c => c === 'grey' ? 'gray' : c);
+          const hasMatchingColor = normalizedSelected.some(color => normalizedColors.includes(color));
+          if (!hasMatchingColor) {
+            return false;
+          }
+        }
+
+        // Fabric filter
+        if (selectedFabrics.length > 0) {
+          const attrs = extractProductAttributes(product);
+          const hasMatchingFabric = selectedFabrics.some(fabric => attrs.fabrics.includes(fabric));
+          if (!hasMatchingFabric) {
+            return false;
+          }
+        }
+
+        // Subcategory (e.g. curtain type) filter
+        if (selectedSubcategories.length > 0) {
+          const prodSub = (product.subcategory || '').toLowerCase();
+          const matchesSub = selectedSubcategories.some(s => s.toLowerCase() === prodSub);
+          if (!matchesSub) return false;
+        }
+
+        return true;
+      });
+    }
+
+    /**
+     * Render a product card
+     */
+    function renderProductCard(product, index) {
+      const card = document.createElement('article');
+      card.className = 'product-card';
+      if (product && product.id) card.dataset.id = product.id;
+      card.setAttribute('data-category', product.category || 'all');
+      card.setAttribute('role', 'listitem');
+      card.setAttribute('aria-label', `Product: ${product.name || 'Unnamed Product'}`);
+
+      const badgeHTML = product.badge 
+        ? `<span class="badge badge-${product.badge.toLowerCase().replace(/\s+/g, '-')}">${product.badge}</span>` 
+        : '';
+
+      // Stock badge (if server provided)
+      const rawStock = product.stock_status || product.stock || ''; 
+      const stockKey = String(rawStock).trim().toLowerCase().replace(/[-\s]+/g, '_');
+      let stockHTML = '';
+      if (stockKey === 'out_of_stock' || stockKey === 'outofstock') {
+        stockHTML = `<span class="stock-badge out-of-stock">Out of stock</span>`;
+      } else if (stockKey === 'low_stock' || stockKey === 'lowstock') {
+        stockHTML = `<span class="stock-badge low-stock">Low stock</span>`;
+      } else if (stockKey) {
+        stockHTML = `<span class="stock-badge in-stock">In stock</span>`;
+      }
+      
+      const imgSrc = product.image_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="%23f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%236b7280" font-family="Arial, sans-serif" font-size="20">No Image</text></svg>';
+      const whatsappUrl = product.whatsapp_url || 'https://wa.me/233540460532';
+      const price = product.price ? Number(product.price).toLocaleString('en-GH') : '0';
+      const productName = product.name || 'Unnamed Product';
+      const description = product.description || '';
+
+      card.innerHTML = `
+        <a href="product.html?id=${product.id}" style="text-decoration: none; color: inherit; display: block;">
+          ${badgeHTML}
+          <span class="price-badge">GHS ${price}</span>
+          <picture>
+            <img src="${imgSrc}" alt="${productName}" loading="${index < 4 ? 'eager' : 'lazy'}" decoding="async" width="400" height="300" fetchpriority="${index < 4 ? 'high' : 'low'}">
+          </picture>
+          <div class="product-card-content">
+            <h3>${productName}</h3>
+            ${description ? `<p style="margin: 0 0 8px 0; font-size: 14px; color: var(--muted);">${description}</p>` : ''}
+            ${stockHTML}
+            <a href="product.html?id=${product.id}" class="btn" style="background: linear-gradient(135deg, #25D366, #128C7E); margin-top: auto;">
+              View Details
+            </a>
+          </div>
+        </a>
+      `;
+
+      return card;
+    }
+
+    /**
+     * Update filter count display
+     */
+    function updateFilterCount() {
+      const count = (priceMin !== null ? 1 : 0) + 
+                   (priceMax !== null ? 1 : 0) + 
+                   selectedSizes.length + 
+                   selectedColors.length + 
+                   selectedFabrics.length + 
+                   selectedSubcategories.length;
+      const countEl = document.getElementById('active-filter-count');
+      if (countEl) {
+        countEl.textContent = `${count} active`;
+        countEl.setAttribute('data-count', count);
+      }
+    }
+
+    /**
+     * Update results count
+     */
+    function updateResultsCount(filteredProducts) {
+      const resultsEl = document.getElementById('results-text');
+      if (resultsEl) {
+        const count = filteredProducts.length;
+        resultsEl.textContent = `${count} product${count !== 1 ? 's' : ''} found`;
+      }
+    }
+
+    /**
+     * Apply view (grid/list)
+     */
+    function applyView(view) {
+      currentView = view;
+      const container = document.getElementById('products-grid');
+      if (!container) return;
+
+      container.classList.remove('products-grid', 'products-list');
+      container.classList.add(`products-${view}`);
+
+      const gridBtn = document.getElementById('view-grid');
+      const listBtn = document.getElementById('view-list');
+      if (gridBtn && listBtn) {
+        gridBtn.classList.toggle('active', view === 'grid');
+        listBtn.classList.toggle('active', view === 'list');
+        gridBtn.setAttribute('aria-pressed', (view === 'grid').toString());
+        listBtn.setAttribute('aria-pressed', (view === 'list').toString());
+      }
+
+      // Save to localStorage
+      try {
+        localStorage.setItem('productView', view);
+      } catch (e) {}
+    }
+
+    /**
+     * Load and display products
+     */
+    async function loadProducts() {
+      const container = document.getElementById('products-grid');
+      const errorEl = document.getElementById('products-error');
+      
+      if (!container) {
+        console.error('Products container not found');
+        return;
+      }
+
+      // Clear error messages
+      if (errorEl) {
+        errorEl.innerHTML = '';
+        errorEl.setAttribute('aria-live', 'polite');
+      }
+
+      // Show loading state
+      container.innerHTML = '<div class="products-loading" style="text-align: center; padding: 2rem; color: var(--muted);">Loading products...</div>';
+      container.setAttribute('aria-busy', 'true');
+
+      try {
+        const res = await fetch(apiUrl(), {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid response format: expected array');
+        }
+
+        // Store all products and render via existing filter flow
+        allProducts = data;
+
+        // Use the centralized applyFilters() to render results
+        applyFilters();
+        return;
+
+      } catch (err) {
+        console.error('Error loading products:', err);
+        
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+        
+        container.innerHTML = `
+          <div role="alert" style="text-align: center; padding: 2rem; color: var(--error-color, #ef4444);">
+            <p class="lead">Failed to load products. Please try again later.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--muted);">${errorMessage}</p>
+            <button onclick="location.reload()" class="btn" style="margin-top: 1rem;" aria-label="Reload page">Reload Page</button>
+          </div>
+        `;
+        container.setAttribute('aria-busy', 'false');
+
+        // Show detailed error for debugging (development only)
+        if (errorEl && location.hostname === 'localhost') {
+          errorEl.innerHTML = `
+            <details style="text-align: left; margin-top: 1rem; padding: 1rem; background: #fee; border: 1px solid #fcc; border-radius: 8px;">
+              <summary style="cursor: pointer; font-weight: 600; color: #c00;">Debug Information</summary>
+              <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Error:</strong> ${errorMessage}</p>
+              <p style="font-size: 0.85rem;"><strong>URL:</strong> <code>${location.href}</code></p>
+              <p style="font-size: 0.85rem;"><strong>API URL:</strong> <code>${apiUrl()}</code></p>
+            </details>
+          `;
+        }
+      }
+    }
+
+    /**
+     * Apply all filters and refresh display
+     */
+    function applyFilters() {
+      if (allProducts.length === 0) {
+        loadProducts();
+        return;
+      }
+      
+      const container = document.getElementById('products-grid');
+      if (!container) return;
+
+      const filtered = filterProducts(allProducts);
+      container.innerHTML = '';
+      container.setAttribute('aria-busy', 'false');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div role="status" style="text-align: center; padding: 3rem; color: var(--muted);">
+            <p class="lead" style="margin-bottom: 1rem;">No products found matching your criteria.</p>
+            <button class="btn" id="clear-all-btn" style="margin-top: 1rem; margin-right: 0.5rem;">
+              Clear Filters
+            </button>
+            <a href="contact.html" class="btn" style="margin-top: 1rem;">
+              Contact Us
+            </a>
+          </div>
+        `;
+        const clearAllBtn = document.getElementById('clear-all-btn');
+        if (clearAllBtn) {
+          clearAllBtn.addEventListener('click', () => {
+            clearAllFilters();
+            applyFilters();
+          });
+        }
+        updateResultsCount([]);
+        return;
+      }
+
+      filtered.forEach((product, index) => {
+        const card = renderProductCard(product, index);
+        container.appendChild(card);
+      });
+
+      updateResultsCount(filtered);
+      updateFilterCount();
+    }
+
+    /**
+     * Clear all filters
+     */
+    function clearAllFilters() {
+      searchQuery = '';
+      priceMin = null;
+      priceMax = null;
+      selectedSizes = [];
+      selectedColors = [];
+      selectedFabrics = [];
+
+      // Reset UI elements
+      const searchInput = document.getElementById('product-search');
+      if (searchInput) searchInput.value = '';
+
+      const priceMinInput = document.getElementById('price-min');
+      const priceMaxInput = document.getElementById('price-max');
+      if (priceMinInput) priceMinInput.value = '';
+      if (priceMaxInput) priceMaxInput.value = '';
+
+      document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+
+      updateFilterCount();
+    }
+
+    /**
+     * Update filter button states
+     */
+    function updateFilterButtons(activeCategory) {
+      activeCategory = normalizeCategoryName(activeCategory);
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const category = normalizeCategoryName(btn.dataset.category || 'all');
+        const isActive = category === activeCategory;
+        
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive.toString());
+        
+        // Update URL without reload
+        const url = new URL(window.location);
+        if (category === 'all') {
+          url.searchParams.delete('filter');
+        } else {
+          url.searchParams.set('filter', category);
+        }
+        window.history.replaceState({}, '', url);
+      });
+    }
+
+    /**
+     * Initialize event listeners
+     */
+    function initEventListeners() {
+      // Category filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentCategory = normalizeCategoryName(btn.dataset.category || 'all');
+          updateFilterButtons(currentCategory);
+          applyFilters();
+          document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      // Search input
+      const searchInput = document.getElementById('product-search');
+      if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+          clearTimeout(searchTimeout);
+          searchQuery = e.target.value.trim();
+          searchTimeout = setTimeout(() => {
+            applyFilters();
+          }, 300);
+        });
+      }
+
+      // Price filters
+      const priceMinInput = document.getElementById('price-min');
+      const priceMaxInput = document.getElementById('price-max');
+      if (priceMinInput) {
+        priceMinInput.addEventListener('change', (e) => {
+          priceMin = e.target.value ? Number(e.target.value) : null;
+          applyFilters();
+        });
+      }
+      if (priceMaxInput) {
+        priceMaxInput.addEventListener('change', (e) => {
+          priceMax = e.target.value ? Number(e.target.value) : null;
+          applyFilters();
+        });
+      }
+
+      // Checkbox filters
+      document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const filterType = checkbox.dataset.filter;
+          const value = checkbox.value;
+
+          if (filterType === 'size') {
+            if (checkbox.checked) {
+              selectedSizes.push(value);
+            } else {
+              selectedSizes = selectedSizes.filter(s => s !== value);
+            }
+          } else if (filterType === 'color') {
+            if (checkbox.checked) {
+              selectedColors.push(value);
+            } else {
+              selectedColors = selectedColors.filter(c => c !== value);
+            }
+          } else if (filterType === 'fabric') {
+            if (checkbox.checked) {
+              selectedFabrics.push(value);
+            } else {
+              selectedFabrics = selectedFabrics.filter(f => f !== value);
+            }
+          } else if (filterType === 'subcategory') {
+            if (checkbox.checked) {
+              selectedSubcategories.push(value);
+            } else {
+              selectedSubcategories = selectedSubcategories.filter(s => s !== value);
+            }
+          }
+
+          applyFilters();
+        });
+      });
+
+      // Clear filters button
+      const clearFiltersBtn = document.getElementById('clear-filters');
+      if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => {
+          clearAllFilters();
+          applyFilters();
+        });
+      }
+
+      // View toggle buttons
+      const gridBtn = document.getElementById('view-grid');
+      const listBtn = document.getElementById('view-list');
+      if (gridBtn) {
+        gridBtn.addEventListener('click', () => applyView('grid'));
+      }
+      if (listBtn) {
+        listBtn.addEventListener('click', () => applyView('list'));
+      }
+
+      // Reload button
+      const reloadBtn = document.getElementById('reload-products');
+      if (reloadBtn) {
+        reloadBtn.addEventListener('click', () => {
+          const reloadContainer = document.getElementById('reload-container');
+          if (reloadContainer) {
+            reloadContainer.style.display = 'none';
+          }
+          loadProducts();
+        });
+      }
+    }
+
+    /**
+     * Initialize page
+     */
+    function init() {
+      // Load saved view preference
+      try {
+        const savedView = localStorage.getItem('productView');
+        if (savedView === 'grid' || savedView === 'list') {
+          applyView(savedView);
+        }
+      } catch (e) {}
+
+      initEventListeners();
+      updateFilterButtons(currentCategory);
+      loadProducts();
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+<!-- Navigation Script -->
+<script src="../assets/js/navbar.js" defer></script>
+
+<!-- Delegate WhatsApp clicks and report to server for tracking -->
+<script>
+(function(){
+  document.addEventListener('click', function(e){
+    try {
+      // Try to locate a tracking source in this order:
+      // 1) WhatsApp anchor (a[href*="wa.me"]) 2) product link (product.html?id=) 3) any click inside .product-card
+      const wa = e.target.closest && e.target.closest('a[href*="wa.me"]');
+      let card = wa ? (wa.closest && wa.closest('.product-card')) : null;
+      let link = null;
+      if (!wa) link = e.target.closest && e.target.closest('a[href*="product.html"]');
+
+      if (!wa && !link) {
+        // Maybe clicked somewhere inside the product card
+        card = e.target.closest && e.target.closest('.product-card');
+      }
+
+      // Determine product identifier and name
+      let productId = null;
+      let name = null;
+
+      if (card && card.dataset && card.dataset.id) {
+        productId = card.dataset.id || null;
+        name = (card.querySelector && (card.querySelector('h3') && card.querySelector('h3').textContent)) || null;
+      } else if (link) {
+        // Parse id from href if present
+        try {
+          const url = new URL(link.href, location.href);
+          productId = url.searchParams.get('id') || null;
+          name = link.getAttribute('aria-label') || null;
+        } catch (e) {
+          productId = null;
+        }
+      } else if (wa) {
+        productId = wa.dataset && wa.dataset.productId ? wa.dataset.productId : null;
+        // fallback to parent card name
+        name = (card && (card.querySelector && card.querySelector('h3') && card.querySelector('h3').textContent)) || wa.getAttribute('aria-label') || null;
+      }
+
+      // If neither id nor name found, nothing to track
+      if (!productId && !name) return;
+
+      const endpoint = (location.protocol === 'file:' ? 'http://localhost:3000' : '') + '/api/tracking';
+      const payload = { productId: productId, name: name };
+
+      // Small debug log to help local troubleshooting (can be removed later)
+      try { console.debug('Tracking send', payload); } catch (e) {}
+
+      try {
+        if (navigator && typeof navigator.sendBeacon === 'function') {
+          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+          navigator.sendBeacon(endpoint, blob);
+        } else {
+          fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
+        }
+      } catch (e) {
+        fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(() => {});
+      }
+    } catch (err) {
+      console.warn('Tracking error', err);
+    }
+  }, { capture: true });
+})();
+</script>
+
+</body>
+</html>

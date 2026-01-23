@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Admin Login | Classic Dreamspread</title>
+    <meta name="description" content="Admin login for Classic Dreamspread">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Admin Stylesheet -->
+    <link rel="stylesheet" href="./admin.css">
+    
+    <!-- Supabase Client - Will be loaded by admin.js with fallback -->
+    <!-- Admin Utilities - Load after DOM is ready -->
+    <script src="./admin.js" defer></script>
+</head>
+<body class="login-page">
+
+    <main class="admin-login-box" role="main" aria-labelledby="login-heading">
+        <h1 id="login-heading">Admin Login</h1>
+        <p class="login-subtitle">Access the admin dashboard</p>
+
+        <form id="loginForm" novalidate aria-label="Login form">
+            <div class="form-group">
+                <label for="email" class="visually-hidden">Email Address</label>
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="Email address"
+                    autocomplete="username"
+                    required
+                    aria-required="true"
+                    aria-describedby="email-error"
+                >
+                <span id="email-error" class="error-message" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="visually-hidden">Password</label>
+                <div class="password-field">
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required
+                        aria-required="true"
+                        aria-describedby="password-error"
+                    >
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="password-toggle"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                    >
+                        <span class="toggle-icon">👁</span>
+                    </button>
+                </div>
+                <span id="password-error" class="error-message" role="alert" aria-live="polite"></span>
+            </div>
+
+            <button id="loginBtn" type="submit" class="btn-primary" aria-label="Sign in to admin dashboard">
+                <span class="btn-text">Sign In</span>
+                <span class="btn-loader" aria-hidden="true"></span>
+            </button>
+        </form>
+
+        <div id="status" role="status" aria-live="polite" aria-atomic="true"></div>
+    </main>
+
+    <footer class="login-footer">
+        <p>&copy; <time datetime="2025">2025</time> Classic Dreamspread. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

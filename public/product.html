@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Product Details | Classic Dreamspread</title>
+    <meta name="description" content="View product details, specifications, and ordering information. Premium bedspreads and curtains in Ghana.">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg">
+    <link rel="apple-touch-icon" href="../assets/favicon/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js" defer></script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="header">
+    <h1 class="logo">Classic <span>Dreamspread</span></h1>
+
+    <nav class="nav" role="navigation" aria-label="Primary Navigation">
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="navLinks">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+</header>
+
+<main id="main-content">
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="breadcrumb-container">
+            <a href="index.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="products.html">Products</a>
+            <span class="breadcrumb-separator">/</span>
+            <span id="breadcrumb-product" class="breadcrumb-current">Product</span>
+        </div>
+    </nav>
+
+    <!-- PRODUCT DETAIL SECTION -->
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+            <!-- Loading State -->
+            <div id="product-loading" class="product-loading" style="text-align: center; padding: 4rem; color: var(--muted);">
+                <p>Loading product details...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="product-error" class="product-error" style="display: none; text-align: center; padding: 4rem;">
+                <h2>Product Not Found</h2>
+                <p style="color: var(--muted); margin: 1rem 0;">Sorry, we couldn't find the product you're looking for.</p>
+                <a href="products.html" class="btn">Browse All Products</a>
+            </div>
+
+            <!-- Product Content -->
+            <div id="product-content" class="product-content" style="display: none;">
+                <!-- Product Images -->
+                <div class="product-images">
+                    <div class="product-main-image">
+                        <img id="main-product-image" src="" alt="Product image" loading="eager">
+                        <button class="zoom-btn" id="zoom-btn" aria-label="Zoom image" title="Click to zoom">
+                            🔍
+                        </button>
+                    </div>
+                    <div class="product-thumbnails" id="product-thumbnails" role="list" aria-label="Product image thumbnails">
+                        <!-- Thumbnails will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <div class="product-header">
+                        <span id="product-badge" class="badge" style="display: none;"></span>
+                        <h1 id="product-name" class="product-title">Product Name</h1>
+                        <div class="product-price-container">
+                            <span id="product-price" class="product-price">GHS 0</span>
+                        </div>
+                    </div>
+
+                    <div id="product-description" class="product-description">
+                        <!-- Description will be loaded -->
+                    </div>
+
+                    <!-- Stock Availability -->
+                    <div class="stock-status" id="stock-status">
+                        <span class="stock-label">Availability:</span>
+                        <span id="stock-text" class="stock-text">Checking availability...</span>
+                    </div>
+
+                    <!-- Size Selector -->
+                    <div class="product-option-group">
+                        <label for="size-select" class="option-label">Size <span class="required">*</span></label>
+                        <select id="size-select" class="product-select" required aria-required="true">
+                            <option value="">Select Size</option>
+                            <option value="single">Single</option>
+                            <option value="double">Double</option>
+                            <option value="queen">Queen</option>
+                            <option value="king">King</option>
+                        </select>
+                    </div>
+
+                    <!-- Color Selector -->
+                    <div class="product-option-group">
+                        <label for="color-select" class="option-label">Color <span class="required">*</span></label>
+                        <select id="color-select" class="product-select" required aria-required="true">
+                            <option value="">Select Color</option>
+                            <option value="white">White</option>
+                            <option value="beige">Beige</option>
+                            <option value="gray">Gray</option>
+                            <option value="blue">Blue</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="purple">Purple</option>
+                            <option value="yellow">Yellow</option>
+                        </select>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div class="product-option-group">
+                        <label for="quantity-select" class="option-label">Quantity</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="quantity-btn" id="quantity-decrease" aria-label="Decrease quantity">−</button>
+                            <input type="number" id="quantity-select" class="quantity-input" value="1" min="1" max="10" aria-label="Quantity">
+                            <button type="button" class="quantity-btn" id="quantity-increase" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="product-actions">
+                        <button type="button" class="btn btn-primary btn-add-to-cart" id="add-to-cart-btn">
+                            🛒 Add to Cart
+                        </button>
+                        <a href="#" class="btn btn-whatsapp" id="order-whatsapp-btn" target="_blank" rel="noopener noreferrer">
+                            💬 Order via WhatsApp
+                        </a>
+                    </div>
+
+                    <!-- Product Details Tabs -->
+                    <div class="product-details-tabs">
+                        <button class="tab-btn active" data-tab="fabric">Fabric Details</button>
+                        <button class="tab-btn" data-tab="care">Care Instructions</button>
+                        <button class="tab-btn" data-tab="shipping">Shipping & Delivery</button>
+                    </div>
+
+                    <div class="tab-content">
+                        <div id="tab-fabric" class="tab-pane active">
+                            <h3>Fabric Description</h3>
+                            <p id="fabric-description">Loading fabric information...</p>
+                        </div>
+                        <div id="tab-care" class="tab-pane">
+                            <h3>Care Instructions</h3>
+                            <ul id="care-instructions">
+                                <li>Loading care instructions...</li>
+                            </ul>
+                        </div>
+                        <div id="tab-shipping" class="tab-pane">
+                            <h3>Shipping & Delivery</h3>
+                            <p>We deliver nationwide across Ghana. Delivery typically takes 3-5 business days for in-stock items.</p>
+                            <ul>
+                                <li>Free delivery on orders over GHS 500</li>
+                                <li>Standard delivery: GHS 50 (within Accra), GHS 100 (other regions)</li>
+                                <li>Express delivery available on request</li>
+                                <li>We'll contact you to confirm delivery details after your order</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RELATED PRODUCTS -->
+    <section class="section" id="related-products-section" style="display: none;" aria-labelledby="related-heading">
+        <h2 id="related-heading" class="section-title">You May Also Like</h2>
+        <div class="products" id="related-products" role="list" aria-label="Related products list">
+            <!-- Related products will be loaded dynamically -->
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <p>&copy; <time datetime="2025">2025</time> Classic Dreamspread. All Rights Reserved.</p>
+</footer>
+
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/233540460532" 
+   class="whatsapp-float"
+   aria-label="Chat with us on WhatsApp"
+   target="_blank"
+   rel="noopener noreferrer">
+   WhatsApp
+</a>
+
+<!-- Product Detail Script -->
+<script src="../assets/js/product-detail.js" defer></script>
+<!-- Navigation Script -->
+<script src="../assets/js/navbar.js" defer></script>
+
+</body>
+</html>
