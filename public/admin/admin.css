@@ -181,14 +181,14 @@ body {
     transform: translateY(-50%);
     width: 2.5rem;
     height: 2.5rem;
-    background: transparent;
-    border: none;
+    background: rgba(10, 88, 202, 0.05);
+    border: 1px solid rgba(10, 88, 202, 0.2);
     border-radius: 6px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 120ms ease, transform 120ms ease;
+    transition: background 120ms ease, transform 120ms ease, border-color 120ms ease;
     color: var(--admin-primary);
     font-size: 1.1rem;
     z-index: 10;
@@ -198,7 +198,8 @@ body {
 }
 
 .password-toggle:hover {
-    background: rgba(10, 88, 202, 0.1);
+    background: rgba(10, 88, 202, 0.15);
+    border-color: rgba(10, 88, 202, 0.4);
     transform: translateY(-50%) scale(1.05);
 }
 
@@ -209,12 +210,14 @@ body {
 .password-toggle:focus-visible {
     outline: 2px solid var(--admin-primary);
     outline-offset: 2px;
-    background: rgba(10, 88, 202, 0.15);
+    background: rgba(10, 88, 202, 0.2);
+    border-color: var(--admin-primary);
 }
 
 .password-toggle[aria-pressed="true"],
 .password-toggle.active {
-    background: rgba(10, 88, 202, 0.15);
+    background: rgba(10, 88, 202, 0.2);
+    border-color: var(--admin-primary);
 }
 
 .password-toggle .toggle-icon {
