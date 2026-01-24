@@ -255,7 +255,6 @@
 
         // Initialize password toggle - simple implementation
         const toggleButton = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
         
         if (passwordInput && toggleButton) {
             let isVisible = false;
