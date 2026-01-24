@@ -1493,7 +1493,7 @@
         
         console.log('Auth check:', { isAuthenticated, user: user?.email, path: currentPath });
         
-        if (currentPath.includes('login.html') || currentPath.endsWith('/admin/') || currentPath.endsWith('/admin')) {
+        if (currentPath.includes('login') || currentPath.endsWith('/admin/') || currentPath.endsWith('/admin')) {
             if (isAuthenticated) {
                 // Already logged in, redirect to dashboard
                 console.log('Already authenticated, redirecting to dashboard...');
