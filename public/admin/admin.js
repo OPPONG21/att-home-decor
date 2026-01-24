@@ -10,12 +10,14 @@
     let SUPABASE_URL = '';
     let SUPABASE_ANON_KEY = '';
 
+    const API_BASE = 'https://att-home-decor-api.onrender.com';
+
     let supabaseClient;
 
     // Load public config from server
     async function loadClientConfig() {
         try {
-            const res = await fetch('/config', { cache: 'no-store' });
+            const res = await fetch(API_BASE + '/config', { cache: 'no-store' });
             if (!res.ok) {
                 console.warn('Config endpoint returned non-OK status', res.status);
                 return false;
@@ -425,7 +427,7 @@
                             throw new Error('Access denied. Unable to verify admin privileges.');
                         }
 
-                        const bootstrapRes = await fetch('/api/profiles/bootstrap', {
+                        const bootstrapRes = await fetch(API_BASE + '/api/profiles/bootstrap', {
                             method: 'POST',
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
@@ -578,7 +580,7 @@
                     const token = sessionResp?.data?.session?.access_token || null;
 
                     for (const id of ids) {
-                        const res = await fetch(`/api/products/${encodeURIComponent(id)}`, {
+                        const res = await fetch(`${API_BASE}/api/products/${encodeURIComponent(id)}`, {
                             method: 'DELETE',
                             headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                         });
@@ -614,7 +616,7 @@
                     const token = sessionResp?.data?.session?.access_token || null;
 
                     for (const id of ids) {
-                        const res = await fetch(`/api/products/${encodeURIComponent(id)}`, {
+                        const res = await fetch(`${API_BASE}/api/products/${encodeURIComponent(id)}`, {
                             method: 'PUT',
                             headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': `Bearer ${token}` } : {}),
                             body: JSON.stringify({ stock_status: newStock })
@@ -665,7 +667,7 @@
         // Clicks loader: fetch tracking stats and render in admin table
         async function loadClicks() {
             try {
-                const resp = await fetch('/api/tracking');
+                const resp = await fetch(API_BASE + '/api/tracking');
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                 const list = await resp.json();
                 const tbody = document.getElementById('clicksTable');
@@ -1112,7 +1114,7 @@
                     const sessionResp = await supabaseClient.auth.getSession();
                     const token = sessionResp?.data?.session?.access_token || null;
 
-                    const res = await fetch('/api/products', {
+                    const res = await fetch(API_BASE + '/api/products', {
                         method: 'POST',
                         headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': `Bearer ${token}` } : {}),
                         body: JSON.stringify({ name, category, subcategory, price, image_url: final_image_url, whatsapp_url: whatsapp_final })
@@ -1198,7 +1200,7 @@
                     const sessionResp = await supabaseClient.auth.getSession();
                     const token = sessionResp?.data?.session?.access_token || null;
 
-                    const res = await fetch(`/api/products/${encodeURIComponent(id)}`, {
+                    const res = await fetch(`${API_BASE}/api/products/${encodeURIComponent(id)}`, {
                         method: 'PUT',
                         headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': `Bearer ${token}` } : {}),
                         body: JSON.stringify({ name, category, subcategory, price, image_url: final_image_url, whatsapp_url: whatsapp_final, stock_status: stock, visible })
@@ -1247,7 +1249,7 @@
                         const sessionResp = await supabaseClient.auth.getSession();
                         const token = sessionResp?.data?.session?.access_token || null;
                         if (token) {
-                            const bootstrapRes = await fetch('/api/profiles/bootstrap', {
+                            const bootstrapRes = await fetch(API_BASE + '/api/profiles/bootstrap', {
                                 method: 'POST',
                                 headers: { 'Authorization': `Bearer ${token}` }
                             });
@@ -1524,7 +1526,7 @@
                     try {
                         const sessionResp = await supabaseClient.auth.getSession();
                         const token = sessionResp?.data?.session?.access_token || null;
-                        const res = await fetch(`/api/products/${encodeURIComponent(id)}`, { method: 'DELETE', headers: token ? { 'Authorization': `Bearer ${token}` } : {} });
+                        const res = await fetch(`${API_BASE}/api/products/${encodeURIComponent(id)}`, { method: 'DELETE', headers: token ? { 'Authorization': `Bearer ${token}` } : {} });
                         if (!res.ok) {
                             const body = await res.json().catch(() => ({}));
                             throw new Error(body.error || `HTTP ${res.status}`);
@@ -1550,7 +1552,7 @@
 
                     // Fetch product details
                     try {
-                        const resp = await fetch('/api/products');
+                        const resp = await fetch(API_BASE + '/api/products');
                         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                         const list = await resp.json();
                         const product = (list || []).find(p => p.id === id);
