@@ -164,9 +164,17 @@ function updateWhatsAppLink(product) {
   
   const encodedMsg = encodeURIComponent(message);
   
-  document.getElementById('order-whatsapp-btn').href =
-    product.whatsapp_url ||
-    `https://wa.me/233540460532?text=${encodedMsg}`;
+  // If the product provides a WhatsApp base URL, append the message as a query param.
+  // Otherwise use the default phone number with the encoded text.
+  let href;
+  if (product.whatsapp_url && typeof product.whatsapp_url === 'string') {
+    const base = product.whatsapp_url.split('?')[0];
+    href = `${base}?text=${encodedMsg}`;
+  } else {
+    href = `https://wa.me/233540460532?text=${encodedMsg}`;
+  }
+
+  document.getElementById('order-whatsapp-btn').href = href;
 }
 
 function showError() {
