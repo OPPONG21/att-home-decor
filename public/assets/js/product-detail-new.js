@@ -155,7 +155,7 @@ function updateWhatsAppLink(product) {
   const selectedColor = colorSelect.value;
   const quantity = parseInt(quantityInput.value) || 1;
   
-  let message = `Hello, I'm interested in\n${product.name}\nPrice: GHS ${product.price}`;
+  let message = `Hello, I'm interested in:\n${product.name}\nPrice: GHS ${product.price}`;
   if (selectedColor) {
     message += `\nColor: ${selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}`;
   }
