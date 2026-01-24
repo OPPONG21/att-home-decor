@@ -317,8 +317,8 @@
     currentCategory = normalizeCategoryName(urlParams.get('filter')) || 'all';
 
     // API configuration
-    const API_BASE = (location.protocol === 'file:') ? 'http://localhost:3000' : '';
-    const apiUrl = (path = '/api/products') => `${API_BASE}${path}`;
+    const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') ? 'http://localhost:3000' : '';
+    const USE_FALLBACK = !API_BASE; // Use fallback when no API server
 
     /**
      * Extract filter values from product name/description
@@ -517,6 +517,11 @@
      * Load and display products
      */
     async function loadProducts() {
+      if (allProducts.length > 0) {
+        applyFilters();
+        return;
+      }
+      
       const container = document.getElementById('products-grid');
       const errorEl = document.getElementById('products-error');
       
@@ -536,42 +541,54 @@
       container.setAttribute('aria-busy', 'true');
 
       try {
-        const res = await fetch(apiUrl(), {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
+        let data;
 
-        if (!res.ok) {
-          // If API not found (hosted static site without server), fall back to bundled static JSON
-          if (res.status === 404) {
-            try {
-              const fallbackRes = await fetch('/assets/data/products.json', { headers: { 'Accept': 'application/json' } });
-              if (fallbackRes.ok) {
-                const fallbackData = await fallbackRes.json();
-                allProducts = fallbackData;
-                applyFilters();
-                return;
-              }
-            } catch (fallbackErr) {
-              console.warn('Fallback products fetch failed', fallbackErr);
+        if (USE_FALLBACK) {
+          // Use static fallback for hosted sites without API
+          console.log('Using static product fallback');
+          const fallbackRes = await fetch('/assets/data/products.json', { headers: { 'Accept': 'application/json' } });
+          if (!fallbackRes.ok) {
+            throw new Error(`Fallback fetch failed: ${fallbackRes.status}`);
+          }
+          data = await fallbackRes.json();
+        } else {
+          // Try API first, then fallback
+          const res = await fetch(apiUrl(), {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json'
             }
+          });
+
+          if (!res.ok) {
+            // If API not found, fall back to bundled static JSON
+            if (res.status === 404) {
+              console.log('API not found, using fallback');
+              try {
+                const fallbackRes = await fetch('/assets/data/products.json', { headers: { 'Accept': 'application/json' } });
+                if (fallbackRes.ok) {
+                  data = await fallbackRes.json();
+                } else {
+                  throw new Error(`Fallback fetch failed: ${fallbackRes.status}`);
+                }
+              } catch (fallbackErr) {
+                console.warn('Fallback products fetch failed', fallbackErr);
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+              }
+            } else {
+              throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+          } else {
+            data = await res.json();
           }
-
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         }
-
-        const data = await res.json();
 
         if (!Array.isArray(data)) {
           throw new Error('Invalid response format: expected array');
         }
 
-        // Store all products and render via existing filter flow
+        // Store all products and render
         allProducts = data;
-
-        // Use the centralized applyFilters() to render results
         applyFilters();
         return;
 
@@ -590,13 +607,14 @@
         container.setAttribute('aria-busy', 'false');
 
         // Show detailed error for debugging (development only)
-        if (errorEl && location.hostname === 'localhost') {
+        if (errorEl && (location.hostname === 'localhost' || location.protocol === 'file:')) {
           errorEl.innerHTML = `
             <details style="text-align: left; margin-top: 1rem; padding: 1rem; background: #fee; border: 1px solid #fcc; border-radius: 8px;">
               <summary style="cursor: pointer; font-weight: 600; color: #c00;">Debug Information</summary>
               <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Error:</strong> ${errorMessage}</p>
               <p style="font-size: 0.85rem;"><strong>URL:</strong> <code>${location.href}</code></p>
               <p style="font-size: 0.85rem;"><strong>API URL:</strong> <code>${apiUrl()}</code></p>
+              <p style="font-size: 0.85rem;"><strong>Using Fallback:</strong> ${USE_FALLBACK}</p>
             </details>
           `;
         }
