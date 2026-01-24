@@ -236,6 +236,238 @@
                 return;
             }
 
+            // Form validation
+            function validateForm() {
+                let isValid = true;
+
+                // Email validation
+                if (!emailInput.value.trim() || !emailInput.validity.valid) {
+                    emailError.textContent = 'Please enter a valid email address';
+                    emailInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    emailError.textContent = '';
+                    emailInput.setAttribute('aria-invalid', 'false');
+                }
+
+                // Password validation
+                if (!passwordInput.value || passwordInput.value.length < 6) {
+                    passwordError.textContent = 'Password must be at least 6 characters';
+                    passwordInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    passwordError.textContent = '';
+                    passwordInput.setAttribute('aria-invalid', 'false');
+                }
+
+                return isValid;
+            }
+
+            // Real-time validation
+            emailInput.addEventListener('blur', validateForm);
+            passwordInput.addEventListener('blur', validateForm);
+
+            /**
+             * Redirect to dashboard
+             */
+            function redirectToDashboard() {
+                // Show success message
+                showStatus('Login successful! Redirecting...', 'success');
+                
+                // Re-enable button (in case redirect fails)
+                loginBtn.disabled = false;
+                loginBtn.classList.remove('loading');
+                loginBtn.setAttribute('aria-busy', 'false');
+                
+                // Build dashboard URL
+                const currentPath = window.location.pathname;
+                let dashboardPath = './dashboard.html';
+                
+                // If current path ends with /admin or /admin/, use appropriate relative path
+                if (currentPath.endsWith('/admin') || currentPath.endsWith('/admin/')) {
+                    dashboardPath = 'admin/dashboard.html';
+                } else if (currentPath.includes('/admin/')) {
+                    dashboardPath = './dashboard.html';
+                } else {
+                    dashboardPath = 'admin/dashboard.html';
+                }
+                
+                console.log('Redirecting to:', dashboardPath);
+                console.log('Current path:', currentPath);
+                
+                // Redirect after brief delay to show success message
+                setTimeout(() => {
+                    try {
+                        // Use location.href for standard redirect
+                        window.location.href = dashboardPath;
+                        
+                        // Fallback: if still on login page after 1 second, force redirect
+                        setTimeout(() => {
+                            if (window.location.pathname.includes('login')) {
+                                console.warn('Redirect failed, forcing redirect...');
+                                window.location.replace(dashboardPath);
+                            }
+                        }, 1000);
+                    } catch (err) {
+                        console.error('Redirect error:', err);
+                        // Force redirect as last resort
+                        window.location.replace(dashboardPath);
+                    }
+                }, 600);
+            }
+
+            // Add form submission listener immediately to prevent page refresh
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Clear previous errors
+                clearStatus();
+                emailError.textContent = '';
+                passwordError.textContent = '';
+
+                // Check if Supabase is ready
+                if (!supabaseClient) {
+                    showStatus('Authentication system not ready. Please wait or refresh the page.', 'error');
+                    return;
+                }
+
+                // Validate form
+                if (!validateForm()) {
+                    showStatus('Please fix the errors above', 'error');
+                    return;
+                }
+
+                // Show loading state
+                loginBtn.disabled = true;
+                loginBtn.classList.add('loading');
+                loginBtn.setAttribute('aria-busy', 'true');
+
+                try {
+                    const email = emailInput.value.trim();
+                    const password = passwordInput.value;
+
+                    console.log('Attempting login for:', email);
+
+                    // Sign in with Supabase
+                    const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+
+                    if (authError) {
+                        console.error('Authentication error:', authError);
+                        throw new Error(authError.message || 'Login failed. Please check your credentials.');
+                    }
+
+                    if (!authData || !authData.user) {
+                        throw new Error('Login failed. No user data returned.');
+                    }
+
+                    console.log('Authentication successful, checking admin role...');
+
+                    // Check if user has admin role
+                    const { data: profile, error: profileError } = await supabaseClient
+                        .from('profiles')
+                        .select('role, email')
+                        .eq('id', authData.user.id)
+                        .single();
+
+                    console.log('Profile check result:', { profile, profileError });
+
+                    // Handle profile check errors
+                    if (profileError) {
+                        console.error('Profile error:', profileError);
+
+                        // If profile doesn't exist or select failed, request the server to bootstrap the profile
+                        // The server uses the service role key to upsert the profile safely.
+                        try {
+                            // Obtain a current access token from the client auth session
+                            const sessionResp = await supabaseClient.auth.getSession();
+                            const token = sessionResp?.data?.session?.access_token || null;
+
+                            if (!token) {
+                                console.error('No access token available to call bootstrap endpoint');
+                                await supabaseClient.auth.signOut();
+                                throw new Error('Access denied. Unable to verify admin privileges.');
+                            }
+
+                            const bootstrapRes = await fetch(API_BASE + '/api/profiles/bootstrap', {
+                                method: 'POST',
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+
+                            if (!bootstrapRes.ok) {
+                                const body = await bootstrapRes.json().catch(() => ({}));
+                                console.error('Bootstrap failed:', body);
+                                await supabaseClient.auth.signOut();
+                                throw new Error(body.error || 'Access denied. Unable to verify admin privileges.');
+                            }
+
+                            const newProfile = await bootstrapRes.json().catch(() => null);
+                            if (newProfile && newProfile.role === 'admin') {
+                                console.log('Admin profile created via bootstrap, redirecting...');
+                                redirectToDashboard();
+                                return;
+                            }
+
+                            console.error('Bootstrap did not return an admin profile', newProfile);
+                            await supabaseClient.auth.signOut();
+                            throw new Error('Access denied. Unable to verify admin privileges.');
+                        } catch (bErr) {
+                            console.error('Bootstrap error:', bErr);
+                            await supabaseClient.auth.signOut();
+                            throw new Error('Access denied. Unable to verify admin privileges.');
+                        }
+                    }
+
+                    // Verify admin role
+                    if (!profile || profile.role !== 'admin') {
+                        console.warn('User does not have admin role:', profile);
+                        await supabaseClient.auth.signOut();
+                        throw new Error('Access denied. Admin privileges required.');
+                    }
+
+                    // Success - redirect to dashboard
+                    console.log('Admin login successful, redirecting...');
+                    redirectToDashboard();
+
+                } catch (err) {
+                    console.error('Login error:', err);
+                    const errorMessage = err.message || 'Login failed. Please check your credentials.';
+                    showStatus(errorMessage, 'error');
+                    
+                    // Hide password on error for security
+                    if (passwordInput.type === 'text') {
+                        passwordInput.type = 'password';
+                    }
+
+                    // Re-enable button on error
+                    loginBtn.disabled = false;
+                    loginBtn.classList.remove('loading');
+                    loginBtn.setAttribute('aria-busy', 'false');
+                }
+            });
+
+            // Initialize password toggle - simple implementation
+            const toggleButton = document.getElementById('togglePassword');
+            
+            if (passwordInput && toggleButton) {
+                let isVisible = false;
+                toggleButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    isVisible = !isVisible;
+                    passwordInput.type = isVisible ? 'text' : 'password';
+                    const icon = toggleButton.querySelector('.toggle-icon');
+                    if (icon) {
+                        icon.textContent = isVisible ? '🙈' : '👁';
+                    }
+                    toggleButton.setAttribute('aria-label', isVisible ? 'Hide password' : 'Show password');
+                });
+                console.log('Password toggle initialized');
+            } else {
+                console.error('Password toggle elements not found');
+            }
+
             // Wait for Supabase to load
             const supabaseReady = await waitForSupabase();
             if (!supabaseReady) {
@@ -252,232 +484,6 @@
             }
 
             console.log('Supabase client initialized successfully');
-
-        // Initialize password toggle - simple implementation
-        const toggleButton = document.getElementById('togglePassword');
-        
-        if (passwordInput && toggleButton) {
-            let isVisible = false;
-            toggleButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                isVisible = !isVisible;
-                passwordInput.type = isVisible ? 'text' : 'password';
-                const icon = toggleButton.querySelector('.toggle-icon');
-                if (icon) {
-                    icon.textContent = isVisible ? '🙈' : '👁';
-                }
-                toggleButton.setAttribute('aria-label', isVisible ? 'Hide password' : 'Show password');
-            });
-            console.log('Password toggle initialized');
-        } else {
-            console.error('Password toggle elements not found');
-        }
-
-        // Form validation
-        function validateForm() {
-            let isValid = true;
-
-            // Email validation
-            if (!emailInput.value.trim() || !emailInput.validity.valid) {
-                emailError.textContent = 'Please enter a valid email address';
-                emailInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                emailError.textContent = '';
-                emailInput.setAttribute('aria-invalid', 'false');
-            }
-
-            // Password validation
-            if (!passwordInput.value || passwordInput.value.length < 6) {
-                passwordError.textContent = 'Password must be at least 6 characters';
-                passwordInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                passwordError.textContent = '';
-                passwordInput.setAttribute('aria-invalid', 'false');
-            }
-
-            return isValid;
-        }
-
-        // Real-time validation
-        emailInput.addEventListener('blur', validateForm);
-        passwordInput.addEventListener('blur', validateForm);
-
-        /**
-         * Redirect to dashboard
-         */
-        function redirectToDashboard() {
-            // Show success message
-            showStatus('Login successful! Redirecting...', 'success');
-            
-            // Re-enable button (in case redirect fails)
-            loginBtn.disabled = false;
-            loginBtn.classList.remove('loading');
-            loginBtn.setAttribute('aria-busy', 'false');
-            
-            // Build dashboard URL
-            const currentPath = window.location.pathname;
-            let dashboardPath = './dashboard.html';
-            
-            // If current path ends with /admin or /admin/, use appropriate relative path
-            if (currentPath.endsWith('/admin') || currentPath.endsWith('/admin/')) {
-                dashboardPath = 'admin/dashboard.html';
-            } else if (currentPath.includes('/admin/')) {
-                dashboardPath = './dashboard.html';
-            } else {
-                dashboardPath = 'admin/dashboard.html';
-            }
-            
-            console.log('Redirecting to:', dashboardPath);
-            console.log('Current path:', currentPath);
-            
-            // Redirect after brief delay to show success message
-            setTimeout(() => {
-                try {
-                    // Use location.href for standard redirect
-                    window.location.href = dashboardPath;
-                    
-                    // Fallback: if still on login page after 1 second, force redirect
-                    setTimeout(() => {
-                        if (window.location.pathname.includes('login')) {
-                            console.warn('Redirect failed, forcing redirect...');
-                            window.location.replace(dashboardPath);
-                        }
-                    }, 1000);
-                } catch (err) {
-                    console.error('Redirect error:', err);
-                    // Force redirect as last resort
-                    window.location.replace(dashboardPath);
-                }
-            }, 600);
-        }
-
-        // Form submission
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Clear previous errors
-            clearStatus();
-            emailError.textContent = '';
-            passwordError.textContent = '';
-
-            // Validate form
-            if (!validateForm()) {
-                showStatus('Please fix the errors above', 'error');
-                return;
-            }
-
-            // Show loading state
-            loginBtn.disabled = true;
-            loginBtn.classList.add('loading');
-            loginBtn.setAttribute('aria-busy', 'true');
-
-            try {
-                const email = emailInput.value.trim();
-                const password = passwordInput.value;
-
-                console.log('Attempting login for:', email);
-
-                // Sign in with Supabase
-                const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-                if (authError) {
-                    console.error('Authentication error:', authError);
-                    throw new Error(authError.message || 'Login failed. Please check your credentials.');
-                }
-
-                if (!authData || !authData.user) {
-                    throw new Error('Login failed. No user data returned.');
-                }
-
-                console.log('Authentication successful, checking admin role...');
-
-                // Check if user has admin role
-                const { data: profile, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('role, email')
-                    .eq('id', authData.user.id)
-                    .single();
-
-                console.log('Profile check result:', { profile, profileError });
-
-                // Handle profile check errors
-                if (profileError) {
-                    console.error('Profile error:', profileError);
-
-                    // If profile doesn't exist or select failed, request the server to bootstrap the profile
-                    // The server uses the service role key to upsert the profile safely.
-                    try {
-                        // Obtain a current access token from the client auth session
-                        const sessionResp = await supabaseClient.auth.getSession();
-                        const token = sessionResp?.data?.session?.access_token || null;
-
-                        if (!token) {
-                            console.error('No access token available to call bootstrap endpoint');
-                            await supabaseClient.auth.signOut();
-                            throw new Error('Access denied. Unable to verify admin privileges.');
-                        }
-
-                        const bootstrapRes = await fetch(API_BASE + '/api/profiles/bootstrap', {
-                            method: 'POST',
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-
-                        if (!bootstrapRes.ok) {
-                            const body = await bootstrapRes.json().catch(() => ({}));
-                            console.error('Bootstrap failed:', body);
-                            await supabaseClient.auth.signOut();
-                            throw new Error(body.error || 'Access denied. Unable to verify admin privileges.');
-                        }
-
-                        const newProfile = await bootstrapRes.json().catch(() => null);
-                        if (newProfile && newProfile.role === 'admin') {
-                            console.log('Admin profile created via bootstrap, redirecting...');
-                            redirectToDashboard();
-                            return;
-                        }
-
-                        console.error('Bootstrap did not return an admin profile', newProfile);
-                        await supabaseClient.auth.signOut();
-                        throw new Error('Access denied. Unable to verify admin privileges.');
-                    } catch (bErr) {
-                        console.error('Bootstrap error:', bErr);
-                        await supabaseClient.auth.signOut();
-                        throw new Error('Access denied. Unable to verify admin privileges.');
-                    }
-                }
-
-                // Verify admin role
-                if (!profile || profile.role !== 'admin') {
-                    console.warn('User does not have admin role:', profile);
-                    await supabaseClient.auth.signOut();
-                    throw new Error('Access denied. Admin privileges required.');
-                }
-
-                // Success - redirect to dashboard
-                console.log('Admin login successful, redirecting...');
-                redirectToDashboard();
-
-            } catch (err) {
-                console.error('Login error:', err);
-                const errorMessage = err.message || 'Login failed. Please check your credentials.';
-                showStatus(errorMessage, 'error');
-                
-                // Hide password on error for security
-                if (passwordInput.type === 'text') {
-                    passwordInput.type = 'password';
-                }
-
-                // Re-enable button on error
-                loginBtn.disabled = false;
-                loginBtn.classList.remove('loading');
-                loginBtn.setAttribute('aria-busy', 'false');
-            }
-        });
         } catch (initError) {
             console.error('Error initializing login page:', initError);
             const statusEl = document.getElementById('status');
