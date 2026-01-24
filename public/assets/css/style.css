@@ -1599,3 +1599,25 @@ img {
     margin: 20px auto;
     max-width: 1400px;
 }
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--primary);
+  color: var(--light);
+  padding: 8px 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+.marquee span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+}
