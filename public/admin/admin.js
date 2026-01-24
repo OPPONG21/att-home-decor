@@ -177,45 +177,32 @@
             function redirectToDashboard() {
                 // Show success message
                 showStatus('Login successful! Redirecting...', 'success');
-                
+
                 // Re-enable button (in case redirect fails)
                 loginBtn.disabled = false;
                 loginBtn.classList.remove('loading');
                 loginBtn.setAttribute('aria-busy', 'false');
-                
-                // Build dashboard URL
-                const currentPath = window.location.pathname;
-                let dashboardPath = './dashboard.html';
-                
-                // If current path ends with /admin or /admin/, use appropriate relative path
-                if (currentPath.endsWith('/admin') || currentPath.endsWith('/admin/')) {
-                    dashboardPath = 'admin/dashboard.html';
-                } else if (currentPath.includes('/admin/')) {
-                    dashboardPath = './dashboard.html';
-                } else {
-                    dashboardPath = 'admin/dashboard.html';
-                }
-                
-                console.log('Redirecting to:', dashboardPath);
-                console.log('Current path:', currentPath);
-                
+
+                // Use an absolute dashboard URL to avoid relative-path resolution issues
+                const dashboardUrl = `${window.location.origin}/admin/dashboard.html`;
+                console.log('Redirecting to (absolute):', dashboardUrl);
+
                 // Redirect after brief delay to show success message
                 setTimeout(() => {
                     try {
-                        // Use location.href for standard redirect
-                        window.location.href = dashboardPath;
-                        
-                        // Fallback: if still on login page after 1 second, force redirect
+                        window.location.href = dashboardUrl;
+
+                        // Fallback: if still on login page after 1 second, force replace
                         setTimeout(() => {
                             if (window.location.pathname.includes('login')) {
-                                console.warn('Redirect failed, forcing redirect...');
-                                window.location.replace(dashboardPath);
+                                console.warn('Redirect failed, forcing absolute redirect...');
+                                window.location.replace(dashboardUrl);
                             }
                         }, 1000);
                     } catch (err) {
                         console.error('Redirect error:', err);
-                        // Force redirect as last resort
-                        window.location.replace(dashboardPath);
+                        // Force replace as last resort
+                        window.location.replace(dashboardUrl);
                     }
                 }, 600);
             }
