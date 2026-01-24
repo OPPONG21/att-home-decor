@@ -131,7 +131,7 @@
                                         </div>
                 </div>
                 <div class="table-wrapper">
-                    <table role="table" aria-label="Products table">
+                    <table role="table" aria-label="Products table" class="products-table">
                         <thead>
                             <tr>
                                 <th scope="col"><input type="checkbox" id="selectAll" aria-label="Select all products"></th>
@@ -164,66 +164,112 @@
     </footer>
 
     <!-- Add Product Modal (hidden) -->
-    <div id="addProductModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:40;">
-        <div style="background:white; padding:1.25rem; width:520px; max-width:94%; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
-            <h3 style="margin-top:0;">Add Product</h3>
-            <form id="addProductForm">
-                <div style="display:grid; gap:8px;">
-                    <input id="prodName" placeholder="Product name" required style="padding:8px;" />
-                    <input id="prodCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required style="padding:8px;" />
-                    <div id="prodSubcategoryContainer">
-                        <input id="prodSubcategory" placeholder="Subcategory (e.g. Single bed bedspreads, Duvet, Comfortten)" style="padding:8px; width:100%;" />
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Product</h2>
+                <button class="modal-close" id="closeAddModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label for="prodName">Product Name</label>
+                        <input id="prodName" placeholder="Product name" required />
                     </div>
-                    <input id="prodPrice" placeholder="Price (GHS)" type="number" step="0.01" style="padding:8px;" />
-                    <input id="prodWhatsapp" placeholder="WhatsApp number (optional) e.g. 0540460532" style="padding:8px;" />
-                    <div id="prodWhatsappHint" style="font-size:0.85rem;color:#666;margin-top:4px;"></div>
-                    <input id="prodImage" placeholder="Image URL (optional)" style="padding:8px;" />
-                    <label for="prodImageFile" style="font-size:0.85rem;color:#666;margin:0">Or upload an image file</label>
-                    <input id="prodImageFile" type="file" accept="image/*" style="padding:8px;" />
-                    <div style="display:flex; gap:8px; justify-content:flex-end;">
-                        <button type="button" id="cancelAddProduct" class="btn-secondary">Cancel</button>
-                        <button type="submit" id="submitAddProduct" class="btn-primary">Create</button>
+                    <div class="form-group">
+                        <label for="prodCategory">Category</label>
+                        <input id="prodCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required />
                     </div>
-                </div>
-            </form>
+                    <div id="prodSubcategoryContainer" class="form-group">
+                        <label for="prodSubcategory">Subcategory (optional)</label>
+                        <input id="prodSubcategory" placeholder="Subcategory (e.g. Single bed bedspreads, Duvet, Comfortten)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="prodPrice">Price (GHS)</label>
+                        <input id="prodPrice" placeholder="Price" type="number" step="0.01" />
+                    </div>
+                    <div class="form-group">
+                        <label for="prodWhatsapp">WhatsApp Number (optional)</label>
+                        <input id="prodWhatsapp" placeholder="e.g. 0540460532" />
+                        <div id="prodWhatsappHint" style="font-size:0.85rem;color:#666;margin-top:4px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="prodImage">Image URL (optional)</label>
+                        <input id="prodImage" placeholder="Image URL" />
+                    </div>
+                    <div class="form-group">
+                        <label for="prodImageFile">Or upload an image file</label>
+                        <input id="prodImageFile" type="file" accept="image/*" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancelAddProduct" class="btn-secondary">Cancel</button>
+                <button type="submit" form="addProductForm" id="submitAddProduct" class="btn-primary">Create Product</button>
+            </div>
         </div>
     </div>
 
         <!-- Edit Product Modal (hidden) -->
-        <div id="editProductModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:50;">
-            <div style="background:white; padding:1.25rem; width:520px; max-width:94%; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
-                <h3 style="margin-top:0;">Edit Product</h3>
-                <form id="editProductForm">
-                    <input type="hidden" id="editProdId" />
-                    <div style="display:grid; gap:8px;">
-                        <input id="editProdName" placeholder="Product name" required style="padding:8px;" />
-                        <input id="editProdCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required style="padding:8px;" />
-                        <div id="editProdSubcategoryContainer">
-                            <input id="editProdSubcategory" placeholder="Subcategory (optional)" style="padding:8px; width:100%;" />
+        <div id="editProductModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Product</h2>
+                    <button class="modal-close" id="closeEditModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProdId" />
+                        <div class="form-group">
+                            <label for="editProdName">Product Name</label>
+                            <input id="editProdName" placeholder="Product name" required />
                         </div>
-                        <input id="editProdPrice" placeholder="Price (GHS)" type="number" step="0.01" style="padding:8px;" />
-                        <input id="editProdWhatsapp" placeholder="WhatsApp number (optional) e.g. 0540460532" style="padding:8px;" />
-                        <div id="editProdWhatsappHint" style="font-size:0.85rem;color:#666;margin-top:4px;"></div>
-                        <input id="editProdImage" placeholder="Image URL (optional)" style="padding:8px;" />
-                        <label for="editProdImageFile" style="font-size:0.85rem;color:#666;margin:0">Or upload an image file</label>
-                        <input id="editProdImageFile" type="file" accept="image/*" style="padding:8px;" />
-                        <label style="font-size:0.9rem;">Stock status</label>
-                        <select id="editProdStock" required style="padding:8px;">
-                            <option value="in_stock">In stock</option>
-                            <option value="low_stock">Low stock</option>
-                            <option value="out_of_stock">Out of stock</option>
-                        </select>
-                        <label style="font-size:0.9rem;">Visibility</label>
-                        <select id="editProdVisible" style="padding:8px;">
-                            <option value="true">Visible</option>
-                            <option value="false">Hidden</option>
-                        </select>
-                        <div style="display:flex; gap:8px; justify-content:flex-end;">
-                            <button type="button" id="cancelEditProduct" class="btn-secondary">Cancel</button>
-                            <button type="submit" id="saveEditProduct" class="btn-primary">Save</button>
+                        <div class="form-group">
+                            <label for="editProdCategory">Category</label>
+                            <input id="editProdCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required />
                         </div>
-                    </div>
-                </form>
+                        <div id="editProdSubcategoryContainer" class="form-group">
+                            <label for="editProdSubcategory">Subcategory (optional)</label>
+                            <input id="editProdSubcategory" placeholder="Subcategory" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editProdPrice">Price (GHS)</label>
+                            <input id="editProdPrice" placeholder="Price" type="number" step="0.01" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editProdWhatsapp">WhatsApp Number (optional)</label>
+                            <input id="editProdWhatsapp" placeholder="e.g. 0540460532" />
+                            <div id="editProdWhatsappHint" style="font-size:0.85rem;color:#666;margin-top:4px;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProdImage">Image URL (optional)</label>
+                            <input id="editProdImage" placeholder="Image URL" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editProdImageFile">Or upload an image file</label>
+                            <input id="editProdImageFile" type="file" accept="image/*" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editProdStock">Stock Status</label>
+                            <select id="editProdStock" required>
+                                <option value="in_stock">In stock</option>
+                                <option value="low_stock">Low stock</option>
+                                <option value="out_of_stock">Out of stock</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProdVisible">Visibility</label>
+                            <select id="editProdVisible">
+                                <option value="true">Visible</option>
+                                <option value="false">Hidden</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="cancelEditProduct" class="btn-secondary">Cancel</button>
+                    <button type="submit" form="editProductForm" id="saveEditProduct" class="btn-primary">Save Changes</button>
+                </div>
             </div>
         </div>
 
