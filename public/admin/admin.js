@@ -16,20 +16,10 @@
 
     // Load public config from server
     async function loadClientConfig() {
-        try {
-            const res = await fetch(API_BASE + '/config', { cache: 'no-store' });
-            if (!res.ok) {
-                console.warn('Config endpoint returned non-OK status', res.status);
-                return false;
-            }
-            const cfg = await res.json();
-            SUPABASE_URL = cfg.supabaseUrl || SUPABASE_URL;
-            SUPABASE_ANON_KEY = cfg.supabaseAnonKey || SUPABASE_ANON_KEY;
-            return true;
-        } catch (err) {
-            console.error('Failed to load client config:', err);
-            return false;
-        }
+        // Hardcode public config to avoid fetch issues
+        SUPABASE_URL = 'https://upmhieojblkvtgkxtocn.supabase.co';
+        SUPABASE_ANON_KEY = 'sb_publishable_4lmKpyR0VTfgH5L4kkvLSQ_hi9XnpUM';
+        return true;
     }
 
     /**
