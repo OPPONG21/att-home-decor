@@ -123,6 +123,8 @@
                     <h2 id="products-heading">Products</h2>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <button id="addProductBtn" class="btn-primary" aria-label="Add product" title="Add product">+ Add Product</button>
+                                            <button id="bulkDeleteBtn" class="btn-danger" style="display:none;" aria-label="Delete selected products" title="Delete selected">Delete Selected</button>
+                                            <button id="bulkStockBtn" class="btn-secondary" style="display:none;" aria-label="Update stock status" title="Update stock">Update Stock</button>
                                             <button id="refreshBtn" class="btn-icon" aria-label="Refresh products list" title="Refresh">🔄</button>
                                             <button id="groupToggleBtn" class="btn-secondary" aria-pressed="false" title="Toggle grouping">Group by Category</button>
                                         </div>
@@ -131,6 +133,7 @@
                     <table role="table" aria-label="Products table">
                         <thead>
                             <tr>
+                                <th scope="col"><input type="checkbox" id="selectAll" aria-label="Select all products"></th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">Price (GHS)</th>
@@ -141,7 +144,7 @@
                         </thead>
                         <tbody id="productsTable" role="rowgroup">
                             <tr>
-                                <td colspan="6" class="loading-state">
+                                <td colspan="7" class="loading-state">
                                     <div class="loading-spinner" aria-label="Loading products"></div>
                                     <span>Loading products...</span>
                                 </td>

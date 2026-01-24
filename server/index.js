@@ -8,6 +8,7 @@ const cors = require('cors');
 const productsRouter = require('./routes/products');
 const profilesRouter = require('./routes/profiles');
 const trackingRouter = require('./routes/tracking');
+const adminRouter = require('./routes/admin');
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(express.static(publicPath));
 app.use('/api/products', productsRouter);
 app.use('/api/profiles', profilesRouter);
 app.use('/api/tracking', trackingRouter);
+app.use('/api/admin', adminRouter);
 
 // Public config endpoint for client-side apps to fetch required public keys
 // This returns only non-sensitive public config (anon key and URL). Do NOT expose service_role keys here.
@@ -31,8 +33,7 @@ app.get('/config', (req, res) => {
   });
 });
 
-// Note: Admin routes have been removed. If needed in the future, re-create admin routes
-// and ensure they are properly protected with authentication and authorization checks.
+// Note: Admin routes are now available at /api/admin and /api/products (for product management)
 
 // Fallback to index for SPA-style navigation
 app.get('*', (req, res) => {

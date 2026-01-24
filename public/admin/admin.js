@@ -542,6 +542,99 @@
             });
         }
 
+        // Bulk actions
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+        const bulkStockBtn = document.getElementById('bulkStockBtn');
+
+        function updateBulkButtons() {
+            const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+            const hasSelection = checkedBoxes.length > 0;
+            if (bulkDeleteBtn) bulkDeleteBtn.style.display = hasSelection ? 'inline-block' : 'none';
+            if (bulkStockBtn) bulkStockBtn.style.display = hasSelection ? 'inline-block' : 'none';
+        }
+
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', (e) => {
+                const checkboxes = document.querySelectorAll('.product-checkbox');
+                checkboxes.forEach(cb => cb.checked = e.target.checked);
+                updateBulkButtons();
+            });
+        }
+
+        if (bulkDeleteBtn) {
+            bulkDeleteBtn.addEventListener('click', async () => {
+                const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+                if (checkedBoxes.length === 0) return;
+                const ids = Array.from(checkedBoxes).map(cb => cb.dataset.id).filter(Boolean);
+                if (ids.length === 0) return;
+
+                const ok = confirm(`Are you sure you want to delete ${ids.length} product(s)? This cannot be undone.`);
+                if (!ok) return;
+
+                bulkDeleteBtn.disabled = true;
+                try {
+                    const sessionResp = await supabaseClient.auth.getSession();
+                    const token = sessionResp?.data?.session?.access_token || null;
+
+                    for (const id of ids) {
+                        const res = await fetch(`/api/products/${encodeURIComponent(id)}`, {
+                            method: 'DELETE',
+                            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                        });
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            throw new Error(err.error || `Failed to delete ${id}`);
+                        }
+                    }
+
+                    loadDashboard();
+                } catch (err) {
+                    console.error('Bulk delete error:', err);
+                    alert('Error deleting products: ' + (err.message || err));
+                } finally {
+                    bulkDeleteBtn.disabled = false;
+                }
+            });
+        }
+
+        if (bulkStockBtn) {
+            bulkStockBtn.addEventListener('click', async () => {
+                const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+                if (checkedBoxes.length === 0) return;
+                const ids = Array.from(checkedBoxes).map(cb => cb.dataset.id).filter(Boolean);
+                if (ids.length === 0) return;
+
+                const newStock = prompt('Enter new stock status (in_stock, low_stock, out_of_stock):', 'in_stock');
+                if (!newStock || !['in_stock', 'low_stock', 'out_of_stock'].includes(newStock)) return;
+
+                bulkStockBtn.disabled = true;
+                try {
+                    const sessionResp = await supabaseClient.auth.getSession();
+                    const token = sessionResp?.data?.session?.access_token || null;
+
+                    for (const id of ids) {
+                        const res = await fetch(`/api/products/${encodeURIComponent(id)}`, {
+                            method: 'PUT',
+                            headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': `Bearer ${token}` } : {}),
+                            body: JSON.stringify({ stock_status: newStock })
+                        });
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            throw new Error(err.error || `Failed to update ${id}`);
+                        }
+                    }
+
+                    loadDashboard();
+                } catch (err) {
+                    console.error('Bulk stock update error:', err);
+                    alert('Error updating stock: ' + (err.message || err));
+                } finally {
+                    bulkStockBtn.disabled = false;
+                }
+            });
+        }
+
         if (!logoutBtn) {
             return; // Not on dashboard page
         }
@@ -1227,7 +1320,7 @@
                 if (productsTable) {
                     productsTable.innerHTML = `
                         <tr>
-                            <td colspan="6" class="empty-state">
+                            <td colspan="7" class="empty-state">
                                 <p>Unable to load products. Please try again later.</p>
                                 <button class="btn-secondary" onclick="location.reload()" style="margin-top: 1rem;">
                                     Reload Page
@@ -1282,7 +1375,7 @@
             if (products.length === 0) {
                         productsTable.innerHTML = `
                             <tr>
-                                <td colspan="6" class="empty-state">
+                                <td colspan="7" class="empty-state">
                                     No products found
                                 </td>
                             </tr>
@@ -1303,7 +1396,7 @@
                 Object.keys(groups).sort().forEach(cat => {
                     const items = groups[cat];
                     html += `
-                        <tr class="group-header"><td colspan="6"><strong>${escapeHtml(cat)} (${items.length})</strong></td></tr>
+                        <tr class="group-header"><td colspan="7"><strong>${escapeHtml(cat)} (${items.length})</strong></td></tr>
                     `;
 
                     // Within each category, optionally group by subcategory
@@ -1339,6 +1432,7 @@
 
                             html += `
                                 <tr data-id="${escapeHtml(id)}">
+                                    <td><input type="checkbox" class="product-checkbox" data-id="${escapeHtml(id)}" aria-label="Select ${escapeHtml(name)}"></td>
                                     <td style="padding-left:40px"><strong>${escapeHtml(name)}</strong></td>
                                     <td><span style="text-transform: capitalize;">${escapeHtml(category)}${subcat ? ' / ' + escapeHtml(subcat) : ''}</span></td>
                                     <td>GHS ${price}</td>
@@ -1357,6 +1451,20 @@
                 });
 
                 productsTable.innerHTML = html;
+
+                // Update bulk buttons
+                updateBulkButtons();
+
+                // Add listeners to checkboxes
+                const checkboxes = productsTable.querySelectorAll('.product-checkbox');
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        updateBulkButtons();
+                        // Update select all
+                        const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(c => c.checked);
+                        if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+                    });
+                });
             } else {
                 productsTable.innerHTML = products.map(product => {
                     const imageUrl = product.image_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="%23f3f4f6"/></svg>';
@@ -1369,6 +1477,7 @@
 
                     return `
                         <tr data-id="${escapeHtml(id)}">
+                            <td><input type="checkbox" class="product-checkbox" data-id="${escapeHtml(id)}" aria-label="Select ${escapeHtml(name)}"></td>
                             <td><strong>${escapeHtml(name)}</strong></td>
                             <td><span style="text-transform: capitalize;">${escapeHtml(category)}${subcat ? ' / ' + escapeHtml(subcat) : ''}</span></td>
                             <td>GHS ${price}</td>
@@ -1383,6 +1492,20 @@
                         </tr>
                     `;
                 }).join('');
+
+                // Update bulk buttons
+                updateBulkButtons();
+
+                // Add listeners to checkboxes
+                const checkboxes = productsTable.querySelectorAll('.product-checkbox');
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        updateBulkButtons();
+                        // Update select all
+                        const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(c => c.checked);
+                        if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+                    });
+                });
             }
 
             // Attach delete handlers
