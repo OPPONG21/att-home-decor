@@ -1484,7 +1484,7 @@
         
         if (currentPath.includes('login.html') || currentPath.endsWith('/admin/') || currentPath.endsWith('/admin')) {
             await initLogin();
-        } else if (currentPath.includes('dashboard.html')) {
+        } else if (currentPath.includes('dashboard.html') || currentPath.includes('/admin/dashboard')) {
             await initDashboard();
         }
     }
