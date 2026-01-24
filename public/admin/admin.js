@@ -126,6 +126,7 @@
      * Initialize Login Page
      */
     async function initLogin() {
+        console.log('initLogin called');
         try {
             const loginForm = document.getElementById('loginForm');
             const loginBtn = document.getElementById('loginBtn');
@@ -134,6 +135,9 @@
             const statusEl = document.getElementById('status');
             const emailError = document.getElementById('email-error');
             const passwordError = document.getElementById('password-error');
+
+            console.log('loginForm found:', loginForm);
+            console.log('loginBtn found:', loginBtn);
 
             if (!loginForm || !loginBtn || !emailInput || !passwordInput) {
                 console.error('Login form elements not found');
