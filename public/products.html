@@ -317,7 +317,9 @@
     currentCategory = normalizeCategoryName(urlParams.get('filter')) || 'all';
 
     // API configuration
-    const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') ? 'http://localhost:3000' : '';
+    const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') 
+      ? 'http://localhost:3000' 
+      : 'https://your-api-server.onrender.com';  // ← Replace with your deployed API URL
     const USE_FALLBACK = !API_BASE; // Use fallback when no API server
     const apiUrl = (path = '/api/products') => `${API_BASE}${path}`;
 
