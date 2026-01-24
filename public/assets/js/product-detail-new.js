@@ -4,47 +4,63 @@
 (async function () {
   console.log('Product detail page loaded');
 
-  // Supabase should be loaded synchronously now
-  if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient !== 'undefined') {
-    console.log('Supabase library is available. Proceeding with initialization.');
+  const SUPABASE_URL = 'https://upmhieojblkvtgkxtocn.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_4lmKpyR0VTfgH5L4kkvLSQ_hi9XnpUM';
 
-    const SUPABASE_URL = 'https://upmhieojblkvtgkxtocn.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_4lmKpyR0VTfgH5L4kkvLSQ_hi9XnpUM';
+  // Wait for Supabase to be available (created by `supabase.js` or CDN)
+  async function waitForSupabase(timeout = 4000) {
+    const start = Date.now();
+    while (Date.now() - start < timeout) {
+      if (window.supabaseClient && typeof window.supabaseClient.from === 'function') {
+        return window.supabaseClient;
+      }
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        try {
+          window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          return window.supabaseClient;
+        } catch (e) {
+          console.warn('Error creating supabase client:', e);
+        }
+      }
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    return null;
+  }
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+  const supabaseClient = await waitForSupabase(5000);
 
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
+  if (!supabaseClient) {
+    console.error('Supabase library failed to load.');
+    showError();
+    return;
+  }
 
-    if (!productId) {
+  // Continue with fetching product
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+
+  if (!productId) {
+    showError();
+    return;
+  }
+
+  try {
+    const { data: product, error } = await supabaseClient
+      .from('products')
+      .select('*')
+      .eq('id', productId)
+      .eq('is_published', true)
+      .single();
+
+    if (error || !product) {
+      console.error('Supabase data fetch error:', error);
       showError();
       return;
     }
 
-    try {
-      const { data: product, error } = await supabaseClient
-        .from('products')
-        .select('*')
-        .eq('id', productId)
-        .eq('is_published', true)
-        .single();
-
-      if (error || !product) {
-        console.error('Supabase data fetch error:', error);
-        showError();
-        return;
-      }
-
-      populateProduct(product);
-    } catch (fetchError) {
-      console.error('An error occurred during Supabase data fetch:', fetchError);
-      showError();
-    }
-  } else {
-    console.error('Supabase library failed to load.');
+    populateProduct(product);
+  } catch (fetchError) {
+    console.error('An error occurred during Supabase data fetch:', fetchError);
     showError();
   }
 })(); // End of self-executing async function

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "sample-1",
+    "name": "Classic White Bedspread",
+    "description": "Elegant white bedspread, single size, cotton blend.",
+    "price": 250,
+    "category": "bedspread",
+    "image_url": "classic-white-bedspread.jpg",
+    "badge": "New",
+    "subcategory": "",
+    "stock_status": "in_stock",
+    "whatsapp_url": "https://wa.me/233540460532"
+  },
+  {
+    "id": "sample-2",
+    "name": "Blue Sheer Curtains",
+    "description": "Lightweight sheer curtains in blue, set of two.",
+    "price": 180,
+    "category": "curtain",
+    "image_url": "blue-sheer-curtains.jpg",
+    "badge": "",
+    "subcategory": "two in one",
+    "stock_status": "low_stock",
+    "whatsapp_url": "https://wa.me/233540460532"
+  }
+]

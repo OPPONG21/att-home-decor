@@ -31,8 +31,9 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css">
     
-    <!-- Supabase Client -->
-    <script src="/assets/js/supabase.js" defer></script>
+    <!-- Supabase Client (load official lib first, then local initializer) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js" defer></script>
+    <script src="assets/js/supabase.js" defer></script>
 </head>
 <body>
 
@@ -543,6 +544,21 @@
         });
 
         if (!res.ok) {
+          // If API not found (hosted static site without server), fall back to bundled static JSON
+          if (res.status === 404) {
+            try {
+              const fallbackRes = await fetch('/assets/data/products.json', { headers: { 'Accept': 'application/json' } });
+              if (fallbackRes.ok) {
+                const fallbackData = await fallbackRes.json();
+                allProducts = fallbackData;
+                applyFilters();
+                return;
+              }
+            } catch (fallbackErr) {
+              console.warn('Fallback products fetch failed', fallbackErr);
+            }
+          }
+
           throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         }
 

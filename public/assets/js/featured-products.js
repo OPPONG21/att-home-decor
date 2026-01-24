@@ -1,37 +1,27 @@
-(function() {
-  'use strict';
-
-  // Supabase public storage URL
+(function () {
   const SUPABASE_PUBLIC_URL = 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/';
-
-  // Initialize Supabase client (replace with your ANON key)
-  const SUPABASE_URL = 'https://upmhieojblkvtgkxtocn.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_4lmKpyR0VTfgH5L4kkvLSQ_hi9XnpUM'; // <-- replace this
-  
-  if (!window.supabase) {
-    console.error('Supabase library not loaded. Please check your internet connection.');
-    return;
-  }
-  
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const container = document.getElementById('featured-products');
+  const loadingEl = container.querySelector('.products-loading');
 
   async function loadFeaturedProducts() {
-    const container = document.getElementById('featured-products');
-    const loadingEl = container.querySelector('.products-loading');
+    if (!window.supabaseClient) {
+      console.error('Supabase client not loaded');
+      return;
+    }
 
     try {
       if (loadingEl) loadingEl.textContent = 'Loading products...';
 
-      const { data, error } = await supabaseClient
+      const { data, error } = await window.supabaseClient
         .from('products')
         .select('*')
         .eq('is_published', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw new Error(error.message || 'Failed to load products');
+      if (error) throw error;
 
       if (!data || data.length === 0) {
-        container.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--muted);">No products available at the moment.</p>';
+        container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--muted);">No products available.</p>';
         return;
       }
 
@@ -55,7 +45,7 @@
           : '';
 
         card.innerHTML = `
-          <a href="product.html?id=${product.id}" style="text-decoration: none; color: inherit; display: block;">
+          <a href="product.html?id=${product.id}" style="text-decoration:none;color:inherit;display:block;">
             ${badgeHTML}
             <span class="price-badge">GHS ${price}</span>
             <picture>
@@ -63,22 +53,19 @@
             </picture>
             <div class="product-card-content">
               <h3>${product.name || 'Unnamed Product'}</h3>
-              <a href="product.html?id=${product.id}" class="btn" style="background: linear-gradient(135deg, #25D366, #128C7E);">
-                View Details
-              </a>
+              <a href="product.html?id=${product.id}" class="btn" style="background:linear-gradient(135deg,#25D366,#128C7E);">View Details</a>
             </div>
           </a>
         `;
 
         container.appendChild(card);
       });
-
     } catch (err) {
       console.error('Error loading featured products:', err);
       if (loadingEl) loadingEl.remove();
-      container.innerHTML = `<div class="error-message" role="alert" style="text-align: center; padding: 2rem; color: var(--error-color, #ef4444);">
+      container.innerHTML = `<div style="text-align:center;padding:2rem;color:red;">
         <p>Unable to load products. Please try again later.</p>
-        <button onclick="location.reload()" class="btn" style="margin-top: 1rem;">Reload Page</button>
+        <button onclick="location.reload()" class="btn" style="margin-top:1rem;">Reload Page</button>
       </div>`;
     }
   }
@@ -88,5 +75,4 @@
   } else {
     loadFeaturedProducts();
   }
-
 })();
