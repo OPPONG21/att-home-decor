@@ -210,6 +210,7 @@
             // Add form submission listener immediately to prevent page refresh
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                console.log('Form submit handler called');
 
                 // Clear previous errors
                 clearStatus();
