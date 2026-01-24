@@ -253,19 +253,25 @@
 
             console.log('Supabase client initialized successfully');
 
-        // Initialize password toggle - ensure elements exist
+        // Initialize password toggle - simple implementation
         const toggleButton = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
         
         if (passwordInput && toggleButton) {
-            const passwordToggle = new PasswordToggle('password', 'togglePassword');
-            if (!passwordToggle) {
-                console.error('Failed to initialize password toggle');
-            }
-        } else {
-            console.error('Password toggle elements not found:', {
-                password: !!passwordInput,
-                toggle: !!toggleButton
+            let isVisible = false;
+            toggleButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                isVisible = !isVisible;
+                passwordInput.type = isVisible ? 'text' : 'password';
+                const icon = toggleButton.querySelector('.toggle-icon');
+                if (icon) {
+                    icon.textContent = isVisible ? '🙈' : '👁';
+                }
+                toggleButton.setAttribute('aria-label', isVisible ? 'Hide password' : 'Show password');
             });
+            console.log('Password toggle initialized');
+        } else {
+            console.error('Password toggle elements not found');
         }
 
         // Form validation
