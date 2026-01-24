@@ -597,10 +597,10 @@
         const cancelAddProduct = document.getElementById('cancelAddProduct');
 
         function openAddModal() {
-            if (addProductModal) addProductModal.classList.add('show');
+            if (addProductModal) addProductModal.style.display = 'flex';
         }
         function closeAddModal() {
-            if (addProductModal) addProductModal.classList.remove('show');
+            if (addProductModal) addProductModal.style.display = 'none';
         }
 
         if (addProductBtn) {
@@ -612,14 +612,6 @@
 
         if (cancelAddProduct) {
             cancelAddProduct.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeAddModal();
-            });
-        }
-
-        const closeAddModalBtn = document.getElementById('closeAddModal');
-        if (closeAddModalBtn) {
-            closeAddModalBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 closeAddModal();
             });
@@ -1030,16 +1022,7 @@
             cancelEditProduct.addEventListener('click', (e) => {
                 e.preventDefault();
                 const modal = document.getElementById('editProductModal');
-                if (modal) modal.classList.remove('show');
-            });
-        }
-
-        const closeEditModalBtn = document.getElementById('closeEditModal');
-        if (closeEditModalBtn) {
-            closeEditModalBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const modal = document.getElementById('editProductModal');
-                if (modal) modal.classList.remove('show');
+                if (modal) modal.style.display = 'none';
             });
         }
 
@@ -1105,7 +1088,7 @@
 
                     // Success
                     const modal = document.getElementById('editProductModal');
-                    if (modal) modal.classList.remove('show');
+                    if (modal) modal.style.display = 'none';
                     await loadDashboard();
                 } catch (err) {
                     console.error('Edit product error:', err);
@@ -1471,7 +1454,7 @@
 
                         // Show modal
                         const modal = document.getElementById('editProductModal');
-                        if (modal) modal.classList.add('show');
+                        if (modal) modal.style.display = 'flex';
                     } catch (err) {
                         console.error('Failed to load product for edit:', err);
                         alert('Unable to load product details for editing');
