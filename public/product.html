@@ -46,6 +46,24 @@
             <span id="stock-text"></span>
           </p>
 
+          <!-- Color Selection -->
+          <div class="form-group" style="margin: 1rem 0;">
+            <label for="color-select"><strong>Color:</strong></label>
+            <select id="color-select" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; margin-top: 0.25rem;">
+              <option value="">Select Color</option>
+            </select>
+          </div>
+
+          <!-- Quantity Selection -->
+          <div class="form-group" style="margin: 1rem 0;">
+            <label for="quantity-input"><strong>Quantity:</strong></label>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+              <button id="quantity-minus" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; background: #f9f9f9;">-</button>
+              <input id="quantity-input" type="number" min="1" value="1" style="width: 60px; text-align: center; padding: 0.25rem; border: 1px solid #ddd; border-radius: 4px;">
+              <button id="quantity-plus" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; background: #f9f9f9;">+</button>
+            </div>
+          </div>
+
           <a id="order-whatsapp-btn" class="btn" target="_blank">
             Order via WhatsApp
           </a>

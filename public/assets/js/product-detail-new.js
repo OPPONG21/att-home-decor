@@ -98,13 +98,75 @@ function populateProduct(product) {
   document.getElementById('stock-text').textContent =
     product.in_stock === false ? 'Out of stock' : 'In stock';
 
-  const msg = encodeURIComponent(
-    `Hello, I'm interested in:\n${product.name}\nPrice: GHS ${product.price}`
-  );
+  // Populate color options
+  const colorSelect = document.getElementById('color-select');
+  colorSelect.innerHTML = '<option value="">Select Color</option>';
+  
+  // Extract colors from product text (similar to products.js)
+  const text = `${product.name || ''} ${product.description || ''}`.toLowerCase();
+  const availableColors = ['white', 'beige', 'gray', 'grey', 'blue', 'red', 'green', 'purple', 'yellow']
+    .filter(color => text.includes(color));
+  
+  // Add default colors if none found
+  if (availableColors.length === 0) {
+    availableColors.push('white', 'beige', 'gray');
+  }
+  
+  availableColors.forEach(color => {
+    const option = document.createElement('option');
+    option.value = color;
+    option.textContent = color.charAt(0).toUpperCase() + color.slice(1);
+    colorSelect.appendChild(option);
+  });
 
+  // Quantity controls
+  const quantityInput = document.getElementById('quantity-input');
+  const quantityMinus = document.getElementById('quantity-minus');
+  const quantityPlus = document.getElementById('quantity-plus');
+
+  quantityMinus.addEventListener('click', () => {
+    const current = parseInt(quantityInput.value) || 1;
+    if (current > 1) quantityInput.value = current - 1;
+    updateWhatsAppLink(product);
+  });
+
+  quantityPlus.addEventListener('click', () => {
+    const current = parseInt(quantityInput.value) || 1;
+    quantityInput.value = current + 1;
+    updateWhatsAppLink(product);
+  });
+
+  quantityInput.addEventListener('change', () => {
+    const current = parseInt(quantityInput.value) || 1;
+    if (current < 1) quantityInput.value = 1;
+    updateWhatsAppLink(product);
+  });
+
+  colorSelect.addEventListener('change', () => updateWhatsAppLink(product));
+
+  // Initial WhatsApp link
+  updateWhatsAppLink(product);
+}
+
+function updateWhatsAppLink(product) {
+  const colorSelect = document.getElementById('color-select');
+  const quantityInput = document.getElementById('quantity-input');
+  
+  const selectedColor = colorSelect.value;
+  const quantity = parseInt(quantityInput.value) || 1;
+  
+  let message = `Hello, I'm interested in:\n${product.name}\nPrice: GHS ${product.price}`;
+  if (selectedColor) {
+    message += `\nColor: ${selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}`;
+  }
+  message += `\nQuantity: ${quantity}`;
+  message += `\nTotal: GHS ${(product.price * quantity).toLocaleString('en-GH')}`;
+  
+  const encodedMsg = encodeURIComponent(message);
+  
   document.getElementById('order-whatsapp-btn').href =
     product.whatsapp_url ||
-    `https://wa.me/233540460532?text=${msg}`;
+    `https://wa.me/233540460532?text=${encodedMsg}`;
 }
 
 function showError() {
