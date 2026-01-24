@@ -319,6 +319,7 @@
     // API configuration
     const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') ? 'http://localhost:3000' : '';
     const USE_FALLBACK = !API_BASE; // Use fallback when no API server
+    const apiUrl = (path = '/api/products') => `${API_BASE}${path}`;
 
     /**
      * Extract filter values from product name/description
