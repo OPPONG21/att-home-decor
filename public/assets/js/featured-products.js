@@ -1,6 +1,13 @@
 (function () {
   const SUPABASE_PUBLIC_URL = 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/';
   const container = document.getElementById('featured-products');
+  
+  // Guard: if container doesn't exist, exit gracefully
+  if (!container) {
+    console.warn('Featured products container not found on this page.');
+    return;
+  }
+  
   const loadingEl = container.querySelector('.products-loading');
 
   async function loadFeaturedProducts() {
