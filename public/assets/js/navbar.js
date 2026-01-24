@@ -94,6 +94,10 @@
         } else if (href && (href === path || href.includes(path.replace('.html', '')))) {
           a.classList.add('active');
           a.setAttribute('aria-current', 'page');
+        } else if (path === 'product.html' && href === 'products.html') {
+          // Special case: product detail page should highlight Products
+          a.classList.add('active');
+          a.setAttribute('aria-current', 'page');
         }
       });
     } catch(e) {

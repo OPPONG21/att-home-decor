@@ -19,8 +19,8 @@
     <meta property="og:url" content="https://att-home-decor.com/products.html">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg">
-    <link rel="apple-touch-icon" href="../assets/favicon/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/favicon/favicon.svg">
     
     <!-- Fonts - Optimized loading with font-display: swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,10 +29,10 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
     
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     
     <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js" defer></script>
+    <script src="/assets/js/supabase.js" defer></script>
 </head>
 <body>
 
@@ -824,7 +824,9 @@
 </script>
 
 <!-- Navigation Script -->
-<script src="../assets/js/navbar.js" defer></script>
+<script src="assets/js/navbar.js" defer></script>
+<script src="assets/js/featured-products.js" defer></script> <!-- <- NEW: move all Supabase product code here -->
+
 
 <!-- Delegate WhatsApp clicks and report to server for tracking -->
 <script>
