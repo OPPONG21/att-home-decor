@@ -1482,9 +1482,29 @@
         
         const currentPath = window.location.pathname;
         
+        // Check authentication state
+        const { data: { user }, error } = await supabaseClient.auth.getUser();
+        const isAuthenticated = user && !error;
+        
+        console.log('Auth check:', { isAuthenticated, user: user?.email, path: currentPath });
+        
         if (currentPath.includes('login.html') || currentPath.endsWith('/admin/') || currentPath.endsWith('/admin')) {
+            if (isAuthenticated) {
+                // Already logged in, redirect to dashboard
+                console.log('Already authenticated, redirecting to dashboard...');
+                const dashboardUrl = `${window.location.origin}/admin/dashboard.html`;
+                window.location.href = dashboardUrl;
+                return;
+            }
             await initLogin();
         } else if (currentPath.includes('dashboard.html') || currentPath.includes('/admin/dashboard')) {
+            if (!isAuthenticated) {
+                // Not authenticated, redirect to login
+                console.log('Not authenticated, redirecting to login...');
+                const loginUrl = `${window.location.origin}/admin/login.html`;
+                window.location.href = loginUrl;
+                return;
+            }
             await initDashboard();
         }
     }
@@ -1522,6 +1542,20 @@
 
         // Supabase is ready, proceed with initialization
         console.log('Supabase is ready, initializing...');
+        
+        // Set up auth state listener
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state change:', event, session?.user?.email);
+            if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED' && !session) {
+                // Redirect to login if signed out or session invalid
+                const currentPath = window.location.pathname;
+                if (!currentPath.includes('login.html')) {
+                    const loginUrl = `${window.location.origin}/admin/login.html`;
+                    window.location.href = loginUrl;
+                }
+            }
+        });
+        
         await init();
     }
 
