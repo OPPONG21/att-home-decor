@@ -26,115 +26,19 @@
      * Initialize Supabase client
      */
     function initSupabase() {
-        // Check for Supabase in multiple possible locations
-        const supabase = window.supabase || (window.supabase && window.supabase.createClient) || null;
-        
-        if (!supabase || typeof supabase.createClient !== 'function') {
-            console.error('Supabase library not loaded or createClient not available');
-            console.log('Available on window:', Object.keys(window).filter(k => k.toLowerCase().includes('supabase')));
+        if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+            console.error('Supabase library not loaded');
             return null;
         }
         
         try {
-            const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             console.log('Supabase client created successfully');
             return client;
         } catch (err) {
             console.error('Error creating Supabase client:', err);
             return null;
         }
-    }
-
-    /**
-     * Load Supabase dynamically from CDN
-     */
-    function loadSupabaseFromCDN(url) {
-        return new Promise((resolve, reject) => {
-            // Check if already loaded
-            if (window.supabase && typeof window.supabase.createClient === 'function') {
-                resolve(window.supabase);
-                return;
-            }
-
-            // Check if script already exists
-            const existingScript = document.querySelector(`script[src="${url}"]`);
-            if (existingScript) {
-                // Script exists, wait for it to load
-                existingScript.addEventListener('load', () => {
-                    if (window.supabase) resolve(window.supabase);
-                    else reject(new Error('Script loaded but supabase not available'));
-                });
-                existingScript.addEventListener('error', () => reject(new Error('Script failed to load')));
-                return;
-            }
-
-            // Create new script tag
-            const script = document.createElement('script');
-            script.src = url;
-            script.async = true;
-            script.onload = () => {
-                if (window.supabase && typeof window.supabase.createClient === 'function') {
-                    console.log('Supabase loaded successfully from:', url);
-                    resolve(window.supabase);
-                } else {
-                    reject(new Error('Script loaded but supabase.createClient not available'));
-                }
-            };
-            script.onerror = () => {
-                console.error('Failed to load Supabase from:', url);
-                reject(new Error(`Failed to load from ${url}`));
-            };
-            document.head.appendChild(script);
-        });
-    }
-
-    /**
-     * Wait for Supabase to be available with fallback CDN sources
-     */
-    async function waitForSupabase(maxAttempts = 40, delay = 150) {
-        // First check if already loaded
-        if (window.supabase && typeof window.supabase.createClient === 'function') {
-            console.log('Supabase already loaded');
-            return true;
-        }
-
-        // Try existing script first
-        const supabaseScript = document.querySelector('script[src*="supabase"]');
-        if (supabaseScript && !window.supabaseError) {
-            console.log('Waiting for existing Supabase script to load...');
-            for (let i = 0; i < maxAttempts; i++) {
-                if (window.supabase && typeof window.supabase.createClient === 'function') {
-                    console.log('Supabase loaded from existing script');
-                    return true;
-                }
-                if (window.supabaseError && i > 10) {
-                    console.warn('Existing script failed, trying fallback...');
-                    break;
-                }
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-
-        // If failed, try alternative CDN sources
-        const cdnUrls = [
-            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js',
-            'https://unpkg.com/@supabase/supabase-js@2/dist/supabase.min.js',
-            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js'
-        ];
-
-        for (const url of cdnUrls) {
-            try {
-                console.log('Attempting to load Supabase from:', url);
-                await loadSupabaseFromCDN(url);
-                return true;
-            } catch (err) {
-                console.warn('Failed to load from', url, err.message);
-                continue;
-            }
-        }
-
-        console.error('All Supabase CDN sources failed');
-        return false;
     }
 
     /**
@@ -468,16 +372,7 @@
                 console.error('Password toggle elements not found');
             }
 
-            // Wait for Supabase to load
-            const supabaseReady = await waitForSupabase();
-            if (!supabaseReady) {
-                showStatus('Unable to load authentication library. Please check your internet connection and refresh the page.', 'error');
-                console.error('Supabase library failed to load');
-                return;
-            }
-
-            // Initialize Supabase client
-            supabaseClient = initSupabase();
+            // Check if Supabase client is available
             if (!supabaseClient) {
                 showStatus('Unable to initialize authentication. Please refresh the page.', 'error');
                 return;
@@ -642,18 +537,10 @@
             return; // Not on dashboard page
         }
 
-        // Wait for Supabase to load
-        const supabaseReady = await waitForSupabase();
-        if (!supabaseReady) {
-            console.error('Supabase library failed to load');
-            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h2>Error</h2><p>Unable to load authentication library. Please refresh the page.</p></div>';
-            return;
-        }
-
-        // Initialize Supabase client
-        supabaseClient = initSupabase();
+        // Check if Supabase client is available
         if (!supabaseClient) {
             console.error('Supabase client not available');
+            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h2>Error</h2><p>Unable to initialize authentication. Please refresh the page.</p></div>';
             return;
         }
 
@@ -1621,22 +1508,16 @@
         // Load client config (supabase URL + anon key)
         await loadClientConfig();
 
-        // Wait for Supabase to be available (with automatic fallback loading)
-        const supabaseReady = await waitForSupabase();
-        
-        if (!supabaseReady) {
-            console.error('Supabase library failed to load from all CDN sources');
+        // Initialize Supabase client
+        supabaseClient = initSupabase();
+        if (!supabaseClient) {
+            console.error('Failed to initialize Supabase client');
             const statusEl = document.getElementById('status');
             if (statusEl) {
                 statusEl.innerHTML = `
-                    <strong>Error: Unable to load authentication library</strong><br>
+                    <strong>Error: Unable to initialize authentication</strong><br>
                     <p style="font-size: 0.9rem; margin-top: 0.5rem;">
-                        This might be due to:
-                        <ul style="text-align: left; margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.85rem;">
-                            <li>No internet connection</li>
-                            <li>Firewall blocking CDN access</li>
-                            <li>CDN services being unavailable</li>
-                        </ul>
+                        Please refresh the page and try again.
                     </p>
                     <button onclick="location.reload()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--admin-primary, #0a58ca); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
                         Reload Page
@@ -1644,10 +1525,10 @@
                 `;
                 statusEl.className = 'error';
             }
-            
+
             // Also show alert if status element doesn't exist (for dashboard)
             if (!statusEl) {
-                alert('Unable to load authentication library. Please check your internet connection and refresh the page.');
+                alert('Unable to initialize authentication. Please check your internet connection and refresh the page.');
             }
             return;
         }

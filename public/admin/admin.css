@@ -1,7 +1,7 @@
 /* Admin Stylesheet - Professional Design */
 
 /* Import base theme variables from main stylesheet */
-@import url("../../assets/css/style.css");
+@import url("./style.css");
 
 /* Admin-specific CSS Variables */
 :root {
