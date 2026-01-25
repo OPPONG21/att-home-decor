@@ -362,7 +362,13 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.topbar:hover {
+    box-shadow: 0 16px 48px rgba(59, 130, 246, 0.2);
 }
 
 .topbar-content {
@@ -379,7 +385,21 @@ body {
     font-weight: 900;
     text-decoration: none;
     color: inherit;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.topbar .logo:hover {
+    transform: scale(1.05);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.topbar .logo::before {
+    content: "🏠";
+    font-size: 1.75rem;
 }
 
 .back-to-site {
@@ -389,11 +409,17 @@ body {
     opacity: 0.9;
     transition: var(--transition);
     font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .back-to-site:hover {
     opacity: 1;
-    transform: translateX(4px);
+    transform: translateX(4px) translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .back-to-site:focus-visible {
@@ -410,6 +436,92 @@ body {
 .user-info {
     font-size: var(--font-size-sm);
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.user-info:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.user-info::after {
+    content: "👤";
+    font-size: 1.25rem;
+}
+
+/* Mobile hamburger menu */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments for navbar */
+@media (max-width: 768px) {
+    .topbar-content {
+        padding: 0 1rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .topbar-actions {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .topbar-actions.open {
+        display: flex;
+    }
+
+    .user-info {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .back-to-site {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar-content {
+        padding: 0 0.5rem;
+    }
+
+    .topbar .logo {
+        font-size: 1.25rem;
+    }
+
+    .topbar .logo::before {
+        font-size: 1.5rem;
+    }
 }
 
 /* ==============================
