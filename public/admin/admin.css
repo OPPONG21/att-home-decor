@@ -12,19 +12,16 @@
     --admin-bg: #f4f6fb;
     --admin-panel: #ffffff;
     --admin-radius: 14px;
-
     --admin-primary: #2563eb;
     --admin-accent: #f97316;
-
     --admin-success: #16a34a;
     --admin-error: #dc2626;
     --admin-warning: #f59e0b;
     --admin-muted: #64748b;
-
     --admin-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
     --admin-shadow-hover: 0 20px 45px rgba(15, 23, 42, 0.12);
-
     --field-height: 48px;
+    --transition: all 0.2s ease;
 }
 
 /* ==============================
@@ -34,8 +31,6 @@
 *::before,
 *::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 html {
@@ -47,16 +42,19 @@ body {
     color: #0f172a;
     line-height: 1.6;
     background: linear-gradient(180deg, #f4f6fb, #eef1f8);
+    margin: 0;
+    min-height: 100vh;
 }
 
 /* ==============================
    ACCESSIBILITY UTIL
    ============================== */
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
 }
 
 /* ==============================
@@ -80,8 +78,14 @@ body {
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .admin-login-box h1 {
@@ -109,31 +113,42 @@ body {
     margin-bottom: 1.25rem;
 }
 
-label {
+.form-group label {
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 0.4rem;
+    color: #374151;
 }
 
-input {
+.admin-login-box input[type="email"],
+.admin-login-box input[type="password"],
+.admin-login-box input[type="text"] {
     width: 100%;
     height: var(--field-height);
     padding: 0 1rem;
     border-radius: 10px;
     border: 1px solid #e2e8f0;
     font-size: 0.95rem;
-    transition: all 0.2s ease;
+    transition: var(--transition);
 }
 
-input::placeholder {
+.admin-login-box input::placeholder {
     color: #94a3b8;
 }
 
-input:focus {
+.admin-login-box input:focus {
     outline: none;
     border-color: var(--admin-primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.admin-login-box input:invalid:not(:placeholder-shown) {
+    border-color: var(--admin-error);
+}
+
+.admin-login-box input:valid:not(:placeholder-shown) {
+    border-color: var(--admin-success);
 }
 
 /* Password field */
@@ -153,6 +168,36 @@ input:focus {
     background: rgba(37, 99, 235, 0.08);
     cursor: pointer;
     color: var(--admin-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.password-toggle:hover {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--admin-primary);
+    outline-offset: 2px;
+}
+
+.password-toggle[aria-pressed="true"] {
+    background: var(--admin-primary);
+    color: #fff;
+}
+
+/* Error Messages */
+.error-message {
+    color: var(--admin-error);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.error-message:empty {
+    display: none;
 }
 
 /* ==============================
@@ -168,22 +213,67 @@ input:focus {
     cursor: pointer;
     background: linear-gradient(135deg, var(--admin-primary), var(--admin-accent));
     box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
-    transition: all 0.2s ease;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 18px 38px rgba(37, 99, 235, 0.45);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .btn-secondary {
     background: #fff;
     color: var(--admin-primary);
+    border: 1px solid var(--admin-primary);
     border-radius: 8px;
-    border: none;
     padding: 0.5rem 1rem;
     font-weight: 600;
     cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-secondary:hover {
+    background: var(--admin-primary);
+    color: #fff;
+}
+
+/* Status Message */
+#status {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+#status:empty {
+    display: none;
+}
+
+#status.error {
+    background: #fef2f2;
+    color: var(--admin-error);
+    border: 1px solid #fecaca;
+}
+
+#status.success {
+    background: #f0fdf4;
+    color: var(--admin-success);
+    border: 1px solid #bbf7d0;
 }
 
 /* ==============================
@@ -207,16 +297,45 @@ input:focus {
 
 .topbar-content {
     max-width: 1400px;
-    margin: auto;
+    margin: 0 auto;
     padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.logo {
+.topbar .logo {
     font-size: 1.2rem;
     font-weight: 800;
+    text-decoration: none;
+    color: inherit;
+}
+
+.back-to-site {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    transition: var(--transition);
+}
+
+.back-to-site:hover {
+    opacity: 1;
+}
+
+.back-to-site:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    font-size: 0.9rem;
 }
 
 /* ==============================
@@ -229,12 +348,19 @@ input:focus {
 
 .container {
     max-width: 1400px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 /* ==============================
    STATS
    ============================== */
+.stats-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -247,7 +373,10 @@ input:focus {
     border-radius: var(--admin-radius);
     padding: 1.5rem;
     box-shadow: var(--admin-shadow);
-    transition: all 0.2s ease;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .stat-card:hover {
@@ -255,10 +384,27 @@ input:focus {
     box-shadow: var(--admin-shadow-hover);
 }
 
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--admin-primary);
+    font-size: 1.5rem;
+}
+
+.stat-content {
+    flex: 1;
+}
+
 .stat-value {
     font-size: 1.8rem;
     font-weight: 800;
     color: var(--admin-primary);
+    display: block;
 }
 
 .stat-label {
@@ -274,24 +420,42 @@ input:focus {
     border-radius: var(--admin-radius);
     padding: 1.5rem;
     box-shadow: var(--admin-shadow);
+    overflow-x: auto;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 0.9rem;
 }
 
 thead th {
     font-size: 0.75rem;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--admin-muted);
     padding: 0.75rem;
     border-bottom: 1px solid #e5e7eb;
+    text-align: left;
 }
 
 tbody td {
     padding: 0.85rem;
     border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
 }
 
 tbody tr:hover {
@@ -303,6 +467,35 @@ table img {
     height: 52px;
     border-radius: 8px;
     object-fit: cover;
+}
+
+/* Action buttons in table */
+.action-btn {
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.action-btn.edit {
+    background: var(--admin-primary);
+    color: #fff;
+}
+
+.action-btn.edit:hover {
+    background: #1d4ed8;
+}
+
+.action-btn.delete {
+    background: var(--admin-error);
+    color: #fff;
+}
+
+.action-btn.delete:hover {
+    background: #b91c1c;
 }
 
 /* ==============================
@@ -323,12 +516,22 @@ table img {
 @media (max-width: 768px) {
     .topbar-content {
         padding: 0 1rem;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 1rem;
     }
 
     .dashboard-main {
         padding: 1.25rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
 }
 
@@ -341,8 +544,11 @@ table img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    * {
+    *,
+    *::before,
+    *::after {
         animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
 }
@@ -360,4 +566,5 @@ body::before {
         rgba(37, 99, 235, 0.015) 0 2px,
         transparent 2px 20px
     );
+    z-index: -1;
 }
