@@ -734,67 +734,96 @@ table img {
     }
 }
 
- / *   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-       A D M I N   D A S H B O A R D   S P E C I F I C 
-       = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =   * / 
- 
- . d a s h b o a r d - m a i n   { 
-         p a d d i n g - t o p :   c a l c ( v a r ( - - h e a d e r - h e i g h t )   +   1 r e m ) ; 
- } 
- 
- . h e a d e r - c o n t e n t   { 
-         d i s p l a y :   f l e x ; 
-         j u s t i f y - c o n t e n t :   s p a c e - b e t w e e n ; 
-         a l i g n - i t e m s :   c e n t e r ; 
-         w i d t h :   1 0 0 % ; 
- } 
- 
- . h e a d e r - l e f t   { 
-         d i s p l a y :   f l e x ; 
-         a l i g n - i t e m s :   c e n t e r ; 
-         g a p :   1 6 p x ; 
- } 
- 
- . h e a d e r - a c t i o n s   { 
-         d i s p l a y :   f l e x ; 
-         a l i g n - i t e m s :   c e n t e r ; 
-         g a p :   1 6 p x ; 
- } 
- 
- . b a c k - t o - s i t e   { 
-         c o l o r :   v a r ( - - d a r k ) ; 
-         t e x t - d e c o r a t i o n :   n o n e ; 
-         f o n t - w e i g h t :   6 0 0 ; 
-         p a d d i n g :   6 p x   8 p x ; 
-         b o r d e r - r a d i u s :   6 p x ; 
-         t r a n s i t i o n :   b a c k g r o u n d   0 . 2 s   e a s e ; 
- } 
- 
- . b a c k - t o - s i t e : h o v e r   { 
-         b a c k g r o u n d :   v a r ( - - s e c o n d a r y ) ; 
- } 
- 
- . u s e r - i n f o   { 
-         f o n t - w e i g h t :   6 0 0 ; 
-         c o l o r :   v a r ( - - p r i m a r y ) ; 
- } 
- 
- / *   M o b i l e   a d j u s t m e n t s   f o r   d a s h b o a r d   * / 
- @ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   { 
-         . d a s h b o a r d - m a i n   { 
-                 p a d d i n g - t o p :   c a l c ( v a r ( - - h e a d e r - h e i g h t )   +   0 . 5 r e m ) ; 
-         } 
-         
-         . h e a d e r - l e f t   { 
-                 f l e x - d i r e c t i o n :   c o l u m n ; 
-                 a l i g n - i t e m s :   f l e x - s t a r t ; 
-                 g a p :   8 p x ; 
-         } 
-         
-         . h e a d e r - a c t i o n s   { 
-                 f l e x - d i r e c t i o n :   c o l u m n ; 
-                 g a p :   8 p x ; 
-         } 
- } 
-  
- 
+/* ==============================
+   ADMIN DASHBOARD SPECIFIC
+   ============================== */
+.dashboard-main {
+    padding-top: calc(var(--header-height) + 1rem);
+}
+.header-placeholder {
+    height: var(--header-height);
+}
+
+/* ==============================
+   PROFESSIONAL ENHANCEMENTS
+   ============================== */
+
+/* Subtle card hover effect for all cards */
+.card,
+.stat-card,
+.table-section {
+    transition: box-shadow 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.18s cubic-bezier(0.4,0,0.2,1);
+}
+.card:hover,
+.stat-card:hover,
+.table-section:hover {
+    box-shadow: 0 16px 40px rgba(10,88,202,0.12), 0 2px 8px rgba(0,0,0,0.04);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Add focus style for all interactive elements for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--admin-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Smoother transitions for buttons and links */
+button,
+a,
+input,
+select,
+textarea {
+    transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+
+/* Custom scrollbar for admin panel */
+body,
+.dashboard-main,
+.table-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: var(--admin-primary) var(--admin-bg);
+}
+body::-webkit-scrollbar,
+.dashboard-main::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar {
+    width: 8px;
+    background: var(--admin-bg);
+}
+body::-webkit-scrollbar-thumb,
+.dashboard-main::-webkit-scrollbar-thumb,
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--admin-primary);
+    border-radius: 8px;
+}
+
+/* Responsive font scaling for admin headings */
+@media (max-width: 600px) {
+    .admin-login-box h1,
+    .section-header h2 {
+        font-size: 1.2rem;
+    }
+    .stat-value {
+        font-size: 1.2rem;
+    }
+}
+
+/* Subtle background pattern for extra polish */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: repeating-linear-gradient(
+        135deg,
+        rgba(10,88,202,0.01) 0 2px,
+        transparent 2px 20px
+    );
+}
+
+/* End of file */
