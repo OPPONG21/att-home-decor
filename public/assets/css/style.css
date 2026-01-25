@@ -1326,10 +1326,10 @@ a:focus-visible,
 .product-card img {
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     transition: transform 0.4s ease;
-    min-height: 140px;
+    min-height: 120px;
 }
 
 .product-card:hover img {
