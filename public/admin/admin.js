@@ -919,6 +919,7 @@
                 subcategory = normalizeSubcategoryForCategory(category, subcategory);
                 const price = document.getElementById('prodPrice').value;
                 const whatsapp_input = document.getElementById('prodWhatsapp') ? document.getElementById('prodWhatsapp').value.trim() : '';
+                const notes = document.getElementById('prodNotes') ? document.getElementById('prodNotes').value.trim() : '';
 
                 const whatsapp_final = normalizeWhatsapp(whatsapp_input);
                 const image_url_input = document.getElementById('prodImage').value.trim();
@@ -992,7 +993,7 @@
                     const res = await fetch(API_BASE + '/api/products', {
                         method: 'POST',
                         headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': `Bearer ${token}` } : {}),
-                        body: JSON.stringify({ name, category, subcategory, price, image_url: final_image_url, whatsapp_url: whatsapp_final })
+                        body: JSON.stringify({ name, category, subcategory, price, image_url: final_image_url, whatsapp_url: whatsapp_final, notes: notes || null })
                     });
 
                     if (!res.ok) {
@@ -1037,6 +1038,7 @@
                 subcategory = normalizeSubcategoryForCategory(category, subcategory);
                 const price = document.getElementById('editProdPrice').value;
                 const whatsapp_input = document.getElementById('editProdWhatsapp') ? document.getElementById('editProdWhatsapp').value.trim() : '';
+                const notes = document.getElementById('editProdNotes') ? document.getElementById('editProdNotes').value.trim() : '';
 
                 // Image upload handling (optional)
                 const image_url_input = document.getElementById('editProdImage').value.trim();
@@ -1078,7 +1080,7 @@
                     const res = await fetch(`${API_BASE}/api/products/${encodeURIComponent(id)}`, {
                         method: 'PUT',
                         headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': `Bearer ${token}` } : {}),
-                        body: JSON.stringify({ name, category, subcategory, price, image_url: final_image_url, whatsapp_url: whatsapp_final, stock_status: stock, visible })
+                        body: JSON.stringify({ name, category, subcategory, price, image_url: final_image_url, whatsapp_url: whatsapp_final, stock_status: stock, visible, notes: notes || null })
                     });
 
                     if (!res.ok) {
@@ -1442,6 +1444,7 @@
                         document.getElementById('editProdPrice').value = product.price || '';
                         document.getElementById('editProdWhatsapp').value = product.whatsapp_url || '';
                         document.getElementById('editProdImage').value = product.image_url || '';
+                        document.getElementById('editProdNotes').value = product.notes || '';
 
                         // set stock and visibility fields if present
                         const stockEl = document.getElementById('editProdStock');
@@ -1883,6 +1886,7 @@
                     document.getElementById('editProdPrice').value = product.price || '';
                     document.getElementById('editProdWhatsapp').value = product.whatsapp_url || '';
                     document.getElementById('editProdImage').value = product.image_url || '';
+                    document.getElementById('editProdNotes').value = product.notes || '';
 
                     // set stock and visibility fields if present
                     const stockEl = document.getElementById('editProdStock');
