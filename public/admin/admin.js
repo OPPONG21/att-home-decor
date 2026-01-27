@@ -26,13 +26,12 @@
         'queen size with two pillow cases and 2 curtains of the same kind': 'Queen-size bedspread set with two pillow cases and two matching curtains. Provides full bedroom coordination.',
         'duvet with two pillow cases and a bedsheet': 'Comfortable duvet set with two pillow cases and a matching bedsheet. Suitable for all-season use.',
         'duvet': 'Soft and warm duvet designed for comfort and durability. Can be paired with any standard duvet cover.',
-        'waterproof': 'Protective sheet designed to prevent liquid penetration. Ideal for children, hospitals, and guest rooms.',
         'waterproof sheet': 'Protective sheet designed to prevent liquid penetration. Ideal for children, hospitals, and guest rooms.',
         // Pillows
         'comfortten': 'Soft, supportive pillow designed for neck and head comfort. Suitable for long-term sleeping use.',
-        'cotton': 'Traditional cotton-filled pillow. Breathable, affordable, and easy to maintain.',
+        'normal cotton': 'Traditional cotton-filled pillow. Breathable, affordable, and easy to maintain.',
         // Blankets
-        'student': 'Lightweight and easy to carry. Suitable for students, hostels, and everyday use.',
+        'student blankets': 'Lightweight and easy to carry. Suitable for students, hostels, and everyday use.',
         'big blanket': 'Large-sized blanket providing full body coverage and extra warmth. Ideal for home use.',
         // Curtains
         'two in one': 'Simple dual-layer curtain suitable for living rooms and bedrooms. Provides basic privacy and light control.',
