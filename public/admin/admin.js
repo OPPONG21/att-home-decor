@@ -41,6 +41,50 @@
         'bathroom curtains': 'Water-resistant curtains suitable for bathroom use. Easy to clean and designed for moisture-rich areas.'
     };
 
+    // Subcategories mapped by category
+    const CATEGORY_SUBCATEGORIES = {
+        'bedspread': [
+            'Single bed bedspreads',
+            'Double bed bedspreads with two pillow cases',
+            'King size with one sheet and two pillow cases',
+            'King size with two sheets with 4 pillow cases',
+            'Queen size with two pillow cases and 2 curtains of the same kind',
+            'Duvet with two pillow cases and a bedsheet',
+            'Duvet',
+            'Waterproof sheet'
+        ],
+        'pillow': [
+            'Comfortten',
+            'Normal cotton'
+        ],
+        'blanket': [
+            'Student blankets',
+            'Big blanket'
+        ],
+        'curtain': [
+            'Two in one',
+            'Two in one with designs',
+            'Three in one',
+            'Door curtains',
+            'Bathroom curtains'
+        ]
+    };
+
+    // Function to populate subcategories dropdown
+    function populateSubcategories(categorySelect, subcategorySelect) {
+        const category = (categorySelect.value || '').toLowerCase().trim();
+        subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+        
+        if (category && CATEGORY_SUBCATEGORIES[category]) {
+            CATEGORY_SUBCATEGORIES[category].forEach(subcat => {
+                const option = document.createElement('option');
+                option.value = subcat;
+                option.textContent = subcat;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    }
+
     // Load public config from server
     async function loadClientConfig() {
         // Hardcode public config to avoid fetch issues
@@ -937,8 +981,17 @@
         }
 
         if (addProductForm) {
-            // Auto-populate notes when subcategory changes
+            // Populate subcategories when category changes
+            const prodCategoryEl = document.getElementById('prodCategory');
             const prodSubcategoryEl = document.getElementById('prodSubcategory');
+            
+            if (prodCategoryEl && prodSubcategoryEl) {
+                prodCategoryEl.addEventListener('change', function() {
+                    populateSubcategories(this, prodSubcategoryEl);
+                });
+            }
+            
+            // Auto-populate notes when subcategory changes
             if (prodSubcategoryEl) {
                 prodSubcategoryEl.addEventListener('change', function() {
                     const subcatValue = (this.value || '').trim().toLowerCase();
@@ -1080,8 +1133,17 @@
         }
 
         if (editProductForm) {
-            // Auto-populate notes when subcategory changes
+            // Populate subcategories when category changes
+            const editProdCategoryEl = document.getElementById('editProdCategory');
             const editProdSubcategoryEl = document.getElementById('editProdSubcategory');
+            
+            if (editProdCategoryEl && editProdSubcategoryEl) {
+                editProdCategoryEl.addEventListener('change', function() {
+                    populateSubcategories(this, editProdSubcategoryEl);
+                });
+            }
+            
+            // Auto-populate notes when subcategory changes
             if (editProdSubcategoryEl) {
                 editProdSubcategoryEl.addEventListener('change', function() {
                     const subcatValue = (this.value || '').trim().toLowerCase();
