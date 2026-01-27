@@ -1443,15 +1443,27 @@
                         }
 
                         // Populate edit modal fields
-                        document.getElementById('editProdId').value = product.id || '';
-                        document.getElementById('editProdName').value = product.name || '';
-                        document.getElementById('editProdCategory').value = product.category || '';
+                        const fields = {
+                            'editProdId': product.id,
+                            'editProdName': product.name,
+                            'editProdCategory': product.category,
+                            'editProdPrice': product.price,
+                            'editProdWhatsapp': product.whatsapp_url,
+                            'editProdImage': product.image_url,
+                            'editProdNotes': product.notes
+                        };
+                        
+                        for (const [fieldId, value] of Object.entries(fields)) {
+                            const el = document.getElementById(fieldId);
+                            if (el) {
+                                el.value = value || '';
+                            } else {
+                                console.warn(`Element not found: ${fieldId}`);
+                            }
+                        }
+                        
                         // render appropriate subcategory field
                         renderEditSubcategoryField(product.category || '', product.subcategory || '');
-                        document.getElementById('editProdPrice').value = product.price || '';
-                        document.getElementById('editProdWhatsapp').value = product.whatsapp_url || '';
-                        document.getElementById('editProdImage').value = product.image_url || '';
-                        document.getElementById('editProdNotes').value = product.notes || '';
 
                         // set stock and visibility fields if present
                         const stockEl = document.getElementById('editProdStock');
@@ -1890,15 +1902,27 @@
                     }
 
                     // Populate edit modal fields
-                    document.getElementById('editProdId').value = product.id || '';
-                    document.getElementById('editProdName').value = product.name || '';
-                    document.getElementById('editProdCategory').value = product.category || '';
+                    const fields = {
+                        'editProdId': product.id,
+                        'editProdName': product.name,
+                        'editProdCategory': product.category,
+                        'editProdPrice': product.price,
+                        'editProdWhatsapp': product.whatsapp_url,
+                        'editProdImage': product.image_url,
+                        'editProdNotes': product.notes
+                    };
+                    
+                    for (const [fieldId, value] of Object.entries(fields)) {
+                        const el = document.getElementById(fieldId);
+                        if (el) {
+                            el.value = value || '';
+                        } else {
+                            console.warn(`Element not found: ${fieldId}`);
+                        }
+                    }
+                    
                     // render appropriate subcategory field
                     renderEditSubcategoryField(product.category || '', product.subcategory || '');
-                    document.getElementById('editProdPrice').value = product.price || '';
-                    document.getElementById('editProdWhatsapp').value = product.whatsapp_url || '';
-                    document.getElementById('editProdImage').value = product.image_url || '';
-                    document.getElementById('editProdNotes').value = product.notes || '';
 
                     // set stock and visibility fields if present
                     const stockEl = document.getElementById('editProdStock');
