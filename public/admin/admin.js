@@ -73,15 +73,19 @@
     // Function to populate subcategories dropdown
     function populateSubcategories(categorySelect, subcategorySelect) {
         const category = (categorySelect.value || '').toLowerCase().trim();
+        console.log('Populating subcategories for category:', category);
         subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
         
         if (category && CATEGORY_SUBCATEGORIES[category]) {
+            console.log('Found subcategories:', CATEGORY_SUBCATEGORIES[category]);
             CATEGORY_SUBCATEGORIES[category].forEach(subcat => {
                 const option = document.createElement('option');
                 option.value = subcat;
                 option.textContent = subcat;
                 subcategorySelect.appendChild(option);
             });
+        } else {
+            console.log('No subcategories found for category:', category);
         }
     }
 
