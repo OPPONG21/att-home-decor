@@ -87,13 +87,46 @@ function populateProduct(product) {
     ? product.images
     : [product.image_url];
 
-  images.forEach((url) => {
+  const mainWrapper = document.querySelector('.product-main-image');
+
+  images.forEach((url, idx) => {
+    const thumbWrap = document.createElement('div');
+    thumbWrap.className = 'product-thumbnail';
+
     const img = document.createElement('img');
     img.src = url;
     img.alt = product.name;
-    img.onclick = () => (mainImg.src = url);
-    thumbs.appendChild(img);
+
+    img.addEventListener('click', () => {
+      mainImg.src = url;
+      // mark active thumbnail
+      Array.from(thumbs.children).forEach((c) => c.classList.remove('active'));
+      thumbWrap.classList.add('active');
+      // remove zoom when changing image
+      if (mainWrapper) mainWrapper.classList.remove('zoomed');
+    });
+
+    if (idx === 0) thumbWrap.classList.add('active');
+
+    thumbWrap.appendChild(img);
+    thumbs.appendChild(thumbWrap);
   });
+
+  // Toggle zoom on main image or zoom button
+  if (mainWrapper) {
+    const zoomBtn = mainWrapper.querySelector('.zoom-btn');
+    mainWrapper.addEventListener('click', (e) => {
+      // prevent toggling when clicking a thumbnail (thumbs are outside)
+      if (e.target.closest('.product-thumbnail')) return;
+      mainWrapper.classList.toggle('zoomed');
+    });
+    if (zoomBtn) {
+      zoomBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mainWrapper.classList.toggle('zoomed');
+      });
+    }
+  }
 
   document.getElementById('stock-text').textContent =
     product.in_stock === false ? 'Out of stock' : 'In stock';
