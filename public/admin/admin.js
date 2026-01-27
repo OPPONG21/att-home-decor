@@ -21,17 +21,18 @@
         // Bedspreads
         'single bed bedspreads': 'Designed to fit a standard single bed comfortably. Durable fabric, easy to wash, and suitable for everyday use.',
         'double bed bedspreads with two pillow cases': 'Sized for double beds and comes with two matching pillow cases. Offers a neat, coordinated bedroom look.',
-        'king size with one sheet': 'Full king-size coverage with one matching bedsheet and two pillow cases. Ideal for spacious, modern bedrooms.',
-        'king size with two sheets and four pillow cases': 'Complete king-size set including two sheets and four pillow cases. Suitable for large households or premium setups.',
-        'queen size with two pillow cases and two curtains': 'Queen-size bedspread set with two pillow cases and two matching curtains. Provides full bedroom coordination.',
-        'duvet set (2 pillow cases + bedsheet)': 'Comfortable duvet set with two pillow cases and a matching bedsheet. Suitable for all-season use.',
-        'duvet (only)': 'Soft and warm duvet designed for comfort and durability. Can be paired with any standard duvet cover.',
+        'king size with one sheet and two pillow cases': 'Full king-size coverage with one matching bedsheet and two pillow cases. Ideal for spacious, modern bedrooms.',
+        'king size with two sheets with 4 pillow cases': 'Complete king-size set including two sheets and four pillow cases. Suitable for large households or premium setups.',
+        'queen size with two pillow cases and 2 curtains of the same kind': 'Queen-size bedspread set with two pillow cases and two matching curtains. Provides full bedroom coordination.',
+        'duvet with two pillow cases and a bedsheet': 'Comfortable duvet set with two pillow cases and a matching bedsheet. Suitable for all-season use.',
+        'duvet': 'Soft and warm duvet designed for comfort and durability. Can be paired with any standard duvet cover.',
+        'waterproof': 'Protective sheet designed to prevent liquid penetration. Ideal for children, hospitals, and guest rooms.',
         'waterproof sheet': 'Protective sheet designed to prevent liquid penetration. Ideal for children, hospitals, and guest rooms.',
         // Pillows
         'comfortten': 'Soft, supportive pillow designed for neck and head comfort. Suitable for long-term sleeping use.',
-        'normal cotton': 'Traditional cotton-filled pillow. Breathable, affordable, and easy to maintain.',
+        'cotton': 'Traditional cotton-filled pillow. Breathable, affordable, and easy to maintain.',
         // Blankets
-        'student blankets': 'Lightweight and easy to carry. Suitable for students, hostels, and everyday use.',
+        'student': 'Lightweight and easy to carry. Suitable for students, hostels, and everyday use.',
         'big blanket': 'Large-sized blanket providing full body coverage and extra warmth. Ideal for home use.',
         // Curtains
         'two in one': 'Simple dual-layer curtain suitable for living rooms and bedrooms. Provides basic privacy and light control.',
