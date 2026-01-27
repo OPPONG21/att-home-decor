@@ -1146,6 +1146,8 @@ body::before {
     width: 100%;
     margin: 1rem;
     box-shadow: var(--admin-shadow);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-title {
