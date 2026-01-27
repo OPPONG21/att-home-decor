@@ -1183,8 +1183,6 @@ body::before {
     width: 90%;
     max-height: 95vh;
     box-shadow: var(--admin-shadow);
-    position: relative;
-    z-index: 1001;
     overflow: visible !important;
     overflow-x: visible !important;
     overflow-y: visible !important;
@@ -1194,7 +1192,6 @@ body::before {
     max-height: calc(95vh - 4rem);
     overflow-y: auto;
     overflow-x: visible;
-    position: relative;
 }
 
 .modal-dialog h3 {
@@ -1224,15 +1221,13 @@ body::before {
     box-sizing: border-box;
     background: white;
     color: #1f2937;
-    position: relative;
-    z-index: 1002;
+    appearance: auto;
 }
 
 .modal-dialog label select {
     overflow: visible !important;
-    position: relative;
-    z-index: 1002;
     appearance: auto;
+    pointer-events: auto;
 }
 
 .modal-content {
