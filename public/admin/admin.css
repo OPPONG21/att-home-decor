@@ -1138,6 +1138,26 @@ body::before {
     display: flex;
 }
 
+#addProductModal,
+#editProductModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+}
+
+#editProductModal {
+    z-index: 50;
+}
+
+#addProductModal.show,
+#editProductModal.show {
+    display: flex !important;
+}
+
 .modal-content {
     background: var(--admin-panel);
     border-radius: var(--admin-radius);
