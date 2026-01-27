@@ -340,10 +340,46 @@
       return;
     }
 
-    filtered.forEach((product, index) => {
-      const card = renderProductCard(product, index);
-      container.appendChild(card);
-    });
+    // If viewing curtains, group by common curtain subcategories
+    if (currentCategory === 'curtain') {
+      const groups = ['two in one', 'three in one', 'door curtains', 'bathroom curtains'];
+      // Render each requested group in order
+      groups.forEach((groupName) => {
+        const groupProducts = filtered.filter(p => (p.subcategory || '').toLowerCase() === groupName);
+        if (groupProducts.length === 0) return;
+        const heading = document.createElement('h3');
+        heading.className = 'curtain-group-heading';
+        heading.textContent = groupName.replace(/\b\w/g, c => c.toUpperCase());
+        container.appendChild(heading);
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'curtain-group';
+        groupProducts.forEach((product, idx) => {
+          const card = renderProductCard(product, idx);
+          groupDiv.appendChild(card);
+        });
+        container.appendChild(groupDiv);
+      });
+
+      // Render any curtains without a matching subcategory under "Other Curtains"
+      const uncategorized = filtered.filter(p => p.category === 'curtain' && !groups.includes((p.subcategory || '').toLowerCase()));
+      if (uncategorized.length > 0) {
+        const heading = document.createElement('h3');
+        heading.className = 'curtain-group-heading';
+        heading.textContent = 'Other Curtains';
+        container.appendChild(heading);
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'curtain-group';
+        uncategorized.forEach((product, idx) => groupDiv.appendChild(renderProductCard(product, idx)));
+        container.appendChild(groupDiv);
+      }
+    } else {
+      filtered.forEach((product, index) => {
+        const card = renderProductCard(product, index);
+        container.appendChild(card);
+      });
+    }
 
     updateResultsCount(filtered);
     updateFilterCount();
