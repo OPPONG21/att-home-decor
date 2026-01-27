@@ -1574,19 +1574,19 @@ img {
     max-width: 500px;
 }
 #featured-products .product-card picture img {
-    max-width: 100%;
-    max-height: 500px;
+    max-width: 350%;
+    max-height: 250px;
     height: auto;
     object-fit: cover;
 }
 
 /* New Arrivals Image Fix */
 #new-arrivals .product-card {
-    max-width: 350px;
+    max-width: 500px;
 }
 #new-arrivals .product-card picture img {
     max-width: 100%;
-    max-height: 250px;
+    max-height: 500px;
     height: auto;
     object-fit: cover;
 }
