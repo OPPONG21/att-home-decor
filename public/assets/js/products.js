@@ -342,7 +342,7 @@
 
     // If viewing curtains, group by common curtain subcategories
     if (currentCategory === 'curtain') {
-      const groups = ['two in one', 'three in one', 'door curtains', 'bathroom curtains'];
+      const groups = ['three in one', 'two in one', 'door curtains', 'bathroom curtains'];
       // Render each requested group in order
       groups.forEach((groupName) => {
         const groupProducts = filtered.filter(p => (p.subcategory || '').toLowerCase() === groupName);
