@@ -1198,6 +1198,18 @@ input, select {
     box-sizing: border-box;
 }
 
+textarea {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+}
+
 input:focus, select:focus {
     outline: none;
     border-color: var(--admin-primary);
