@@ -1210,3 +1210,16 @@ button {
 .btn-secondary:hover {
     background: #e5e7eb;
 }
+
+/* ==============================
+   STOCK BADGE OVERRIDES
+   ============================== */
+.stock-badge {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
