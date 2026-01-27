@@ -1182,11 +1182,15 @@ body::before {
     max-width: 600px;
     width: 90%;
     max-height: 95vh;
-    overflow-y: visible;
-    overflow-x: visible;
     box-shadow: var(--admin-shadow);
     position: relative;
     z-index: 1001;
+    overflow: visible !important;
+}
+
+.modal-dialog form {
+    max-height: calc(95vh - 4rem);
+    overflow-y: auto;
 }
 
 .modal-dialog h3 {
