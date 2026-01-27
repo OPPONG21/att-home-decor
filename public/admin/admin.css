@@ -896,7 +896,7 @@ table img {
 
 .action-btn.delete {
     background: linear-gradient(135deg, var(--admin-error), #dc2626);
-    color: #fff;
+    color: #2b06fa;
 }
 
 .action-btn.delete:hover {
