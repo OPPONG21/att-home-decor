@@ -344,6 +344,7 @@
 
       // If viewing specific categories with subcategories, group by subcategory
       if (['bedspread', 'curtain', 'pillow', 'blanket'].includes(currentCategory)) {
+        container.classList.add('products-grouped');
         // Get unique subcategories for this category
         const subcats = [...new Set(filtered.filter(p => p.subcategory).map(p => (p.subcategory || '').toLowerCase()))];
         
@@ -394,11 +395,12 @@
           container.appendChild(wrapper);
         }
       } else {
-      filtered.forEach((product, index) => {
-        const card = renderProductCard(product, index);
-        container.appendChild(card);
-      });
-    }
+        container.classList.remove('products-grouped');
+        filtered.forEach((product, index) => {
+          const card = renderProductCard(product, index);
+          container.appendChild(card);
+        });
+      }
 
     updateResultsCount(filtered);
     updateFilterCount();
