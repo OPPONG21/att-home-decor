@@ -1434,8 +1434,13 @@
                         const resp = await fetch(API_BASE + '/api/products');
                         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                         const list = await resp.json();
+                        console.log('Fetched products:', list);
+                        console.log('Looking for product id:', id);
                         const product = (list || []).find(p => p.id === id);
-                        if (!product) return alert('Product not found');
+                        if (!product) {
+                            console.log('Product not found. Available IDs:', (list || []).map(p => p.id));
+                            return alert('Product not found');
+                        }
 
                         // Populate edit modal fields
                         document.getElementById('editProdId').value = product.id || '';
@@ -1462,7 +1467,7 @@
                         if (modal) modal.classList.add('show');
                     } catch (err) {
                         console.error('Failed to load product for edit:', err);
-                        alert('Unable to load product details for editing');
+                        alert('Unable to load product details for editing: ' + err.message);
                     }
                 });
             });
@@ -1876,8 +1881,13 @@
                     const resp = await fetch(API_BASE + '/api/products');
                     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                     const list = await resp.json();
+                    console.log('Fetched products:', list);
+                    console.log('Looking for product id:', id);
                     const product = (list || []).find(p => p.id === id);
-                    if (!product) return alert('Product not found');
+                    if (!product) {
+                        console.log('Product not found. Available IDs:', (list || []).map(p => p.id));
+                        return alert('Product not found');
+                    }
 
                     // Populate edit modal fields
                     document.getElementById('editProdId').value = product.id || '';
@@ -1904,7 +1914,7 @@
                     if (modal) modal.classList.add('show');
                 } catch (err) {
                     console.error('Failed to load product for edit:', err);
-                    alert('Unable to load product details for editing');
+                    alert('Unable to load product details for editing: ' + err.message);
                 }
             });
         });
