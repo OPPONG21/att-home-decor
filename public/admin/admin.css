@@ -1162,11 +1162,11 @@ body::before {
     background: var(--admin-panel);
     border-radius: var(--admin-radius);
     padding: 2rem;
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
     margin: 1rem;
     box-shadow: var(--admin-shadow);
-    max-height: 90vh;
+    max-height: 95vh;
     overflow-y: auto;
 }
 
