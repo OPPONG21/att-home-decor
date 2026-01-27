@@ -16,6 +16,31 @@
 
     let supabaseClient;
 
+    // Auto-generated notes for subcategories
+    const SUBCATEGORY_NOTES = {
+        // Bedspreads
+        'single bed bedspreads': 'Designed to fit a standard single bed comfortably. Durable fabric, easy to wash, and suitable for everyday use.',
+        'double bed bedspreads with two pillow cases': 'Sized for double beds and comes with two matching pillow cases. Offers a neat, coordinated bedroom look.',
+        'king size with one sheet': 'Full king-size coverage with one matching bedsheet and two pillow cases. Ideal for spacious, modern bedrooms.',
+        'king size with two sheets and four pillow cases': 'Complete king-size set including two sheets and four pillow cases. Suitable for large households or premium setups.',
+        'queen size with two pillow cases and two curtains': 'Queen-size bedspread set with two pillow cases and two matching curtains. Provides full bedroom coordination.',
+        'duvet set (2 pillow cases + bedsheet)': 'Comfortable duvet set with two pillow cases and a matching bedsheet. Suitable for all-season use.',
+        'duvet (only)': 'Soft and warm duvet designed for comfort and durability. Can be paired with any standard duvet cover.',
+        'waterproof sheet': 'Protective sheet designed to prevent liquid penetration. Ideal for children, hospitals, and guest rooms.',
+        // Pillows
+        'comfortten': 'Soft, supportive pillow designed for neck and head comfort. Suitable for long-term sleeping use.',
+        'normal cotton': 'Traditional cotton-filled pillow. Breathable, affordable, and easy to maintain.',
+        // Blankets
+        'student blankets': 'Lightweight and easy to carry. Suitable for students, hostels, and everyday use.',
+        'big blanket': 'Large-sized blanket providing full body coverage and extra warmth. Ideal for home use.',
+        // Curtains
+        'two in one': 'Simple dual-layer curtain suitable for living rooms and bedrooms. Provides basic privacy and light control.',
+        'two in one with designs': 'Dual-layer curtains with decorative patterns. Enhances interior appearance while maintaining functionality.',
+        'three in one': 'Multi-layer curtain set offering improved light control, privacy, and decoration.',
+        'door curtains': 'Designed specifically for doorways. Helps reduce dust, sunlight, and unwanted visibility.',
+        'bathroom curtains': 'Water-resistant curtains suitable for bathroom use. Easy to clean and designed for moisture-rich areas.'
+    };
+
     // Load public config from server
     async function loadClientConfig() {
         // Hardcode public config to avoid fetch issues
@@ -912,6 +937,31 @@
         }
 
         if (addProductForm) {
+            // Auto-populate notes when subcategory changes
+            const prodSubcategoryEl = document.getElementById('prodSubcategory');
+            if (prodSubcategoryEl) {
+                prodSubcategoryEl.addEventListener('change', function() {
+                    const subcatValue = (this.value || '').trim().toLowerCase();
+                    const notesEl = document.getElementById('prodNotes');
+                    if (notesEl && subcatValue) {
+                        const autoNote = SUBCATEGORY_NOTES[subcatValue];
+                        if (autoNote) {
+                            notesEl.value = autoNote;
+                        }
+                    }
+                });
+                prodSubcategoryEl.addEventListener('blur', function() {
+                    const subcatValue = (this.value || '').trim().toLowerCase();
+                    const notesEl = document.getElementById('prodNotes');
+                    if (notesEl && subcatValue && !notesEl.value) {
+                        const autoNote = SUBCATEGORY_NOTES[subcatValue];
+                        if (autoNote) {
+                            notesEl.value = autoNote;
+                        }
+                    }
+                });
+            }
+            
             addProductForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
@@ -1030,6 +1080,31 @@
         }
 
         if (editProductForm) {
+            // Auto-populate notes when subcategory changes
+            const editProdSubcategoryEl = document.getElementById('editProdSubcategory');
+            if (editProdSubcategoryEl) {
+                editProdSubcategoryEl.addEventListener('change', function() {
+                    const subcatValue = (this.value || '').trim().toLowerCase();
+                    const notesEl = document.getElementById('editProdNotes');
+                    if (notesEl && subcatValue) {
+                        const autoNote = SUBCATEGORY_NOTES[subcatValue];
+                        if (autoNote) {
+                            notesEl.value = autoNote;
+                        }
+                    }
+                });
+                editProdSubcategoryEl.addEventListener('blur', function() {
+                    const subcatValue = (this.value || '').trim().toLowerCase();
+                    const notesEl = document.getElementById('editProdNotes');
+                    if (notesEl && subcatValue && !notesEl.value) {
+                        const autoNote = SUBCATEGORY_NOTES[subcatValue];
+                        if (autoNote) {
+                            notesEl.value = autoNote;
+                        }
+                    }
+                });
+            }
+            
             editProductForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const id = document.getElementById('editProdId').value;
