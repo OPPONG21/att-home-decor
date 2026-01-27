@@ -747,7 +747,7 @@ a:focus-visible,
 }
 
 .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
 .products-list {
@@ -819,31 +819,10 @@ a:focus-visible,
 
     .curtain-group {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: calc(var(--gap) * 0.9);
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: calc(var(--gap) * 0.8);
         margin-bottom: 1.5rem;
         align-items: start;
-    }
-
-    /* Make product-cards inside curtain groups a consistent height for tidy rows */
-    .curtain-group .product-card {
-        display: flex;
-        flex-direction: column;
-        min-height: 340px;
-    }
-
-    .curtain-group .product-card picture {
-        display: block;
-        height: 180px;
-        overflow: hidden;
-        border-radius: 10px 10px 0 0;
-    }
-
-    .curtain-group .product-card picture img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
     }
 
     .products-list .product-card-content {

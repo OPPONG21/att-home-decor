@@ -30,7 +30,9 @@
     if (!s) return 'all';
     const t = String(s).trim().toLowerCase();
     if (t === 'bedspreads' || t === 'bedspread') return 'bedspread';
+    if (t === 'blankets' || t === 'blanket') return 'blanket';
     if (t === 'curtains' || t === 'curtain') return 'curtain';
+    if (t === 'pillows' || t === 'pillow') return 'pillow';
     return t;
   }
   currentCategory = normalizeCategoryName(urlParams.get('filter')) || 'all';
@@ -340,46 +342,58 @@
       return;
     }
 
-    // If viewing curtains, group by common curtain subcategories
-    if (currentCategory === 'curtain') {
-      const groups = ['two in one', 'three in one', 'door curtains', 'bathroom curtains'];
-      // Render each requested group in order
-      groups.forEach((groupName) => {
-        const groupProducts = filtered.filter(p => (p.subcategory || '').toLowerCase() === groupName);
-        if (groupProducts.length === 0) return;
-        const heading = document.createElement('h3');
-        heading.className = 'curtain-group-heading';
-        heading.textContent = groupName.replace(/\b\w/g, c => c.toUpperCase());
-        container.appendChild(heading);
+      // If viewing specific categories with subcategories, group by subcategory
+      if (['bedspread', 'curtain', 'pillow', 'blanket'].includes(currentCategory)) {
+        // Get unique subcategories for this category
+        const subcats = [...new Set(filtered.filter(p => p.subcategory).map(p => (p.subcategory || '').toLowerCase()))];
+        
+        subcats.forEach((subcat) => {
+          const groupProducts = filtered.filter(p => (p.subcategory || '').toLowerCase() === subcat);
+          if (groupProducts.length === 0) return;
+          
+          // Wrapper to span full width in grid view
+          const wrapper = document.createElement('div');
+          wrapper.className = 'curtain-group-wrapper';
+          wrapper.style.gridColumn = '1 / -1';
 
-        const groupDiv = document.createElement('div');
-        // reuse products grid styles so grouped items look like the main grid
-        groupDiv.className = 'products curtain-group';
-        groupDiv.setAttribute('role', 'list');
-        groupDiv.setAttribute('aria-label', `${groupName} curtains`);
-        groupProducts.forEach((product, idx) => {
-          const card = renderProductCard(product, idx);
-          groupDiv.appendChild(card);
+          const heading = document.createElement('h3');
+          heading.className = 'curtain-group-heading';
+          heading.textContent = groupProducts[0].subcategory || 'Other';
+          wrapper.appendChild(heading);
+
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'products curtain-group';
+          groupDiv.setAttribute('role', 'list');
+          groupDiv.setAttribute('aria-label', `${groupProducts[0].subcategory || 'Other'} products`);
+          groupProducts.forEach((product, idx) => {
+            const card = renderProductCard(product, idx);
+            groupDiv.appendChild(card);
+          });
+          wrapper.appendChild(groupDiv);
+          container.appendChild(wrapper);
         });
-        container.appendChild(groupDiv);
-      });
 
-      // Render any curtains without a matching subcategory under "Other Curtains"
-      const uncategorized = filtered.filter(p => p.category === 'curtain' && !groups.includes((p.subcategory || '').toLowerCase()));
-      if (uncategorized.length > 0) {
-        const heading = document.createElement('h3');
-        heading.className = 'curtain-group-heading';
-        heading.textContent = 'Other Curtains';
-        container.appendChild(heading);
+        // Render any products without a subcategory under "Other"
+        const uncategorized = filtered.filter(p => !p.subcategory);
+        if (uncategorized.length > 0) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'curtain-group-wrapper';
+          wrapper.style.gridColumn = '1 / -1';
 
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'products curtain-group';
-        groupDiv.setAttribute('role', 'list');
-        groupDiv.setAttribute('aria-label', 'Other curtains');
-        uncategorized.forEach((product, idx) => groupDiv.appendChild(renderProductCard(product, idx)));
-        container.appendChild(groupDiv);
-      }
-    } else {
+          const heading = document.createElement('h3');
+          heading.className = 'curtain-group-heading';
+          heading.textContent = 'Other';
+          wrapper.appendChild(heading);
+
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'products curtain-group';
+          groupDiv.setAttribute('role', 'list');
+          groupDiv.setAttribute('aria-label', 'Other products');
+          uncategorized.forEach((product, idx) => groupDiv.appendChild(renderProductCard(product, idx)));
+          wrapper.appendChild(groupDiv);
+          container.appendChild(wrapper);
+        }
+      } else {
       filtered.forEach((product, index) => {
         const card = renderProductCard(product, index);
         container.appendChild(card);
