@@ -1193,6 +1193,28 @@ body::before {
     font-weight: 600;
 }
 
+.modal-dialog label {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.modal-dialog label input,
+.modal-dialog label select,
+.modal-dialog label textarea {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    background: white;
+    color: #1f2937;
+}
+
 .modal-content {
     background: var(--admin-panel);
     border-radius: var(--admin-radius);
