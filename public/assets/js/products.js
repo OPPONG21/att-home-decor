@@ -342,7 +342,7 @@
 
     // If viewing curtains, group by common curtain subcategories
     if (currentCategory === 'curtain') {
-      const groups = ['three in one', 'two in one', 'door curtains', 'bathroom curtains'];
+      const groups = ['two in one', 'three in one', 'door curtains', 'bathroom curtains'];
       // Render each requested group in order
       groups.forEach((groupName) => {
         const groupProducts = filtered.filter(p => (p.subcategory || '').toLowerCase() === groupName);
@@ -353,7 +353,10 @@
         container.appendChild(heading);
 
         const groupDiv = document.createElement('div');
-        groupDiv.className = 'curtain-group';
+        // reuse products grid styles so grouped items look like the main grid
+        groupDiv.className = 'products curtain-group';
+        groupDiv.setAttribute('role', 'list');
+        groupDiv.setAttribute('aria-label', `${groupName} curtains`);
         groupProducts.forEach((product, idx) => {
           const card = renderProductCard(product, idx);
           groupDiv.appendChild(card);
@@ -370,7 +373,9 @@
         container.appendChild(heading);
 
         const groupDiv = document.createElement('div');
-        groupDiv.className = 'curtain-group';
+        groupDiv.className = 'products curtain-group';
+        groupDiv.setAttribute('role', 'list');
+        groupDiv.setAttribute('aria-label', 'Other curtains');
         uncategorized.forEach((product, idx) => groupDiv.appendChild(renderProductCard(product, idx)));
         container.appendChild(groupDiv);
       }
