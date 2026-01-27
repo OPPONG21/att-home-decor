@@ -72,7 +72,14 @@
 
     // Function to populate subcategories dropdown
     function populateSubcategories(categorySelect, subcategorySelect) {
-        const category = (categorySelect.value || '').toLowerCase().trim();
+        let category = (categorySelect.value || '').toLowerCase().trim();
+        
+        // Normalize category names (handle plural/singular variations)
+        if (category === 'pillows') category = 'pillow';
+        if (category === 'blankets') category = 'blanket';
+        if (category === 'curtains') category = 'curtain';
+        if (category === 'bedspreads') category = 'bedspread';
+        
         console.log('Populating subcategories for category:', category);
         subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
         
