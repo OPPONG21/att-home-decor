@@ -1169,10 +1169,12 @@ body::before {
     z-index: 1000;
     align-items: center;
     justify-content: center;
+    isolation: auto;
 }
 
 .admin-modal.show {
     display: flex !important;
+    isolation: auto;
 }
 
 .modal-dialog {
@@ -1183,6 +1185,7 @@ body::before {
     width: 90%;
     max-height: 95vh;
     box-shadow: var(--admin-shadow);
+    z-index: 1001;
     overflow: visible !important;
     overflow-x: visible !important;
     overflow-y: visible !important;
