@@ -1144,9 +1144,9 @@ body::before {
     position: fixed;
     inset: 0;
     background: rgba(2,6,23,0.6);
+    z-index: 40;
     align-items: center;
     justify-content: center;
-    z-index: 40;
 }
 
 #editProductModal {
@@ -1156,6 +1156,41 @@ body::before {
 #addProductModal.show,
 #editProductModal.show {
     display: flex !important;
+}
+
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(2,6,23,0.6);
+    z-index: 40;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-modal.show {
+    display: flex !important;
+}
+
+.modal-dialog {
+    background: var(--admin-panel);
+    border-radius: var(--admin-radius);
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-shadow: var(--admin-shadow);
+}
+
+.modal-dialog h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .modal-content {

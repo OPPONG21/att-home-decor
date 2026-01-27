@@ -89,74 +89,55 @@
         <p>&copy; <time datetime="2025">2025</time> Classic Dreamspread. All Rights Reserved.</p>
     </footer>
 
-    <!-- Add Product Modal (hidden) -->
-    <div id="addProductModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(2,6,23,0.6); z-index:40; align-items:center; justify-content:center;">
-        <div style="background:var(--admin-panel); border-radius:var(--admin-radius); padding:2rem; max-width:600px; width:100%; margin:1rem; box-shadow:var(--admin-shadow); max-height:95vh; overflow-y:auto;">
-            <h3 style="margin-top:0; margin-bottom:1rem;">Add New Product</h3>
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="admin-modal">
+        <div class="modal-dialog">
+            <h3>Add New Product</h3>
             <form id="addProductForm">
-                <div style="display:grid; gap:12px;">
-                    <!-- Product Name -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Product Name *</label>
-                        <input id="prodName" type="text" placeholder="e.g. Premium Cotton Bedspread" required style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box;" />
-                    </div>
-                    
-                    <!-- Category -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Category *</label>
-                        <select id="prodCategory" required style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box; background:var(--admin-panel);">
-                            <option value="">-- Select Category --</option>
-                            <option value="bedspread">Bedspread</option>
-                            <option value="pillow">Pillow</option>
-                            <option value="blanket">Blanket</option>
-                            <option value="curtain">Curtain</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Subcategory -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Subcategory *</label>
-                        <select id="prodSubcategory" required style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box; background:var(--admin-panel);">
-                            <option value="">-- Select Category First --</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Price -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Price (GHS) *</label>
-                        <input id="prodPrice" type="number" placeholder="0.00" step="0.01" min="0" required style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box;" />
-                    </div>
-                    
-                    <!-- Notes -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Notes/Details</label>
-                        <textarea id="prodNotes" placeholder="Auto-filled based on subcategory, edit if needed" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box; min-height:80px; font-family:inherit; resize:vertical;"></textarea>
-                    </div>
-                    
-                    <!-- WhatsApp -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">WhatsApp Number (Optional)</label>
-                        <input id="prodWhatsapp" type="text" placeholder="e.g. 0540460532" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box;" />
-                        <div id="prodWhatsappHint" style="font-size:0.85rem; color:var(--muted); margin-top:4px;"></div>
-                    </div>
-                    
-                    <!-- Image URL -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Image URL (Optional)</label>
-                        <input id="prodImage" type="url" placeholder="https://example.com/image.jpg" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:4px; box-sizing:border-box;" />
-                    </div>
-                    
-                    <!-- Image File Upload -->
-                    <div>
-                        <label style="display:block; font-size:0.9rem; margin-bottom:4px;">Or Upload Image File</label>
-                        <input id="prodImageFile" type="file" accept="image/*" style="width:100%;" />
-                    </div>
-                    
-                    <!-- Form Actions -->
-                    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:1rem;">
-                        <button type="button" id="cancelAddProduct" class="btn-secondary">Cancel</button>
-                        <button type="submit" id="submitAddProduct" class="btn-primary">Create Product</button>
-                    </div>
+                <label>Product Name *
+                    <input id="prodName" type="text" placeholder="e.g. Premium Cotton Bedspread" required />
+                </label>
+                
+                <label>Category *
+                    <select id="prodCategory" required>
+                        <option value="">-- Select Category --</option>
+                        <option value="bedspread">Bedspread</option>
+                        <option value="pillow">Pillow</option>
+                        <option value="blanket">Blanket</option>
+                        <option value="curtain">Curtain</option>
+                    </select>
+                </label>
+                
+                <label>Subcategory *
+                    <select id="prodSubcategory" required>
+                        <option value="">-- Select Category First --</option>
+                    </select>
+                </label>
+                
+                <label>Price (GHS) *
+                    <input id="prodPrice" type="number" placeholder="0.00" step="0.01" min="0" required />
+                </label>
+                
+                <label>Notes/Details
+                    <textarea id="prodNotes" placeholder="Auto-filled based on subcategory"></textarea>
+                </label>
+                
+                <label>WhatsApp Number (Optional)
+                    <input id="prodWhatsapp" type="text" placeholder="e.g. 0540460532" />
+                    <div id="prodWhatsappHint" style="font-size:0.85rem; color:var(--muted); margin-top:4px;"></div>
+                </label>
+                
+                <label>Image URL (Optional)
+                    <input id="prodImage" type="url" placeholder="https://example.com/image.jpg" />
+                </label>
+                
+                <label>Or Upload Image File
+                    <input id="prodImageFile" type="file" accept="image/*" />
+                </label>
+                
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:1rem;">
+                    <button type="button" id="cancelAddProduct" class="btn-secondary">Cancel</button>
+                    <button type="submit" id="submitAddProduct" class="btn-primary">Create Product</button>
                 </div>
             </form>
         </div>
