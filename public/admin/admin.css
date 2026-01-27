@@ -1186,11 +1186,15 @@ body::before {
     position: relative;
     z-index: 1001;
     overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
 }
 
 .modal-dialog form {
     max-height: calc(95vh - 4rem);
     overflow-y: auto;
+    overflow-x: visible;
+    position: relative;
 }
 
 .modal-dialog h3 {
@@ -1227,6 +1231,8 @@ body::before {
 .modal-dialog label select {
     overflow: visible !important;
     position: relative;
+    z-index: 1002;
+    appearance: auto;
 }
 
 .modal-content {
