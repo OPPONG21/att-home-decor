@@ -909,8 +909,14 @@
             
             if (prodCategoryEl && prodSubcategoryEl) {
                 prodCategoryEl.addEventListener('change', function() {
+                    console.log('Category changed to:', this.value);
                     populateSubcategories(this, prodSubcategoryEl);
                 });
+                // Initialize on page load
+                if (prodCategoryEl.value) {
+                    console.log('Initializing with category:', prodCategoryEl.value);
+                    populateSubcategories(prodCategoryEl, prodSubcategoryEl);
+                }
             }
             
             // Auto-populate notes when subcategory changes
@@ -1031,8 +1037,6 @@
                     // Success
                     closeAddModal();
                     addProductForm.reset();
-                    // Ensure subcategory field is reset to default input
-                    renderSubcategoryField('');
                     loadDashboard();
                 } catch (err) {
                     console.error('Add product error:', err);
@@ -1061,6 +1065,7 @@
             
             if (editProdCategoryEl && editProdSubcategoryEl) {
                 editProdCategoryEl.addEventListener('change', function() {
+                    console.log('Edit category changed to:', this.value);
                     populateSubcategories(this, editProdSubcategoryEl);
                 });
             }
