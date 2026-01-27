@@ -99,19 +99,26 @@
                 </label>
                 
                 <label for="prodCategory">Category *
-                    <select id="prodCategory" required>
-                        <option value="">-- Select Category --</option>
-                        <option value="bedspread">Bedspread</option>
-                        <option value="pillow">Pillow</option>
-                        <option value="blanket">Blanket</option>
-                        <option value="curtain">Curtain</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <div class="dropdown-trigger" id="prodCategoryTrigger" data-select="prodCategory">-- Select Category --</div>
+                        <div class="dropdown-menu" id="prodCategoryMenu">
+                            <div class="dropdown-option" data-value="bedspread">Bedspread</div>
+                            <div class="dropdown-option" data-value="pillow">Pillow</div>
+                            <div class="dropdown-option" data-value="blanket">Blanket</div>
+                            <div class="dropdown-option" data-value="curtain">Curtain</div>
+                        </div>
+                    </div>
+                    <input id="prodCategory" type="hidden" required />
                 </label>
                 
                 <label for="prodSubcategory">Subcategory *
-                    <select id="prodSubcategory" required>
-                        <option value="">-- Select Category First --</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <div class="dropdown-trigger" id="prodSubcategoryTrigger" data-select="prodSubcategory">-- Select Category First --</div>
+                        <div class="dropdown-menu" id="prodSubcategoryMenu">
+                            <div class="dropdown-option" data-value="">-- Select Category First --</div>
+                        </div>
+                    </div>
+                    <input id="prodSubcategory" type="hidden" required />
                 </label>
                 
                 <label for="prodPrice">Price (GHS) *
@@ -155,19 +162,26 @@
                 </label>
                 
                 <label for="editProdCategory">Category *
-                    <select id="editProdCategory" required>
-                        <option value="">-- Select Category --</option>
-                        <option value="bedspread">Bedspread</option>
-                        <option value="pillow">Pillow</option>
-                        <option value="blanket">Blanket</option>
-                        <option value="curtain">Curtain</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <div class="dropdown-trigger" id="editProdCategoryTrigger" data-select="editProdCategory">-- Select Category --</div>
+                        <div class="dropdown-menu" id="editProdCategoryMenu">
+                            <div class="dropdown-option" data-value="bedspread">Bedspread</div>
+                            <div class="dropdown-option" data-value="pillow">Pillow</div>
+                            <div class="dropdown-option" data-value="blanket">Blanket</div>
+                            <div class="dropdown-option" data-value="curtain">Curtain</div>
+                        </div>
+                    </div>
+                    <input id="editProdCategory" type="hidden" required />
                 </label>
                 
                 <label for="editProdSubcategory">Subcategory *
-                    <select id="editProdSubcategory" required>
-                        <option value="">-- Select Subcategory --</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <div class="dropdown-trigger" id="editProdSubcategoryTrigger" data-select="editProdSubcategory">-- Select Subcategory --</div>
+                        <div class="dropdown-menu" id="editProdSubcategoryMenu">
+                            <div class="dropdown-option" data-value="">-- Select Subcategory --</div>
+                        </div>
+                    </div>
+                    <input id="editProdSubcategory" type="hidden" required />
                 </label>
                 
                 <label for="editProdPrice">Price (GHS) *

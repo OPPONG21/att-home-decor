@@ -81,6 +81,107 @@
         if (category === 'bedspreads') category = 'bedspread';
         
         console.log('Populating subcategories for category:', category);
+        
+        if (category && CATEGORY_SUBCATEGORIES[category]) {
+            console.log('Found subcategories:', CATEGORY_SUBCATEGORIES[category]);
+            const menu = document.getElementById(subcategorySelect.id + 'Menu');
+            if (menu) {
+                menu.innerHTML = '';
+                CATEGORY_SUBCATEGORIES[category].forEach(subcat => {
+                    const option = document.createElement('div');
+                    option.className = 'dropdown-option';
+                    option.textContent = subcat;
+                    option.dataset.value = subcat;
+                    menu.appendChild(option);
+                });
+                // Re-attach click handlers
+                attachDropdownHandlers();
+            }
+        } else {
+            console.log('No subcategories found for category:', category);
+        }
+    }
+
+    // Initialize custom dropdowns
+    function initializeDropdowns() {
+        const triggers = document.querySelectorAll('.dropdown-trigger');
+        
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const menu = this.nextElementSibling;
+                if (menu && menu.classList.contains('dropdown-menu')) {
+                    // Close other menus
+                    document.querySelectorAll('.dropdown-menu.open').forEach(m => {
+                        if (m !== menu) {
+                            m.classList.remove('open');
+                            m.previousElementSibling.classList.remove('open');
+                        }
+                    });
+                    // Toggle this menu
+                    menu.classList.toggle('open');
+                    this.classList.toggle('open');
+                }
+            });
+        });
+        
+        attachDropdownHandlers();
+    }
+
+    function attachDropdownHandlers() {
+        const options = document.querySelectorAll('.dropdown-option');
+        
+        options.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const menu = this.closest('.dropdown-menu');
+                const trigger = menu.previousElementSibling;
+                const selectId = trigger.dataset.select;
+                const value = this.dataset.value;
+                
+                // Update hidden input
+                const hiddenInput = document.getElementById(selectId);
+                if (hiddenInput) {
+                    hiddenInput.value = value;
+                    
+                    // Update trigger text
+                    trigger.textContent = this.textContent;
+                    trigger.dataset.value = value;
+                    
+                    // Mark as selected
+                    menu.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // Close menu
+                    menu.classList.remove('open');
+                    trigger.classList.remove('open');
+                    
+                    // Trigger change event on hidden input for our listeners
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        });
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-menu.open').forEach(menu => {
+            menu.classList.remove('open');
+            menu.previousElementSibling.classList.remove('open');
+        });
+    });
+
+    // Function to populate subcategories dropdown
+    function populateSubcategories(categorySelect, subcategorySelect) {
+        let category = (categorySelect.value || '').toLowerCase().trim();
+        
+        // Normalize category names (handle plural/singular variations)
+        if (category === 'pillows') category = 'pillow';
+        if (category === 'blankets') category = 'blanket';
+        if (category === 'curtains') category = 'curtain';
+        if (category === 'bedspreads') category = 'bedspread';
+        
+        console.log('Populating subcategories for category:', category);
         subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
         
         if (category && CATEGORY_SUBCATEGORIES[category]) {
@@ -1565,6 +1666,9 @@
         const refreshBtn = document.getElementById('refreshBtn');
         const productsTable = document.getElementById('productsTable');
         const userEmailEl = document.getElementById('userEmail');
+
+        // Initialize custom dropdowns
+        initializeDropdowns();
 
         // Grouping toggle state
         let groupByCategory = false;
