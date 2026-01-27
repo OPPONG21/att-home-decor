@@ -161,11 +161,11 @@
     </footer>
 
     <!-- Add Product Modal (hidden) -->
-    <div id="addProductModal" style="display:none; position:fixed; inset:0; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:40;">
-        <div>
-            <h3 style="margin-top:0;">Add Product</h3>
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Add Product</h3>
             <form id="addProductForm">
-                <div style="display:grid; gap:8px;">
+                <div class="form-grid">
                     <input id="prodName" placeholder="Product name" required />
                     <input id="prodCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required />
                     <div id="prodSubcategoryContainer">
@@ -177,7 +177,7 @@
                     <input id="prodImage" placeholder="Image URL (optional)" />
                     <label for="prodImageFile" style="font-size:0.85rem;color:var(--muted);margin:0">Or upload an image file</label>
                     <input id="prodImageFile" type="file" accept="image/*" />
-                    <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <div class="form-actions">
                         <button type="button" id="cancelAddProduct" class="btn-secondary">Cancel</button>
                         <button type="submit" id="submitAddProduct" class="btn-primary">Create</button>
                     </div>
@@ -187,12 +187,12 @@
     </div>
 
     <!-- Edit Product Modal (hidden) -->
-    <div id="editProductModal" style="display:none; position:fixed; inset:0; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:50;">
-        <div>
-            <h3 style="margin-top:0;">Edit Product</h3>
+    <div id="editProductModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Edit Product</h3>
             <form id="editProductForm">
                 <input type="hidden" id="editProdId" />
-                <div style="display:grid; gap:8px;">
+                <div class="form-grid">
                     <input id="editProdName" placeholder="Product name" required />
                     <input id="editProdCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required />
                     <div id="editProdSubcategoryContainer">
@@ -215,7 +215,7 @@
                         <option value="true">Visible</option>
                         <option value="false">Hidden</option>
                     </select>
-                    <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <div class="form-actions">
                         <button type="button" id="cancelEditProduct" class="btn-secondary">Cancel</button>
                         <button type="submit" id="saveEditProduct" class="btn-primary">Save</button>
                     </div>

@@ -597,10 +597,10 @@
         const cancelAddProduct = document.getElementById('cancelAddProduct');
 
         function openAddModal() {
-            if (addProductModal) addProductModal.style.display = 'flex';
+            if (addProductModal) addProductModal.classList.add('show');
         }
         function closeAddModal() {
-            if (addProductModal) addProductModal.style.display = 'none';
+            if (addProductModal) addProductModal.classList.remove('show');
         }
 
         if (addProductBtn) {
@@ -1022,7 +1022,7 @@
             cancelEditProduct.addEventListener('click', (e) => {
                 e.preventDefault();
                 const modal = document.getElementById('editProductModal');
-                if (modal) modal.style.display = 'none';
+                if (modal) modal.classList.remove('show');
             });
         }
 
@@ -1454,7 +1454,7 @@
 
                         // Show modal
                         const modal = document.getElementById('editProductModal');
-                        if (modal) modal.style.display = 'flex';
+                        if (modal) modal.classList.add('show');
                     } catch (err) {
                         console.error('Failed to load product for edit:', err);
                         alert('Unable to load product details for editing');
@@ -1895,7 +1895,7 @@
 
                     // Show modal
                     const modal = document.getElementById('editProductModal');
-                    if (modal) modal.style.display = 'flex';
+                    if (modal) modal.classList.add('show');
                 } catch (err) {
                     console.error('Failed to load product for edit:', err);
                     alert('Unable to load product details for editing');

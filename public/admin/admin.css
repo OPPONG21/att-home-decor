@@ -1120,3 +1120,93 @@ body::before {
     );
     z-index: -1;
 }
+
+/* ==============================
+   MODAL STYLES
+   ============================== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--admin-panel);
+    border-radius: var(--admin-radius);
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    margin: 1rem;
+    box-shadow: var(--admin-shadow);
+}
+
+.modal-title {
+    margin-top: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.form-grid {
+    display: grid;
+    gap: 8px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+input, select {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: var(--admin-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
