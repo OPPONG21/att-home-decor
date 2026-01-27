@@ -10,7 +10,9 @@
     let SUPABASE_URL = '';
     let SUPABASE_ANON_KEY = '';
 
-    const API_BASE = 'https://att-home-decor-api.onrender.com';
+    const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') 
+        ? 'http://localhost:3000' 
+        : 'https://att-home-decor-api.onrender.com';
 
     let supabaseClient;
 
