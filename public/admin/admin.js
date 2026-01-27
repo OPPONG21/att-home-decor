@@ -1465,6 +1465,446 @@
     }
 
     /**
+     * Initialize Products page
+     */
+    async function initProducts() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const productsTable = document.getElementById('productsTable');
+        const userEmailEl = document.getElementById('userEmail');
+
+        // Grouping toggle state
+        let groupByCategory = false;
+        const groupToggleBtn = document.getElementById('groupToggleBtn');
+        if (groupToggleBtn) {
+            try {
+                groupByCategory = localStorage.getItem('groupByCategory') === 'true';
+            } catch (e) { groupByCategory = false; }
+            groupToggleBtn.setAttribute('aria-pressed', String(groupByCategory));
+            groupToggleBtn.classList.toggle('active', groupByCategory);
+            groupToggleBtn.addEventListener('click', () => {
+                groupByCategory = !groupByCategory;
+                try { localStorage.setItem('groupByCategory', String(groupByCategory)); } catch (e) {}
+                groupToggleBtn.setAttribute('aria-pressed', String(groupByCategory));
+                groupToggleBtn.classList.toggle('active', groupByCategory);
+                // re-render table
+                loadProducts();
+            });
+        }
+
+        // Bulk actions
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+        const bulkStockBtn = document.getElementById('bulkStockBtn');
+
+        function updateBulkButtons() {
+            const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+            const hasSelection = checkedBoxes.length > 0;
+            if (bulkDeleteBtn) bulkDeleteBtn.style.display = hasSelection ? 'inline-block' : 'none';
+            if (bulkStockBtn) bulkStockBtn.style.display = hasSelection ? 'inline-block' : 'none';
+        }
+
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', (e) => {
+                const checkboxes = document.querySelectorAll('.product-checkbox');
+                checkboxes.forEach(cb => cb.checked = e.target.checked);
+                updateBulkButtons();
+            });
+        }
+
+        if (bulkDeleteBtn) {
+            bulkDeleteBtn.addEventListener('click', async () => {
+                const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+                if (checkedBoxes.length === 0) return;
+
+                if (!confirm(`Delete ${checkedBoxes.length} selected product(s)? This action cannot be undone.`)) return;
+
+                try {
+                    const ids = Array.from(checkedBoxes).map(cb => cb.value);
+                    const { error } = await supabaseClient
+                        .from('products')
+                        .delete()
+                        .in('id', ids);
+
+                    if (error) throw error;
+
+                    alert(`${ids.length} product(s) deleted successfully`);
+                    loadProducts();
+                } catch (err) {
+                    console.error('Bulk delete error:', err);
+                    alert('Failed to delete products');
+                }
+            });
+        }
+
+        if (bulkStockBtn) {
+            bulkStockBtn.addEventListener('click', async () => {
+                const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+                if (checkedBoxes.length === 0) return;
+
+                const newStatus = prompt('Enter new stock status (in_stock, low_stock, out_of_stock):');
+                if (!newStatus || !['in_stock', 'low_stock', 'out_of_stock'].includes(newStatus)) {
+                    alert('Invalid stock status');
+                    return;
+                }
+
+                try {
+                    const ids = Array.from(checkedBoxes).map(cb => cb.value);
+                    const { error } = await supabaseClient
+                        .from('products')
+                        .update({ stock: newStatus })
+                        .in('id', ids);
+
+                    if (error) throw error;
+
+                    alert(`${ids.length} product(s) updated successfully`);
+                    loadProducts();
+                } catch (err) {
+                    console.error('Bulk stock update error:', err);
+                    alert('Failed to update stock status');
+                }
+            });
+        }
+
+        // Logout
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    await supabaseClient.auth.signOut();
+                    window.location.href = './login.html';
+                } catch (err) {
+                    console.error('Logout error:', err);
+                }
+            });
+        }
+
+        // Refresh
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => loadProducts());
+        }
+
+        // User email
+        if (userEmailEl) {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) userEmailEl.textContent = user.email;
+        }
+
+        // Load products
+        await loadProducts();
+
+        // Add product functionality
+        initAddProduct();
+        initEditProduct();
+    }
+
+    /**
+     * Initialize Tracking page
+     */
+    async function initTracking() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userEmailEl = document.getElementById('userEmail');
+
+        // Logout
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    await supabaseClient.auth.signOut();
+                    window.location.href = './login.html';
+                } catch (err) {
+                    console.error('Logout error:', err);
+                }
+            });
+        }
+
+        // User email
+        if (userEmailEl) {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) userEmailEl.textContent = user.email;
+        }
+
+        // Load clicks
+        await loadClicks();
+    }
+
+    /**
+     * Load products for products page
+     */
+    async function loadProducts() {
+        try {
+            // Fetch products
+            const { data: products, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                throw error;
+            }
+
+            // Update products table
+            updateProductsTable(products || []);
+
+        } catch (err) {
+            console.error('Error loading products:', err);
+            const productsTable = document.getElementById('productsTable');
+            if (productsTable) {
+                productsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <p>Unable to load products. Please try again later.</p>
+                            <button class="btn-secondary" onclick="location.reload()" style="margin-top: 1rem;">
+                                Reload Page
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+    }
+
+    /**
+     * Update products table
+     */
+    function updateProductsTable(products) {
+        const productsTable = document.getElementById('productsTable');
+        if (!productsTable) return;
+
+        // Grouping toggle state
+        let groupByCategory = false;
+        const groupToggleBtn = document.getElementById('groupToggleBtn');
+        if (groupToggleBtn) {
+            try {
+                groupByCategory = localStorage.getItem('groupByCategory') === 'true';
+            } catch (e) { groupByCategory = false; }
+        }
+
+        // Bulk actions
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+        const bulkStockBtn = document.getElementById('bulkStockBtn');
+
+        function updateBulkButtons() {
+            const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+            const hasSelection = checkedBoxes.length > 0;
+            if (bulkDeleteBtn) bulkDeleteBtn.style.display = hasSelection ? 'inline-block' : 'none';
+            if (bulkStockBtn) bulkStockBtn.style.display = hasSelection ? 'inline-block' : 'none';
+        }
+
+        function stockLabel(s) {
+            if (!s) return '';
+            if (s === 'out_of_stock') return '<span class="stock-badge stock-out">Out of stock</span>';
+            if (s === 'low_stock') return '<span class="stock-badge stock-low">Low stock</span>';
+            if (s === 'in_stock') return '<span class="stock-badge stock-in">In stock</span>';
+            return `<span class="stock-badge">${escapeHtml(s)}</span>`;
+        }
+
+        if (products.length === 0) {
+            productsTable.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        No products found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        if (groupByCategory) {
+            // Group products by category then by subcategory
+            const groups = {};
+            products.forEach(p => {
+                const cat = (p.category || 'uncategorized').toLowerCase();
+                if (!groups[cat]) groups[cat] = [];
+                groups[cat].push(p);
+            });
+
+            let html = '';
+            Object.keys(groups).sort().forEach(cat => {
+                const items = groups[cat];
+                html += `
+                    <tr class="group-header"><td colspan="7"><strong>${escapeHtml(cat)} (${items.length})</strong></td></tr>
+                `;
+
+                // Within each category, optionally group by subcategory
+                const subgroups = {};
+                items.forEach(p => {
+                    const sub = (p.subcategory || '').toLowerCase() || '_none_';
+                    if (!subgroups[sub]) subgroups[sub] = [];
+                    subgroups[sub].push(p);
+                });
+
+                Object.keys(subgroups).sort().forEach(sub => {
+                    if (sub !== '_none_') {
+                        html += `
+                            <tr class="subgroup-header"><td colspan="6" style="padding-left:20px; font-style:italic;">${escapeHtml(sub)} (${subgroups[sub].length})</td></tr>
+                        `;
+                    }
+                    subgroups[sub].forEach(product => {
+                        const imageUrl = product.image_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="%23f3f4f6"/></svg>';
+                        const price = product.price ? Number(product.price).toLocaleString('en-GH') : '0';
+                        const category = product.category || 'N/A';
+                        const subcat = product.subcategory || '';
+                        const name = product.name || 'Unnamed Product';
+                        const id = product.id || '';
+                        const stock = product.stock_status || 'in_stock';
+
+                        html += `
+                            <tr data-id="${escapeHtml(id)}">
+                                <td><input type="checkbox" class="product-checkbox" data-id="${escapeHtml(id)}" aria-label="Select ${escapeHtml(name)}"></td>
+                                <td style="padding-left:40px"><strong>${escapeHtml(name)}</strong></td>
+                                <td><span style="text-transform: capitalize;">${escapeHtml(category)}${subcat ? ' / ' + escapeHtml(subcat) : ''}</span></td>
+                                <td>GHS ${price}</td>
+                                <td>
+                                    <img src="${imageUrl}" alt="${escapeHtml(name)}" loading="lazy" width="60" height="60">
+                                </td>
+                                <td>${stockLabel(stock)}</td>
+                                <td>
+                                    <button class="btn-secondary edit-product" data-id="${escapeHtml(id)}" aria-label="Edit ${escapeHtml(name)}">Edit</button>
+                                    <button class="btn-danger delete-product" data-id="${escapeHtml(id)}" aria-label="Delete ${escapeHtml(name)}">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                });
+            });
+
+            productsTable.innerHTML = html;
+
+            // Update bulk buttons
+            updateBulkButtons();
+
+            // Add listeners to checkboxes
+            const checkboxes = productsTable.querySelectorAll('.product-checkbox');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    updateBulkButtons();
+                    // Update select all
+                    const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(c => c.checked);
+                    if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+                });
+            });
+        } else {
+            productsTable.innerHTML = products.map(product => {
+                const imageUrl = product.image_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="%23f3f4f6"/></svg>';
+                const price = product.price ? Number(product.price).toLocaleString('en-GH') : '0';
+                const category = product.category || 'N/A';
+                const subcat = product.subcategory || '';
+                const name = product.name || 'Unnamed Product';
+                const id = product.id || '';
+                const stock = product.stock_status || 'in_stock';
+
+                return `
+                    <tr data-id="${escapeHtml(id)}">
+                        <td><input type="checkbox" class="product-checkbox" data-id="${escapeHtml(id)}" aria-label="Select ${escapeHtml(name)}"></td>
+                        <td><strong>${escapeHtml(name)}</strong></td>
+                        <td><span style="text-transform: capitalize;">${escapeHtml(category)}${subcat ? ' / ' + escapeHtml(subcat) : ''}</span></td>
+                        <td>GHS ${price}</td>
+                        <td>
+                            <img src="${imageUrl}" alt="${escapeHtml(name)}" loading="lazy" width="60" height="60">
+                        </td>
+                        <td>${stockLabel(stock)}</td>
+                        <td>
+                            <button class="btn-secondary edit-product" data-id="${escapeHtml(id)}" aria-label="Edit ${escapeHtml(name)}">Edit</button>
+                            <button class="btn-danger delete-product" data-id="${escapeHtml(id)}" aria-label="Delete ${escapeHtml(name)}">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Update bulk buttons
+            updateBulkButtons();
+
+            // Add listeners to checkboxes
+            const checkboxes = productsTable.querySelectorAll('.product-checkbox');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    updateBulkButtons();
+                    // Update select all
+                    const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(c => c.checked);
+                    if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+                });
+            });
+        }
+
+        // Attach delete handlers
+        const deleteButtons = productsTable.querySelectorAll('.delete-product');
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const id = btn.dataset.id;
+                const label = btn.getAttribute('aria-label') || 'this product';
+                if (!id) return alert('Product id missing');
+
+                const ok = confirm(`Are you sure you want to delete ${label}? This cannot be undone.`);
+                if (!ok) return;
+
+                btn.disabled = true;
+                try {
+                    const sessionResp = await supabaseClient.auth.getSession();
+                    const token = sessionResp?.data?.session?.access_token || null;
+                    const res = await fetch(`${API_BASE}/api/products/${encodeURIComponent(id)}`, { method: 'DELETE', headers: token ? { 'Authorization': `Bearer ${token}` } : {} });
+                    if (!res.ok) {
+                        const body = await res.json().catch(() => ({}));
+                        throw new Error(body.error || `HTTP ${res.status}`);
+                    }
+                    // Refresh products
+                    await loadProducts();
+                } catch (err) {
+                    console.error('Delete product error:', err);
+                    alert('Failed to delete product: ' + (err.message || err));
+                } finally {
+                    btn.disabled = false;
+                }
+            });
+        });
+
+        // Attach edit handlers
+        const editButtons = productsTable.querySelectorAll('.edit-product');
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const id = btn.dataset.id;
+                if (!id) return alert('Product id missing');
+
+                // Fetch product details
+                try {
+                    const resp = await fetch(API_BASE + '/api/products');
+                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                    const list = await resp.json();
+                    const product = (list || []).find(p => p.id === id);
+                    if (!product) return alert('Product not found');
+
+                    // Populate edit modal fields
+                    document.getElementById('editProdId').value = product.id || '';
+                    document.getElementById('editProdName').value = product.name || '';
+                    document.getElementById('editProdCategory').value = product.category || '';
+                    // render appropriate subcategory field
+                    renderEditSubcategoryField(product.category || '', product.subcategory || '');
+                    document.getElementById('editProdPrice').value = product.price || '';
+                    document.getElementById('editProdWhatsapp').value = product.whatsapp_url || '';
+                    document.getElementById('editProdImage').value = product.image_url || '';
+
+                    // set stock and visibility fields if present
+                    const stockEl = document.getElementById('editProdStock');
+                    if (stockEl) stockEl.value = product.stock_status || 'in_stock';
+                    const visEl = document.getElementById('editProdVisible');
+                    if (visEl) {
+                        const visVal = (typeof product.visible === 'boolean') ? String(product.visible) : (product.visible === 'false' ? 'false' : 'true');
+                        visEl.value = visVal;
+                    }
+
+                    // Show modal
+                    const modal = document.getElementById('editProductModal');
+                    if (modal) modal.style.display = 'flex';
+                } catch (err) {
+                    console.error('Failed to load product for edit:', err);
+                    alert('Unable to load product details for editing');
+                }
+            });
+        });
+    }
+
+    /**
      * Escape HTML to prevent XSS
      */
     function escapeHtml(text) {
@@ -1506,6 +1946,24 @@
                 return;
             }
             await initDashboard();
+        } else if (currentPath.includes('products.html')) {
+            if (!isAuthenticated) {
+                // Not authenticated, redirect to login
+                console.log('Not authenticated, redirecting to login...');
+                const loginUrl = `${window.location.origin}/admin/login.html`;
+                window.location.href = loginUrl;
+                return;
+            }
+            await initProducts();
+        } else if (currentPath.includes('tracking.html')) {
+            if (!isAuthenticated) {
+                // Not authenticated, redirect to login
+                console.log('Not authenticated, redirecting to login...');
+                const loginUrl = `${window.location.origin}/admin/login.html`;
+                window.location.href = loginUrl;
+                return;
+            }
+            await initTracking();
         }
     }
 

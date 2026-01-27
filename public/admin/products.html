@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Products | Classic Dreamspread Admin</title>
+    <meta name="description" content="Manage products for Classic Dreamspread" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Admin Stylesheet -->
+    <link rel="stylesheet" href="./admin.css" />
+
+    <!-- Supabase Client UMD -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+    <!-- Admin Utilities - Load after DOM is ready -->
+    <script src="./admin.js" defer></script>
+</head>
+<body class="dashboard-page">
+
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <h1 class="logo">Classic <span>Dreamspread</span></h1>
+                <nav class="main-nav" role="navigation" aria-label="Admin navigation">
+                    <a href="./dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="./products.html" class="nav-link active" aria-current="page">Products</a>
+                    <a href="./tracking.html" class="nav-link">Clicks</a>
+                    <a href="../index.html" class="nav-link">View Site</a>
+                </nav>
+            </div>
+            <div class="header-actions">
+                <span class="user-info" id="userEmail" aria-label="Current user email"></span>
+                <button id="logoutBtn" class="btn-secondary" aria-label="Sign out of admin dashboard">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main" id="main-content">
+        <div class="container">
+            <!-- Products Table -->
+            <section class="table-section" aria-labelledby="products-heading">
+                <div class="section-header">
+                    <h2 id="products-heading">Products Management</h2>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button id="addProductBtn" class="btn-primary" aria-label="Add product" title="Add product">+ Add Product</button>
+                        <button id="bulkDeleteBtn" class="btn-danger" style="display:none;" aria-label="Delete selected products" title="Delete selected">Delete Selected</button>
+                        <button id="bulkStockBtn" class="btn-secondary" style="display:none;" aria-label="Update stock status" title="Update stock">Update Stock</button>
+                        <button id="refreshBtn" class="btn-icon" aria-label="Refresh products list" title="Refresh">🔄</button>
+                        <button id="groupToggleBtn" class="btn-secondary" aria-pressed="false" title="Toggle grouping">Group by Category</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table role="table" aria-label="Products table">
+                        <thead>
+                            <tr>
+                                <th scope="col"><input type="checkbox" id="selectAll" aria-label="Select all products" /></th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Price (GHS)</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable" role="rowgroup">
+                            <tr>
+                                <td colspan="7" class="loading-state">
+                                    <div class="loading-spinner" aria-label="Loading products"></div>
+                                    <span>Loading products...</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer" style="padding:18px 0; text-align:center; color:var(--muted);">
+        <p>&copy; <time datetime="2025">2025</time> Classic Dreamspread. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Add Product Modal (hidden) -->
+    <div id="addProductModal" style="display:none; position:fixed; inset:0; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:40;">
+        <div>
+            <h3 style="margin-top:0;">Add Product</h3>
+            <form id="addProductForm">
+                <div style="display:grid; gap:8px;">
+                    <input id="prodName" placeholder="Product name" required />
+                    <input id="prodCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required />
+                    <div id="prodSubcategoryContainer">
+                        <input id="prodSubcategory" placeholder="Subcategory (e.g. Single bed bedspreads, Duvet, Comfortten)" />
+                    </div>
+                    <input id="prodPrice" placeholder="Price (GHS)" type="number" step="0.01" />
+                    <input id="prodWhatsapp" placeholder="WhatsApp number (optional) e.g. 0540460532" />
+                    <div id="prodWhatsappHint" style="font-size:0.85rem;color:var(--muted);margin-top:4px;"></div>
+                    <input id="prodImage" placeholder="Image URL (optional)" />
+                    <label for="prodImageFile" style="font-size:0.85rem;color:var(--muted);margin:0">Or upload an image file</label>
+                    <input id="prodImageFile" type="file" accept="image/*" />
+                    <div style="display:flex; gap:8px; justify-content:flex-end;">
+                        <button type="button" id="cancelAddProduct" class="btn-secondary">Cancel</button>
+                        <button type="submit" id="submitAddProduct" class="btn-primary">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal (hidden) -->
+    <div id="editProductModal" style="display:none; position:fixed; inset:0; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:50;">
+        <div>
+            <h3 style="margin-top:0;">Edit Product</h3>
+            <form id="editProductForm">
+                <input type="hidden" id="editProdId" />
+                <div style="display:grid; gap:8px;">
+                    <input id="editProdName" placeholder="Product name" required />
+                    <input id="editProdCategory" placeholder="Category (bedspread|curtain|pillows|blankets)" required />
+                    <div id="editProdSubcategoryContainer">
+                        <input id="editProdSubcategory" placeholder="Subcategory (optional)" />
+                    </div>
+                    <input id="editProdPrice" placeholder="Price (GHS)" type="number" step="0.01" />
+                    <input id="editProdWhatsapp" placeholder="WhatsApp number (optional) e.g. 0540460532" />
+                    <div id="editProdWhatsappHint" style="font-size:0.85rem;color:var(--muted);margin-top:4px;"></div>
+                    <input id="editProdImage" placeholder="Image URL (optional)" />
+                    <label for="editProdImageFile" style="font-size:0.85rem;color:var(--muted);margin:0">Or upload an image file</label>
+                    <input id="editProdImageFile" type="file" accept="image/*" />
+                    <label style="font-size:0.9rem;color:var(--muted);">Stock status</label>
+                    <select id="editProdStock" required>
+                        <option value="in_stock">In stock</option>
+                        <option value="low_stock">Low stock</option>
+                        <option value="out_of_stock">Out of stock</option>
+                    </select>
+                    <label style="font-size:0.9rem;color:var(--muted);">Visibility</label>
+                    <select id="editProdVisible">
+                        <option value="true">Visible</option>
+                        <option value="false">Hidden</option>
+                    </select>
+                    <div style="display:flex; gap:8px; justify-content:flex-end;">
+                        <button type="button" id="cancelEditProduct" class="btn-secondary">Cancel</button>
+                        <button type="submit" id="saveEditProduct" class="btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

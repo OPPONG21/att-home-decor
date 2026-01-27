@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Clicks Tracking | Classic Dreamspread Admin</title>
+    <meta name="description" content="Track WhatsApp clicks for Classic Dreamspread" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Admin Stylesheet -->
+    <link rel="stylesheet" href="./admin.css" />
+
+    <!-- Supabase Client UMD -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+    <!-- Admin Utilities - Load after DOM is ready -->
+    <script src="./admin.js" defer></script>
+</head>
+<body class="dashboard-page">
+
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <h1 class="logo">Classic <span>Dreamspread</span></h1>
+                <nav class="main-nav" role="navigation" aria-label="Admin navigation">
+                    <a href="./dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="./products.html" class="nav-link">Products</a>
+                    <a href="./tracking.html" class="nav-link active" aria-current="page">Clicks</a>
+                    <a href="../index.html" class="nav-link">View Site</a>
+                </nav>
+            </div>
+            <div class="header-actions">
+                <span class="user-info" id="userEmail" aria-label="Current user email"></span>
+                <button id="logoutBtn" class="btn-secondary" aria-label="Sign out of admin dashboard">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main" id="main-content">
+        <div class="container">
+            <!-- Click Tracking -->
+            <section class="section" aria-labelledby="clicks-heading">
+                <h2 id="clicks-heading" class="section-title">WhatsApp Clicks Tracking</h2>
+                <div class="table-wrapper">
+                    <table role="table" aria-label="WhatsApp click counts">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Clicks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clicksTable" role="rowgroup">
+                            <tr>
+                                <td colspan="2" class="loading-state">
+                                    <div class="loading-spinner" aria-label="Loading clicks"></div>
+                                    <span>Loading click statistics...</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer" style="padding:18px 0; text-align:center; color:var(--muted);">
+        <p>&copy; <time datetime="2025">2025</time> Classic Dreamspread. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
