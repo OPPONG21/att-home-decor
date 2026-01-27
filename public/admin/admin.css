@@ -350,7 +350,7 @@ body {
 
 /* Header and Navbar */
 .header {
-    background: linear-gradient(135deg, var(--admin-primary), var(--admin-accent));
+    background: linear-gradient(135deg, #3b82f6, #1e40af);
     color: #fff;
     padding: 1rem 0;
     box-shadow: var(--admin-shadow);
