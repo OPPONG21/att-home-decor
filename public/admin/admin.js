@@ -1696,6 +1696,10 @@
                             return alert('Product not found');
                         }
 
+                        // Show modal first to ensure all elements are accessible
+                        const modal = document.getElementById('editProductModal');
+                        if (modal) modal.classList.add('show');
+
                         // Populate edit modal fields
                         const fields = {
                             'editProdId': product.id,
@@ -1727,10 +1731,6 @@
                             const visVal = (typeof product.visible === 'boolean') ? String(product.visible) : (product.visible === 'false' ? 'false' : 'true');
                             visEl.value = visVal;
                         }
-
-                        // Show modal
-                        const modal = document.getElementById('editProductModal');
-                        if (modal) modal.classList.add('show');
                     } catch (err) {
                         console.error('Failed to load product for edit:', err);
                         alert('Unable to load product details for editing: ' + err.message);
@@ -2158,6 +2158,10 @@
                         return alert('Product not found');
                     }
 
+                    // Show modal first to ensure all elements are accessible
+                    const modal = document.getElementById('editProductModal');
+                    if (modal) modal.classList.add('show');
+
                     // Populate edit modal fields
                     const fields = {
                         'editProdId': product.id,
@@ -2189,10 +2193,6 @@
                         const visVal = (typeof product.visible === 'boolean') ? String(product.visible) : (product.visible === 'false' ? 'false' : 'true');
                         visEl.value = visVal;
                     }
-
-                    // Show modal
-                    const modal = document.getElementById('editProductModal');
-                    if (modal) modal.classList.add('show');
                 } catch (err) {
                     console.error('Failed to load product for edit:', err);
                     alert('Unable to load product details for editing: ' + err.message);
