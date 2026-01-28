@@ -1344,10 +1344,8 @@
                         throw new Error(body.error || `HTTP ${res.status}`);
                     }
 
-                    // Success
-                    const modal = document.getElementById('editProductModal');
-                    if (modal) modal.style.display = 'none';
-                    await loadDashboard();
+                    // Success - redirect to admin dashboard
+                    window.location.href = '/admin/dashboard.html';
                 } catch (err) {
                     console.error('Edit product error:', err);
                     alert('Error updating product: ' + (err.message || err));
