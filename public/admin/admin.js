@@ -755,6 +755,26 @@
         // Invoke after defining
         loadClicks();
 
+        // Toggle WhatsApp Clicks section
+        const toggleClicksBtn = document.getElementById('toggleClicksBtn');
+        const clicksTableWrapper = document.getElementById('clicksTableWrapper');
+        if (toggleClicksBtn && clicksTableWrapper) {
+            toggleClicksBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isHidden = clicksTableWrapper.style.display === 'none';
+                clicksTableWrapper.style.display = isHidden ? '' : 'none';
+                toggleClicksBtn.textContent = isHidden ? 'Hide' : 'Show';
+                // Save preference to localStorage
+                localStorage.setItem('clicksSectionHidden', !isHidden);
+            });
+            
+            // Restore preference on page load
+            if (localStorage.getItem('clicksSectionHidden') === 'true') {
+                clicksTableWrapper.style.display = 'none';
+                toggleClicksBtn.textContent = 'Show';
+            }
+        }
+
         // Logout handler
         logoutBtn.addEventListener('click', async () => {
             try {

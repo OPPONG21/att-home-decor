@@ -95,9 +95,12 @@
             </section>
 
             <!-- Click Tracking -->
-            <section class="section" aria-labelledby="clicks-heading" style="margin-top:1.5rem;">
-                <h2 id="clicks-heading" class="section-title">WhatsApp Clicks</h2>
-                <div class="table-wrapper">
+            <section class="section" aria-labelledby="clicks-heading" style="margin-top:1.5rem;" id="clicksSection">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h2 id="clicks-heading" class="section-title">WhatsApp Clicks</h2>
+                    <button type="button" id="toggleClicksBtn" class="btn-secondary" style="padding:8px 12px;">Hide</button>
+                </div>
+                <div class="table-wrapper" id="clicksTableWrapper">
                     <table role="table" aria-label="WhatsApp click counts">
                         <thead>
                             <tr>
