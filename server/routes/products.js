@@ -42,7 +42,7 @@ router.post('/', requireAdmin, async (req, res) => {
     return res.status(500).json({ error: 'Admin client not configured' });
   }
 
-  const { name, category, price, image_url, whatsapp_url, subcategory } = req.body;
+  const { name, category, price, image_url, whatsapp_url, subcategory, notes } = req.body;
 
   if (!name || !category) {
     return res.status(400).json({ error: 'Name and category required' });
@@ -61,6 +61,7 @@ router.post('/', requireAdmin, async (req, res) => {
     price: price || null,
     image_url: image_url || null,
     whatsapp_url: whatsapp_url || '',
+    notes: notes ? String(notes).trim() : null,
     created_at: new Date().toISOString()
   };
 
@@ -117,7 +118,7 @@ router.put('/:id', requireAdmin, async (req, res) => {
   if (!id) return res.status(400).json({ error: 'Product ID required' });
 
   // Whitelist of allowed update fields
-  const allowed = ['name','category','subcategory','price','image_url','whatsapp_url','stock_status','visible','description','badge','is_published'];
+  const allowed = ['name','category','subcategory','price','image_url','whatsapp_url','stock_status','visible','description','notes','badge','is_published'];
   const payload = {};
   for (const key of allowed) {
     if (Object.prototype.hasOwnProperty.call(req.body, key)) {
