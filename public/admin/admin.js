@@ -951,48 +951,9 @@
                 if (subcatElement) {
                     subcatElement.addEventListener('change', (e) => {
                         const subcatValue = e.target.value.trim().toLowerCase();
-                        console.log('Subcategory selected:', subcatValue);
-                        
-                        // Debug: check if form is visible
-                        const addModal = document.getElementById('addProductModal');
-                        console.log('Add modal exists:', !!addModal, 'has show class:', addModal?.classList.contains('show'));
-                        
-                        // Debug: list all textarea elements
-                        const allTextareas = document.querySelectorAll('textarea');
-                        console.log('Total textareas in DOM:', allTextareas.length);
-                        allTextareas.forEach((ta, i) => {
-                            console.log(`  textarea[${i}]:`, ta.id, 'visible:', ta.offsetParent !== null);
-                        });
-                        
-                        let notesEl = document.getElementById('prodNotes');
-                        console.log('prodNotes found via getElementById:', !!notesEl);
-                        
-                        if (!notesEl) {
-                            // Try querySelector
-                            notesEl = document.querySelector('#prodNotes');
-                            console.log('prodNotes found via querySelector:', !!notesEl);
-                        }
-                        
-                        if (!notesEl) {
-                            // Try in the form
-                            const form = document.getElementById('addProductForm');
-                            if (form) {
-                                notesEl = form.querySelector('textarea[id="prodNotes"]');
-                                console.log('prodNotes found in form:', !!notesEl);
-                            }
-                        }
-                        
-                        console.log('Note text available in mapping:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
-                        
-                        if (notesEl) {
-                            if (SUBCATEGORY_NOTES[subcatValue]) {
-                                notesEl.value = SUBCATEGORY_NOTES[subcatValue];
-                                console.log('✓ Notes filled successfully');
-                            } else {
-                                console.log('✗ No note found for key:', subcatValue);
-                            }
-                        } else {
-                            console.log('✗ Could not find prodNotes element');
+                        const notesEl = document.getElementById('prodNotes');
+                        if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
+                            notesEl.value = SUBCATEGORY_NOTES[subcatValue];
                         }
                     });
                 }
@@ -1136,26 +1097,9 @@
                 if (editSubcatElement) {
                     editSubcatElement.addEventListener('change', (e) => {
                         const subcatValue = e.target.value.trim().toLowerCase();
-                        console.log('Edit Subcategory selected:', subcatValue);
-                        
-                        let notesEl = document.getElementById('editProdNotes');
-                        console.log('Edit Notes element found on first try:', !!notesEl);
-                        
-                        if (!notesEl) {
-                            console.log('Retrying to find edit notes element...');
-                            const form = document.getElementById('editProductForm');
-                            if (form) {
-                                notesEl = form.querySelector('[id="editProdNotes"]');
-                                console.log('Found via querySelector:', !!notesEl);
-                            }
-                        }
-                        
-                        console.log('Edit Note text available:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
+                        const notesEl = document.getElementById('editProdNotes');
                         if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
                             notesEl.value = SUBCATEGORY_NOTES[subcatValue];
-                            console.log('Edit Notes filled with:', SUBCATEGORY_NOTES[subcatValue].substring(0, 50) + '...');
-                        } else {
-                            console.log('Could not fill edit notes - notesEl:', !!notesEl, 'hasNote:', !!SUBCATEGORY_NOTES[subcatValue]);
                         }
                     });
                 }
