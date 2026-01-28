@@ -857,16 +857,26 @@
 
                 const cat = String(categoryValue || '').trim().toLowerCase();
                 if (cat === 'bedspreads' || cat === 'bedspread') {
-                    // render select with curtain options
+                    // render select with bedspread options
                     const select = document.createElement('select');
                     select.id = 'prodSubcategory';
                     select.style.padding = '8px';
                     select.style.width = '100%';
                     const emptyOpt = document.createElement('option');
                     emptyOpt.value = '';
-                    emptyOpt.textContent = 'Select curtain type (optional)';
+                    emptyOpt.textContent = 'Select bedspread type (optional)';
                     select.appendChild(emptyOpt);
-                    curtainSubcategories.forEach(s => {
+                    const bedspreadsSubcategories = [
+                        'Single bed bedspreads',
+                        'Double bed bedspreads with two pillow cases',
+                        'King size with one sheet and two pillow cases',
+                        'King size with two sheets with 4 pillow cases',
+                        'Queen size with two pillow cases and 2 curtains of the same kind',
+                        'Duvet with two pillow cases and a bedsheet',
+                        'Duvet',
+                        'Waterproof sheet'
+                    ];
+                    bedspreadsSubcategories.forEach(s => {
                         const opt = document.createElement('option');
                         opt.value = s;
                         opt.textContent = toTitleCase(s);
@@ -874,7 +884,7 @@
                     });
                     container.innerHTML = '';
                     container.appendChild(select);
-                } else if (cat === 'pillows' || cat === 'pillow') {
+                } else if (cat === 'pillow' || cat === 'pillows') {
                     // render select with pillow options
                     const select = document.createElement('select');
                     select.id = 'prodSubcategory';
@@ -892,7 +902,7 @@
                     });
                     container.innerHTML = '';
                     container.appendChild(select);
-                } else if (cat === 'blankets' || cat === 'blanket') {
+                } else if (cat === 'blanket' || cat === 'blankets') {
                     // render select with blanket options
                     const select = document.createElement('select');
                     select.id = 'prodSubcategory';
@@ -903,6 +913,24 @@
                     emptyOpt.textContent = 'Select blanket type (optional)';
                     select.appendChild(emptyOpt);
                     blanketSubcategories.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = toTitleCase(s);
+                        select.appendChild(opt);
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(select);
+                } else if (cat === 'curtain' || cat === 'curtains') {
+                    // render select with curtain options
+                    const select = document.createElement('select');
+                    select.id = 'prodSubcategory';
+                    select.style.padding = '8px';
+                    select.style.width = '100%';
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Select curtain type (optional)';
+                    select.appendChild(emptyOpt);
+                    curtainSubcategories.forEach(s => {
                         const opt = document.createElement('option');
                         opt.value = s;
                         opt.textContent = toTitleCase(s);
@@ -929,16 +957,26 @@
 
                 const cat = String(categoryValue || '').trim().toLowerCase();
                 if (cat === 'bedspreads' || cat === 'bedspread') {
-                    // render select with curtain options
+                    // render select with bedspread options
                     const select = document.createElement('select');
                     select.id = 'editProdSubcategory';
                     select.style.padding = '8px';
                     select.style.width = '100%';
                     const emptyOpt = document.createElement('option');
                     emptyOpt.value = '';
-                    emptyOpt.textContent = 'Select curtain type (optional)';
+                    emptyOpt.textContent = 'Select bedspread type (optional)';
                     select.appendChild(emptyOpt);
-                    curtainSubcategories.forEach(s => {
+                    const bedspreadsSubcategories = [
+                        'Single bed bedspreads',
+                        'Double bed bedspreads with two pillow cases',
+                        'King size with one sheet and two pillow cases',
+                        'King size with two sheets with 4 pillow cases',
+                        'Queen size with two pillow cases and 2 curtains of the same kind',
+                        'Duvet with two pillow cases and a bedsheet',
+                        'Duvet',
+                        'Waterproof sheet'
+                    ];
+                    bedspreadsSubcategories.forEach(s => {
                         const opt = document.createElement('option');
                         opt.value = s;
                         opt.textContent = toTitleCase(s);
@@ -949,7 +987,7 @@
                     });
                     container.innerHTML = '';
                     container.appendChild(select);
-                } else if (cat === 'pillows' || cat === 'pillow') {
+                } else if (cat === 'pillow' || cat === 'pillows') {
                     // render select with pillow options
                     const select = document.createElement('select');
                     select.id = 'editProdSubcategory';
@@ -970,7 +1008,7 @@
                     });
                     container.innerHTML = '';
                     container.appendChild(select);
-                } else if (cat === 'blankets' || cat === 'blanket') {
+                } else if (cat === 'blanket' || cat === 'blankets') {
                     // render select with blanket options
                     const select = document.createElement('select');
                     select.id = 'editProdSubcategory';
@@ -981,6 +1019,48 @@
                     emptyOpt.textContent = 'Select blanket type (optional)';
                     select.appendChild(emptyOpt);
                     blanketSubcategories.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = toTitleCase(s);
+                        if (s.toLowerCase() === String(subcategoryValue || '').trim().toLowerCase()) {
+                            opt.selected = true;
+                        }
+                        select.appendChild(opt);
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(select);
+                } else if (cat === 'blanket' || cat === 'blankets') {
+                    // render select with blanket options
+                    const select = document.createElement('select');
+                    select.id = 'editProdSubcategory';
+                    select.style.padding = '8px';
+                    select.style.width = '100%';
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Select blanket type (optional)';
+                    select.appendChild(emptyOpt);
+                    blanketSubcategories.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = toTitleCase(s);
+                        if (s.toLowerCase() === String(subcategoryValue || '').trim().toLowerCase()) {
+                            opt.selected = true;
+                        }
+                        select.appendChild(opt);
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(select);
+                } else if (cat === 'curtain' || cat === 'curtains') {
+                    // render select with curtain options
+                    const select = document.createElement('select');
+                    select.id = 'editProdSubcategory';
+                    select.style.padding = '8px';
+                    select.style.width = '100%';
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Select curtain type (optional)';
+                    select.appendChild(emptyOpt);
+                    curtainSubcategories.forEach(s => {
                         const opt = document.createElement('option');
                         opt.value = s;
                         opt.textContent = toTitleCase(s);
