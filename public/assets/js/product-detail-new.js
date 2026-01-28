@@ -1,5 +1,11 @@
 // product-detail-new.js
 
+// Helper function to capitalize strings
+function capitalize(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // Self-executing async function
 (async function () {
   console.log('Product detail page loaded');
@@ -70,11 +76,19 @@ function populateProduct(product) {
   document.getElementById('product-content').style.display = 'grid';
 
   document.getElementById('product-name').textContent = product.name;
+  
+  // Display category and subcategory
+  let categoryText = product.category ? capitalize(product.category) : '';
+  if (product.subcategory) {
+    categoryText += ` / ${product.subcategory}`;
+  }
+  document.getElementById('product-category').textContent = categoryText;
+  
   document.getElementById('product-price').textContent =
     `GHS ${Number(product.price).toLocaleString('en-GH')}`;
 
   document.getElementById('product-description').innerHTML =
-    `<p>${product.description || ''}</p>`;
+    `<p>${product.notes || product.description || ''}</p>`;
 
   const mainImg = document.getElementById('main-product-image');
   mainImg.src = product.image_url;
@@ -163,7 +177,11 @@ function updateWhatsAppLink(product) {
   const quantityInput = document.getElementById('quantity-input');
   const quantity = parseInt(quantityInput.value) || 1;
   
-  let message = `Hello, I'm interested in:\n${product.name}\nPrice: GHS ${product.price}`;
+  let message = `Hello, I'm interested in:\n${product.name}`;
+  if (product.subcategory) {
+    message += `\nType: ${product.subcategory}`;
+  }
+  message += `\nPrice: GHS ${product.price}`;
   message += `\nQuantity: ${quantity}`;
   message += `\nTotal: GHS ${(product.price * quantity).toLocaleString('en-GH')}`;
   
