@@ -321,7 +321,7 @@
     // API configuration
     const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') 
       ? 'http://localhost:3000' 
-      : 'https://classicdreamspread.com';  // Use deployed API for live data
+      : 'https://att-home-decor-api.onrender.com';  // Use deployed API for live data
     const USE_FALLBACK = !API_BASE; // Use fallback when no API server
     const apiUrl = (path = '/api/products') => `${API_BASE}${path}`;
 

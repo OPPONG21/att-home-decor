@@ -12,7 +12,7 @@
 
     const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost') 
         ? 'http://localhost:3000' 
-        : 'https://classicdreamspread.com';
+        : 'https://att-home-decor-api.onrender.com';
 
     let supabaseClient;
 
