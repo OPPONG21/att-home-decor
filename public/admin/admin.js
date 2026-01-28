@@ -43,7 +43,7 @@
 
     // Subcategories mapped by category
     const CATEGORY_SUBCATEGORIES = {
-        'bedspread': [
+        'bedspreads': [
             'Single bed bedspreads',
             'Double bed bedspreads with two pillow cases',
             'King size with one sheet and two pillow cases',
@@ -78,7 +78,7 @@
         if (category === 'pillows') category = 'pillow';
         if (category === 'blankets') category = 'blanket';
         if (category === 'curtains') category = 'curtain';
-        if (category === 'bedspreads') category = 'bedspread';
+        if (category === 'bedspread') category = 'bedspreads';
         
         console.log('Populating subcategories for category:', category);
         
@@ -179,7 +179,7 @@
         if (category === 'pillows') category = 'pillow';
         if (category === 'blankets') category = 'blanket';
         if (category === 'curtains') category = 'curtain';
-        if (category === 'bedspreads') category = 'bedspread';
+        if (category === 'bedspread') category = 'bedspreads';
         
         console.log('Populating subcategories for category:', category);
         subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
@@ -856,7 +856,7 @@
                 if (!container) return;
 
                 const cat = String(categoryValue || '').trim().toLowerCase();
-                if (cat === 'curtain' || cat === 'curtains') {
+                if (cat === 'bedspreads' || cat === 'bedspread') {
                     // render select with curtain options
                     const select = document.createElement('select');
                     select.id = 'prodSubcategory';
@@ -928,7 +928,7 @@
                 if (!container) return;
 
                 const cat = String(categoryValue || '').trim().toLowerCase();
-                if (cat === 'curtain' || cat === 'curtains') {
+                if (cat === 'bedspreads' || cat === 'bedspread') {
                     // render select with curtain options
                     const select = document.createElement('select');
                     select.id = 'editProdSubcategory';
@@ -1529,7 +1529,7 @@
         function updateStats(products) {
             const totalProducts = products.length;
             const categories = new Set(products.map(p => (p.category || '').toLowerCase()).filter(Boolean));
-            const bedspreads = products.filter(p => (p.category || '').toLowerCase() === 'bedspread').length;
+            const bedspreads = products.filter(p => (p.category || '').toLowerCase() === 'bedspreads').length;
             const curtains = products.filter(p => (p.category || '').toLowerCase() === 'curtain').length;
             const pillows = products.filter(p => (p.category || '').toLowerCase() === 'pillows').length;
             const blankets = products.filter(p => (p.category || '').toLowerCase() === 'blankets').length;
