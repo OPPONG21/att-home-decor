@@ -902,6 +902,88 @@
                 }
             }
 
+            // Similar function for edit form
+            function renderEditSubcategoryField(categoryValue, subcategoryValue) {
+                const container = document.getElementById('editProdSubcategoryContainer');
+                if (!container) return;
+
+                const cat = String(categoryValue || '').trim().toLowerCase();
+                if (cat === 'curtain' || cat === 'curtains') {
+                    // render select with curtain options
+                    const select = document.createElement('select');
+                    select.id = 'editProdSubcategory';
+                    select.style.padding = '8px';
+                    select.style.width = '100%';
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Select curtain type (optional)';
+                    select.appendChild(emptyOpt);
+                    curtainSubcategories.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = toTitleCase(s);
+                        if (s.toLowerCase() === String(subcategoryValue || '').trim().toLowerCase()) {
+                            opt.selected = true;
+                        }
+                        select.appendChild(opt);
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(select);
+                } else if (cat === 'pillows' || cat === 'pillow') {
+                    // render select with pillow options
+                    const select = document.createElement('select');
+                    select.id = 'editProdSubcategory';
+                    select.style.padding = '8px';
+                    select.style.width = '100%';
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Select pillow type (optional)';
+                    select.appendChild(emptyOpt);
+                    pillowSubcategories.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = toTitleCase(s);
+                        if (s.toLowerCase() === String(subcategoryValue || '').trim().toLowerCase()) {
+                            opt.selected = true;
+                        }
+                        select.appendChild(opt);
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(select);
+                } else if (cat === 'blankets' || cat === 'blanket') {
+                    // render select with blanket options
+                    const select = document.createElement('select');
+                    select.id = 'editProdSubcategory';
+                    select.style.padding = '8px';
+                    select.style.width = '100%';
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Select blanket type (optional)';
+                    select.appendChild(emptyOpt);
+                    blanketSubcategories.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = toTitleCase(s);
+                        if (s.toLowerCase() === String(subcategoryValue || '').trim().toLowerCase()) {
+                            opt.selected = true;
+                        }
+                        select.appendChild(opt);
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(select);
+                } else {
+                    // render text input for generic subcategory
+                    const input = document.createElement('input');
+                    input.id = 'editProdSubcategory';
+                    input.placeholder = 'Subcategory (e.g. Single bed bedspreads, Duvet, Comfortten)';
+                    input.style.padding = '8px';
+                    input.style.width = '100%';
+                    input.value = subcategoryValue || '';
+                    container.innerHTML = '';
+                    container.appendChild(input);
+                }
+            }
+
             // Normalize subcategory values for consistent storage
             function normalizeSubcategoryForCategory(categoryValue, subcategoryValue) {
                 const cat = String(categoryValue || '').trim().toLowerCase();
