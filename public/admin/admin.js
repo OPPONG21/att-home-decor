@@ -1158,15 +1158,13 @@
             }
 
             // Attach listener to edit subcategory for auto-fill notes
-            const editFormElement = document.getElementById('editProductForm');
-            if (editFormElement) {
-                editFormElement.addEventListener('change', (e) => {
-                    if (e.target && e.target.id === 'editProdSubcategory') {
-                        const subcatValue = e.target.value.trim().toLowerCase();
-                        const notesEl = document.getElementById('editProdNotes');
-                        if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
-                            notesEl.value = SUBCATEGORY_NOTES[subcatValue];
-                        }
+            const editSubcategoryInput = document.getElementById('editProdSubcategory');
+            if (editSubcategoryInput) {
+                editSubcategoryInput.addEventListener('change', (e) => {
+                    const subcatValue = e.target.value.trim().toLowerCase();
+                    const notesEl = document.getElementById('editProdNotes');
+                    if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
+                        notesEl.value = SUBCATEGORY_NOTES[subcatValue];
                     }
                 });
             }
@@ -1183,15 +1181,13 @@
             }
 
             // Attach listener to add subcategory for auto-fill notes
-            const formElement = document.getElementById('addProductForm');
-            if (formElement) {
-                formElement.addEventListener('change', (e) => {
-                    if (e.target && e.target.id === 'prodSubcategory') {
-                        const subcatValue = e.target.value.trim().toLowerCase();
-                        const notesEl = document.getElementById('prodNotes');
-                        if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
-                            notesEl.value = SUBCATEGORY_NOTES[subcatValue];
-                        }
+            const addSubcategoryInput = document.getElementById('prodSubcategory');
+            if (addSubcategoryInput) {
+                addSubcategoryInput.addEventListener('change', (e) => {
+                    const subcatValue = e.target.value.trim().toLowerCase();
+                    const notesEl = document.getElementById('prodNotes');
+                    if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
+                        notesEl.value = SUBCATEGORY_NOTES[subcatValue];
                     }
                 });
             }
