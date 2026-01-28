@@ -948,6 +948,18 @@
                     container.innerHTML = '';
                     container.appendChild(input);
                 }
+                
+                // Attach change listener to the newly created subcategory field
+                const subcatElement = document.getElementById('prodSubcategory');
+                if (subcatElement) {
+                    subcatElement.addEventListener('change', (e) => {
+                        const subcatValue = e.target.value.trim().toLowerCase();
+                        const notesEl = document.getElementById('prodNotes');
+                        if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
+                            notesEl.value = SUBCATEGORY_NOTES[subcatValue];
+                        }
+                    });
+                }
             }
 
             // Similar function for edit form
@@ -1082,6 +1094,18 @@
                     container.innerHTML = '';
                     container.appendChild(input);
                 }
+                
+                // Attach change listener to the newly created edit subcategory field
+                const editSubcatElement = document.getElementById('editProdSubcategory');
+                if (editSubcatElement) {
+                    editSubcatElement.addEventListener('change', (e) => {
+                        const subcatValue = e.target.value.trim().toLowerCase();
+                        const notesEl = document.getElementById('editProdNotes');
+                        if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
+                            notesEl.value = SUBCATEGORY_NOTES[subcatValue];
+                        }
+                    });
+                }
             }
 
             // Normalize subcategory values for consistent storage
@@ -1180,17 +1204,6 @@
                 });
             }
 
-            // Attach listener to add subcategory for auto-fill notes
-            const addSubcategoryInput = document.getElementById('prodSubcategory');
-            if (addSubcategoryInput) {
-                addSubcategoryInput.addEventListener('change', (e) => {
-                    const subcatValue = e.target.value.trim().toLowerCase();
-                    const notesEl = document.getElementById('prodNotes');
-                    if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
-                        notesEl.value = SUBCATEGORY_NOTES[subcatValue];
-                    }
-                });
-            }
 
         // Normalize WhatsApp numbers and provide a preview link
         const whatsappEl = document.getElementById('prodWhatsapp');
