@@ -844,11 +844,8 @@
             ];
 
             const blanketSubcategories = [
-                'duvet',
-                'comforter',
-                'throw',
-                'electric',
-                'weighted'
+                'student blankets',
+                'big blanket'
             ];
 
             function renderSubcategoryField(categoryValue) {
