@@ -952,8 +952,12 @@
                     subcatElement.addEventListener('change', (e) => {
                         const subcatValue = e.target.value.trim().toLowerCase();
                         const notesEl = document.getElementById('prodNotes');
+                        console.log('Subcategory selected:', subcatValue);
+                        console.log('Notes element found:', !!notesEl);
+                        console.log('Note text available:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
                         if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
                             notesEl.value = SUBCATEGORY_NOTES[subcatValue];
+                            console.log('Notes filled with:', SUBCATEGORY_NOTES[subcatValue].substring(0, 50) + '...');
                         }
                     });
                 }
@@ -1098,8 +1102,12 @@
                     editSubcatElement.addEventListener('change', (e) => {
                         const subcatValue = e.target.value.trim().toLowerCase();
                         const notesEl = document.getElementById('editProdNotes');
+                        console.log('Edit Subcategory selected:', subcatValue);
+                        console.log('Edit Notes element found:', !!notesEl);
+                        console.log('Edit Note text available:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
                         if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
                             notesEl.value = SUBCATEGORY_NOTES[subcatValue];
+                            console.log('Edit Notes filled with:', SUBCATEGORY_NOTES[subcatValue].substring(0, 50) + '...');
                         }
                     });
                 }
