@@ -953,26 +953,46 @@
                         const subcatValue = e.target.value.trim().toLowerCase();
                         console.log('Subcategory selected:', subcatValue);
                         
-                        // Try to find notes element with retries
+                        // Debug: check if form is visible
+                        const addModal = document.getElementById('addProductModal');
+                        console.log('Add modal exists:', !!addModal, 'has show class:', addModal?.classList.contains('show'));
+                        
+                        // Debug: list all textarea elements
+                        const allTextareas = document.querySelectorAll('textarea');
+                        console.log('Total textareas in DOM:', allTextareas.length);
+                        allTextareas.forEach((ta, i) => {
+                            console.log(`  textarea[${i}]:`, ta.id, 'visible:', ta.offsetParent !== null);
+                        });
+                        
                         let notesEl = document.getElementById('prodNotes');
-                        console.log('Notes element found on first try:', !!notesEl);
+                        console.log('prodNotes found via getElementById:', !!notesEl);
                         
                         if (!notesEl) {
-                            console.log('Retrying to find notes element...');
-                            // Search in parent form
+                            // Try querySelector
+                            notesEl = document.querySelector('#prodNotes');
+                            console.log('prodNotes found via querySelector:', !!notesEl);
+                        }
+                        
+                        if (!notesEl) {
+                            // Try in the form
                             const form = document.getElementById('addProductForm');
                             if (form) {
-                                notesEl = form.querySelector('[id="prodNotes"]');
-                                console.log('Found via querySelector:', !!notesEl);
+                                notesEl = form.querySelector('textarea[id="prodNotes"]');
+                                console.log('prodNotes found in form:', !!notesEl);
                             }
                         }
                         
-                        console.log('Note text available:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
-                        if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
-                            notesEl.value = SUBCATEGORY_NOTES[subcatValue];
-                            console.log('Notes filled with:', SUBCATEGORY_NOTES[subcatValue].substring(0, 50) + '...');
+                        console.log('Note text available in mapping:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
+                        
+                        if (notesEl) {
+                            if (SUBCATEGORY_NOTES[subcatValue]) {
+                                notesEl.value = SUBCATEGORY_NOTES[subcatValue];
+                                console.log('✓ Notes filled successfully');
+                            } else {
+                                console.log('✗ No note found for key:', subcatValue);
+                            }
                         } else {
-                            console.log('Could not fill notes - notesEl:', !!notesEl, 'hasNote:', !!SUBCATEGORY_NOTES[subcatValue]);
+                            console.log('✗ Could not find prodNotes element');
                         }
                     });
                 }
