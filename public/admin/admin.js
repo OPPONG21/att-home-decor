@@ -951,13 +951,28 @@
                 if (subcatElement) {
                     subcatElement.addEventListener('change', (e) => {
                         const subcatValue = e.target.value.trim().toLowerCase();
-                        const notesEl = document.getElementById('prodNotes');
                         console.log('Subcategory selected:', subcatValue);
-                        console.log('Notes element found:', !!notesEl);
+                        
+                        // Try to find notes element with retries
+                        let notesEl = document.getElementById('prodNotes');
+                        console.log('Notes element found on first try:', !!notesEl);
+                        
+                        if (!notesEl) {
+                            console.log('Retrying to find notes element...');
+                            // Search in parent form
+                            const form = document.getElementById('addProductForm');
+                            if (form) {
+                                notesEl = form.querySelector('[id="prodNotes"]');
+                                console.log('Found via querySelector:', !!notesEl);
+                            }
+                        }
+                        
                         console.log('Note text available:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
                         if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
                             notesEl.value = SUBCATEGORY_NOTES[subcatValue];
                             console.log('Notes filled with:', SUBCATEGORY_NOTES[subcatValue].substring(0, 50) + '...');
+                        } else {
+                            console.log('Could not fill notes - notesEl:', !!notesEl, 'hasNote:', !!SUBCATEGORY_NOTES[subcatValue]);
                         }
                     });
                 }
@@ -1101,13 +1116,26 @@
                 if (editSubcatElement) {
                     editSubcatElement.addEventListener('change', (e) => {
                         const subcatValue = e.target.value.trim().toLowerCase();
-                        const notesEl = document.getElementById('editProdNotes');
                         console.log('Edit Subcategory selected:', subcatValue);
-                        console.log('Edit Notes element found:', !!notesEl);
+                        
+                        let notesEl = document.getElementById('editProdNotes');
+                        console.log('Edit Notes element found on first try:', !!notesEl);
+                        
+                        if (!notesEl) {
+                            console.log('Retrying to find edit notes element...');
+                            const form = document.getElementById('editProductForm');
+                            if (form) {
+                                notesEl = form.querySelector('[id="editProdNotes"]');
+                                console.log('Found via querySelector:', !!notesEl);
+                            }
+                        }
+                        
                         console.log('Edit Note text available:', SUBCATEGORY_NOTES[subcatValue] ? 'YES' : 'NO');
                         if (notesEl && SUBCATEGORY_NOTES[subcatValue]) {
                             notesEl.value = SUBCATEGORY_NOTES[subcatValue];
                             console.log('Edit Notes filled with:', SUBCATEGORY_NOTES[subcatValue].substring(0, 50) + '...');
+                        } else {
+                            console.log('Could not fill edit notes - notesEl:', !!notesEl, 'hasNote:', !!SUBCATEGORY_NOTES[subcatValue]);
                         }
                     });
                 }
