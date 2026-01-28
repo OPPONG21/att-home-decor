@@ -1057,6 +1057,14 @@
                 });
             }
 
+            // Attach listener to add category input for dynamic subcategory field
+            const addCategoryEl = document.getElementById('prodCategory');
+            if (addCategoryEl) {
+                addCategoryEl.addEventListener('change', (e) => {
+                    renderSubcategoryField(e.target.value);
+                });
+            }
+
         // Normalize WhatsApp numbers and provide a preview link
         const whatsappEl = document.getElementById('prodWhatsapp');
         function normalizeWhatsapp(s) {
@@ -1089,6 +1097,36 @@
             whatsappEl.addEventListener('input', () => {
                 const hint = document.getElementById('prodWhatsappHint');
                 if (hint) hint.textContent = '';
+            });
+        }
+
+        // Add WhatsApp toggle buttons for add and edit forms
+        const toggleProdWhatsappBtn = document.getElementById('toggleProdWhatsapp');
+        if (toggleProdWhatsappBtn) {
+            toggleProdWhatsappBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (whatsappEl) {
+                    const isHidden = whatsappEl.style.display === 'none';
+                    whatsappEl.style.display = isHidden ? '' : 'none';
+                    const hintEl = document.getElementById('prodWhatsappHint');
+                    if (hintEl) hintEl.style.display = isHidden ? '' : 'none';
+                    toggleProdWhatsappBtn.textContent = isHidden ? 'Hide' : 'Show';
+                }
+            });
+        }
+
+        const toggleEditProdWhatsappBtn = document.getElementById('toggleEditProdWhatsapp');
+        if (toggleEditProdWhatsappBtn) {
+            toggleEditProdWhatsappBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const editWhatsappEl = document.getElementById('editProdWhatsapp');
+                if (editWhatsappEl) {
+                    const isHidden = editWhatsappEl.style.display === 'none';
+                    editWhatsappEl.style.display = isHidden ? '' : 'none';
+                    const hintEl = document.getElementById('editProdWhatsappHint');
+                    if (hintEl) hintEl.style.display = isHidden ? '' : 'none';
+                    toggleEditProdWhatsappBtn.textContent = isHidden ? 'Hide' : 'Show';
+                }
             });
         }
 

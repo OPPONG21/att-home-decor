@@ -112,13 +112,7 @@
                 </label>
                 
                 <label for="prodSubcategory">Subcategory *
-                    <div class="custom-dropdown">
-                        <div class="dropdown-trigger" id="prodSubcategoryTrigger" data-select="prodSubcategory">-- Select Category First --</div>
-                        <div class="dropdown-menu" id="prodSubcategoryMenu">
-                            <div class="dropdown-option" data-value="">-- Select Category First --</div>
-                        </div>
-                    </div>
-                    <input id="prodSubcategory" type="hidden" required />
+                    <div id="prodSubcategoryContainer"></div>
                 </label>
                 
                 <label for="prodPrice">Price (GHS) *
@@ -130,7 +124,10 @@
                 </label>
                 
                 <label for="prodWhatsapp">WhatsApp Number (Optional)
-                    <input id="prodWhatsapp" type="text" placeholder="e.g. 0540460532" />
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input id="prodWhatsapp" type="text" placeholder="e.g. 0540460532" style="flex:1;" />
+                        <button type="button" id="toggleProdWhatsapp" class="btn-secondary" style="padding:8px 12px; white-space:nowrap;">Hide</button>
+                    </div>
                     <div id="prodWhatsappHint" style="font-size:0.85rem; color:var(--muted); margin-top:4px;"></div>
                 </label>
                 
@@ -193,7 +190,10 @@
                 </label>
                 
                 <label for="editProdWhatsapp">WhatsApp Number (Optional)
-                    <input id="editProdWhatsapp" type="text" placeholder="e.g. 0540460532" />
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input id="editProdWhatsapp" type="text" placeholder="e.g. 0540460532" style="flex:1;" />
+                        <button type="button" id="toggleEditProdWhatsapp" class="btn-secondary" style="padding:8px 12px; white-space:nowrap;">Hide</button>
+                    </div>
                     <div id="editProdWhatsappHint" style="font-size:0.85rem; color:var(--muted); margin-top:4px;"></div>
                 </label>
                 
