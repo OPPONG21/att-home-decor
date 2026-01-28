@@ -13,8 +13,7 @@
 CREATE TABLE IF NOT EXISTS public.products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    category TEXT NOT NULL CHECK (category IN ('bedspread', 'curtain', 'all', 'pillows')),
-        category TEXT NOT NULL CHECK (category IN ('bedspread', 'curtain', 'all', 'pillows', 'blankets')),
+    category TEXT NOT NULL CHECK (category IN ('bedspread', 'curtain', 'all', 'pillows', 'blankets')),
     subcategory TEXT,
     price DECIMAL(10, 2),
     image_url TEXT,
@@ -22,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     whatsapp_url TEXT DEFAULT 'https://wa.me/233540460532',
     badge TEXT, -- e.g., 'best', 'new', null
     description TEXT, -- Optional product description
+    notes TEXT, -- Product notes/details (auto-filled from subcategory)
     is_published BOOLEAN DEFAULT true, -- Allow hiding products without deleting
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
