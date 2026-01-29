@@ -1643,13 +1643,26 @@
         /**
          * Update statistics cards
          */
+        // Normalize category strings to a canonical set used by dashboard stats
+        function normalizeCategory(cat) {
+            if (!cat) return '';
+            const low = String(cat).toLowerCase().trim();
+            if (low.startsWith('bedspread')) return 'bedspreads';
+            if (low.startsWith('curtain')) return 'curtains';
+            if (low.startsWith('pillow')) return 'pillows';
+            if (low.startsWith('blanket')) return 'blankets';
+            return low;
+        }
+
         function updateStats(products) {
             const totalProducts = products.length;
-            const categories = new Set(products.map(p => (p.category || '').toLowerCase()).filter(Boolean));
-            const bedspreads = products.filter(p => (p.category || '').toLowerCase() === 'bedspreads').length;
-            const curtains = products.filter(p => (p.category || '').toLowerCase() === 'curtain').length;
-            const pillows = products.filter(p => (p.category || '').toLowerCase() === 'pillows').length;
-            const blankets = products.filter(p => (p.category || '').toLowerCase() === 'blankets').length;
+            const normalizedCats = products.map(p => normalizeCategory(p.category)).filter(Boolean);
+            const categories = new Set(normalizedCats);
+
+            const bedspreads = normalizedCats.filter(c => c === 'bedspreads').length;
+            const curtains = normalizedCats.filter(c => c === 'curtains').length;
+            const pillows = normalizedCats.filter(c => c === 'pillows').length;
+            const blankets = normalizedCats.filter(c => c === 'blankets').length;
 
             updateStat('totalProducts', totalProducts);
             updateStat('categories', categories.size);
