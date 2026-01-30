@@ -800,6 +800,9 @@
         const cancelAddProduct = document.getElementById('cancelAddProduct');
 
         function openAddModal() {
+            if (addProductForm) addProductForm.reset();
+            const whatsappEl = document.getElementById('prodWhatsapp');
+            if (whatsappEl) whatsappEl.value = 'https://wa.me/0554731557';
             if (addProductModal) addProductModal.classList.add('show');
         }
         function closeAddModal() {
@@ -1892,7 +1895,6 @@
                             'editProdName': product.name,
                             'editProdCategory': product.category,
                             'editProdPrice': product.price,
-                            'editProdWhatsapp': product.whatsapp_url,
                             'editProdImage': product.image_url,
                             'editProdNotes': product.notes
                         };
@@ -1905,6 +1907,10 @@
                                 console.warn(`Element not found: ${fieldId}`);
                             }
                         }
+                        
+                        // Keep WhatsApp as static default
+                        const whatsappEl = document.getElementById('editProdWhatsapp');
+                        if (whatsappEl) whatsappEl.value = 'https://wa.me/0554731557';
                         
                         // render appropriate subcategory field
                         renderEditSubcategoryField(product.category || '', product.subcategory || '');
@@ -2354,7 +2360,6 @@
                         'editProdName': product.name,
                         'editProdCategory': product.category,
                         'editProdPrice': product.price,
-                        'editProdWhatsapp': product.whatsapp_url,
                         'editProdImage': product.image_url,
                         'editProdNotes': product.notes
                     };
@@ -2367,6 +2372,10 @@
                             console.warn(`Element not found: ${fieldId}`);
                         }
                     }
+                    
+                    // Keep WhatsApp as static default
+                    const whatsappEl = document.getElementById('editProdWhatsapp');
+                    if (whatsappEl) whatsappEl.value = 'https://wa.me/0554731557';
                     
                     // render appropriate subcategory field
                     renderEditSubcategoryField(product.category || '', product.subcategory || '');
