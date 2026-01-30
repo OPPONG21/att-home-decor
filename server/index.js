@@ -33,12 +33,17 @@ app.get('/config', (req, res) => {
   });
 });
 
-// Note: Admin routes are now available at /api/admin and /api/products (for product management)
+// --- Health check endpoint for Render ---
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
+});
+// --- End /healthz ---
 
-// Fallback to index for SPA-style navigation
+// Fallback to index.html for SPA-style navigation
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+// Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
