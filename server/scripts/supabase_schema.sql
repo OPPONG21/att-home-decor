@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     price DECIMAL(10, 2),
     image_url TEXT,
     image_path TEXT, -- Alternative field for storage path
-    whatsapp_url TEXT DEFAULT 'https://wa.me/0554731557',
+    whatsapp_url TEXT DEFAULT 'https://wa.me/233554731557',
     badge TEXT, -- e.g., 'best', 'new', null
     description TEXT, -- Optional product description
     notes TEXT, -- Product notes/details (auto-filled from subcategory)

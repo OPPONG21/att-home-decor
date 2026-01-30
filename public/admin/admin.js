@@ -802,7 +802,7 @@
         function openAddModal() {
             if (addProductForm) addProductForm.reset();
             const whatsappEl = document.getElementById('prodWhatsapp');
-            if (whatsappEl) whatsappEl.value = 'https://wa.me/0554731557';
+            if (whatsappEl) whatsappEl.value = 'https://wa.me/233554731557';
             if (addProductModal) addProductModal.classList.add('show');
         }
         function closeAddModal() {
@@ -1910,7 +1910,7 @@
                         
                         // Keep WhatsApp as static default
                         const whatsappEl = document.getElementById('editProdWhatsapp');
-                        if (whatsappEl) whatsappEl.value = 'https://wa.me/0554731557';
+                        if (whatsappEl) whatsappEl.value = 'https://wa.me/233554731557';
                         
                         // render appropriate subcategory field
                         renderEditSubcategoryField(product.category || '', product.subcategory || '');
@@ -2375,7 +2375,7 @@
                     
                     // Keep WhatsApp as static default
                     const whatsappEl = document.getElementById('editProdWhatsapp');
-                    if (whatsappEl) whatsappEl.value = 'https://wa.me/0554731557';
+                    if (whatsappEl) whatsappEl.value = 'https://wa.me/233554731557';
                     
                     // render appropriate subcategory field
                     renderEditSubcategoryField(product.category || '', product.subcategory || '');
