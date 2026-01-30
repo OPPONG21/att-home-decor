@@ -194,7 +194,7 @@ function updateWhatsAppLink(product) {
     const base = product.whatsapp_url.split('?')[0];
     href = `${base}?text=${encodedMsg}`;
   } else {
-    href = `https://wa.me/233540460532?text=${encodedMsg}`;
+    href = `https://wa.me/0554731557?text=${encodedMsg}`;
   }
 
   document.getElementById('order-whatsapp-btn').href = href;

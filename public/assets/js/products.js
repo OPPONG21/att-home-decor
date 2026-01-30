@@ -154,7 +154,7 @@
     }
     
     const imgSrc = product.image_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="%23f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%236b7280" font-family="Arial, sans-serif" font-size="20">No Image</text></svg>';
-    const whatsappUrl = product.whatsapp_url || 'https://wa.me/233540460532';
+    const whatsappUrl = product.whatsapp_url || 'https://wa.me/0554731557';
     const price = product.price ? Number(product.price).toLocaleString('en-GH') : '0';
     const productName = product.name || 'Unnamed Product';
     const description = product.description || '';

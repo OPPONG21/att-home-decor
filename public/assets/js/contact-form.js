@@ -126,7 +126,7 @@
 
             // Create WhatsApp URL with pre-filled message
             const whatsappMessage = encodeURIComponent(formatWhatsAppMessage(name, email, message));
-            const whatsappUrl = `https://wa.me/233540460532?text=${whatsappMessage}`;
+            const whatsappUrl = `https://wa.me/0554731557?text=${whatsappMessage}`;
 
             // Show success message
             if (statusEl) {

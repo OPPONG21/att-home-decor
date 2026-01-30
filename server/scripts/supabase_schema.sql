@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     price DECIMAL(10, 2),
     image_url TEXT,
     image_path TEXT, -- Alternative field for storage path
-    whatsapp_url TEXT DEFAULT 'https://wa.me/233540460532',
+    whatsapp_url TEXT DEFAULT 'https://wa.me/0554731557',
     badge TEXT, -- e.g., 'best', 'new', null
     description TEXT, -- Optional product description
     notes TEXT, -- Product notes/details (auto-filled from subcategory)
@@ -201,10 +201,10 @@ GRANT SELECT ON public.products TO anon;
 -- Uncomment below to insert sample products (for testing only)
 
 -- INSERT INTO public.products (name, category, price, image_url, whatsapp_url, badge) VALUES
--- ('Luxury Bedspread', 'bedspread', 350.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/bedspread-luxury.webp', 'https://wa.me/233540460532', 'best'),
--- ('Modern Curtain Set', 'curtain', 200.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/curt1.webp', 'https://wa.me/233540460532', 'new'),
--- ('Classic Bedspread', 'bedspread', 280.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/bedspread-classic.webp', 'https://wa.me/233540460532', NULL),
--- ('Elegant Curtains', 'curtain', 250.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/curt2.webp', 'https://wa.me/233540460532', NULL)
+-- ('Luxury Bedspread', 'bedspread', 350.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/bedspread-luxury.webp', 'https://wa.me/0554731557', 'best'),
+-- ('Modern Curtain Set', 'curtain', 200.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/curt1.webp', 'https://wa.me/0554731557', 'new'),
+-- ('Classic Bedspread', 'bedspread', 280.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/bedspread-classic.webp', 'https://wa.me/0554731557', NULL),
+-- ('Elegant Curtains', 'curtain', 250.00, 'https://upmhieojblkvtgkxtocn.supabase.co/storage/v1/object/public/product-images/curt2.webp', 'https://wa.me/0554731557', NULL)
 -- ON CONFLICT DO NOTHING;
 
 -- ============================================
