@@ -1319,7 +1319,7 @@
                 const whatsapp_input = document.getElementById('prodWhatsapp') ? document.getElementById('prodWhatsapp').value.trim() : '';
                 const notes = document.getElementById('prodNotes') ? document.getElementById('prodNotes').value.trim() : '';
 
-                const whatsapp_final = normalizeWhatsapp(whatsapp_input);
+                const whatsapp_final = whatsapp_input || 'https://wa.me/0554731557';
                 const image_url_input = document.getElementById('prodImage').value.trim();
                 const image_file_input = document.getElementById('prodImageFile');
 
@@ -1499,7 +1499,7 @@
                         final_image_url = urlData?.publicUrl || (SUPABASE_URL ? `${SUPABASE_URL.replace(/\/$/, '')}/storage/v1/object/public/${bucket}/${filename}` : null);
                     }
 
-                    const whatsapp_final = normalizeWhatsapp(whatsapp_input);
+                    const whatsapp_final = whatsapp_input || 'https://wa.me/0554731557';
 
                     const stock = document.getElementById('editProdStock') ? document.getElementById('editProdStock').value : 'in_stock';
                     const visibleEl = document.getElementById('editProdVisible');
